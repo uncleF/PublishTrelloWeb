@@ -45,11 +45,11 @@
         "*.svg"
       ],
       "follow_symlinks": true,
-      "name": "TBDInterface: Meta",
+      "name": "PublishTrelloWeb: Meta",
       "path": "meta"
     }, {
       "follow_symlinks": true,
-      "name": "TBDInterface: Docs",
+      "name": "PublishTrelloWeb: Docs",
       "path": "docs"
     }
   ]

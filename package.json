@@ -6,8 +6,9 @@
   "private": true,
   "dependencies": {
     "browser-request": "^0.3.3",
-    "form-serialize": "^0.7.0",
+    "ejs": "^2.3.4",
     "express": "^4.13.3",
+    "form-serialize": "^0.7.0",
     "publishtrello": "https://github.com/uncleF/PublishTrello#master"
   },
   "devDependencies": {
@@ -49,7 +50,7 @@
     "grunt-svgmin": "*",
     "grunt-uncss": "*",
     "load-grunt-tasks": "*"
-  }
+  },
   "scripts": {},
   "author": "unclef.npm@gmail.com",
   "license": "ISC",

@@ -6,15 +6,22 @@ var fs = require('fs');
 
 var app = express();
 
-var DIR = '../../TBDInterface/dev/';
+var public = '/public/';
 var data = 'app/data/board.json';
 
 function init() {
-  app.use(express.static(path.join(__dirname, DIR)));
+  app.set('views', __dirname + public);
+  app.use(express.static(path.join(__dirname, public)));
+  app.engine('.html', require('ejs').renderFile);
+  app.get('/', showInterface);
   app.get('/generate', generateOutput);
   app.get('/data', getData);
   app.get('*', pageNotFound);
   app.listen(8000);
+}
+
+function showInterface(request, response) {
+  response.render('app.html');
 }
 
 function generateOutput(request, response) {

@@ -13,7 +13,7 @@
   "scenarios": [
     {
       "label": "Style Guide",
-      "url": "../../build/styleGuide.html",
+      "url": "../../interface/download.html",
       "selectors": ["body"],
       "hideSelectors": [],
       "removeSelectors": []
