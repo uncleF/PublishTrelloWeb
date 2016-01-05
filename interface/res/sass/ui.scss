@@ -1,0 +1,342 @@
+@import 'project/project';
+
+@import 'components/tx-button';
+@import 'components/tx-checkRadio';
+
+
+
+// UI
+
+
+
+/* Selection */
+
+::selection {
+  color: $selection-color;
+  background: $selection-background;
+}
+
+
+
+/* Focus */
+
+%focusStyle {
+
+  &:focus {
+    outline: $focus-outlineWidth dotted $focus-outlineColor;
+    outline-offset: 2px;
+  }
+
+}
+
+
+
+/* Links */
+
+a {
+  @extend %focusStyle;
+  color: $link;
+  text-decoration: underline;
+  text-decoration-color: rgba($link, $underlineOpacity);
+  transition: $UITransition;
+
+  &:visited {
+    color: $visited;
+    text-decoration-color: rgba($visited, $underlineOpacity);
+  }
+
+  &:hover {
+    color: $hover;
+    text-decoration-color: rgba($hover, $underlineOpacity);
+  }
+
+  &:active {
+    color: $active;
+    text-decoration-color: rgba($active, $underlineOpacity);
+  }
+
+}
+
+
+
+/* Forms */
+
+label {
+  cursor: pointer;
+}
+
+%formBaselineStyle {
+  @extend %focusStyle;
+  margin: 0;
+  font-family: $font-sans;
+}
+
+%formFontStyle {
+  @include tx-font-size($fontSize, none);
+}
+
+%formBoxSizingStyle {
+  box-sizing: content-box;
+}
+
+%formBorderResetStyle {
+  border: 0;
+
+  &::-moz-focus-inner {
+    padding: 0;
+    border: 0;
+  }
+
+}
+
+%formTextResetStyle {
+  text-transform: none;
+}
+
+%formAlignStyle {
+  vertical-align: top;
+}
+
+%formStyle {
+  border: $field-borderWidth solid $field-borderColor;
+}
+
+%formRadioCheckboxStyle {
+  box-sizing: border-box;
+  vertical-align: middle;
+}
+
+%formAppearanceResetStyle {
+  appearance: none;
+}
+
+%formInactiveStyle {
+  opacity: .5;
+  cursor: default;
+  cursor: not-allowed;
+}
+
+input {
+  @extend %formBaselineStyle;
+  @extend %formFontStyle;
+  @extend %formBoxSizingStyle;
+  @extend %formBorderResetStyle;
+  @extend %formAlignStyle;
+
+  &[type='radio'] {
+    @extend %formRadioCheckboxStyle;
+  }
+
+  &[type='checkbox'] {
+    @extend %formRadioCheckboxStyle;
+  }
+
+  &[type='file'] {
+    height: auto;
+    border: 0;
+  }
+
+  &[type='search'] {
+    @extend %formAppearanceResetStyle;
+  }
+
+  &[type='number'] {
+    @extend %formAppearanceResetStyle;
+
+    &::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+    }
+
+  }
+
+  &[disabled] {
+    @extend %formInactiveStyle;
+  }
+
+  &[readonly] {
+    @extend %formInactiveStyle;
+  }
+
+}
+
+select {
+  @extend %formBaselineStyle;
+  @extend %formFontStyle;
+  @extend %formTextResetStyle;
+  @extend %formAlignStyle;
+  @extend %formStyle;
+  @include tx-grid-height(1.5, $lh: false);
+  vertical-align: top;
+
+  &[multiple] {
+    @include tx-grid-height(5, $lh: false);
+  }
+
+}
+
+%buttonStyle {
+  @include tx-grid-height(1.5, $lh: false);
+  padding: 0 ($gap / 2);
+  cursor: pointer;
+}
+
+button {
+  @extend %formBaselineStyle;
+  @extend %formFontStyle;
+  @extend %formBoxSizingStyle;
+  @extend %formBorderResetStyle;
+  @extend %formTextResetStyle;
+  @extend %buttonStyle;
+
+  &[disabled] {
+    @extend %formInactiveStyle;
+  }
+
+}
+
+textarea {
+  @extend %formBaselineStyle;
+  @extend %formBoxSizingStyle;
+  @extend %formStyle;
+  @include tx-form-height(9, 1, $lh: false);
+  @include tx-rhythm-padding(.25, .25, $prgt: ($gap / 2), $plft: ($gap / 2));
+  @include tx-font-size($fontSize, 1);
+  display: block;
+  overflow: auto;
+
+  &[disabled] {
+    @extend %formInactiveStyle;
+  }
+
+  &[readonly] {
+    @extend %formInactiveStyle;
+  }
+
+}
+
+
+
+/* Custom Forms */
+
+.field {
+  @extend %formStyle;
+  @include tx-form-height(1.5);
+  padding: 0 ($gap / 2);
+}
+
+
+
+/* Buttons */
+
+.button {
+  @extend %tx-button-input;
+  position: absolute;
+  bottom: 50px;
+  left: 50%;
+  display: block;
+  margin: 0 0 0 ($tx-button-width / -2);
+}
+
+
+
+/* Select */
+
+.select {
+  $select-height: 70px;
+  $select-color: $blue;
+
+  @include tx-extend-image('select');
+  appearance: none;
+  width: 100%;
+  height: $select-height;
+  padding: 0 50px 0 5%;
+  border: 0;
+  border-radius: 10px;
+  margin: 0 0 50px;
+  color: $select-color;
+  background-position: 95% 50%;
+  background-repeat: no-repeat;
+}
+
+
+
+/* Stepper */
+
+.stepper {
+  padding: 0;
+  border-radius: 10px;
+  margin: 0;
+  font-size: 0;
+  list-style: none;
+
+  >li {
+    @include tx-inline-block;
+    @include tx-font-size($fontSize);
+    width: 25%;
+    margin: 0;
+    vertical-align: top;
+
+    &:first-child {
+
+      .optionLabel {
+        border-width: 0 $tx-checkboxLabel-borderWidth 0 0;
+        border-radius: 10px 0 0 10px;
+      }
+
+    }
+
+    &:last-child {
+
+      .optionLabel {
+        border-width: 0 0 0 $tx-checkboxLabel-borderWidth;
+        border-radius: 0 10px 10px 0;
+      }
+
+    }
+
+  }
+
+}
+
+.option {
+  @extend %tx-checkRadio;
+  @extend %tx-checkbox;
+}
+
+.optionLabel {
+  @extend %tx-checkboxLabel;
+  position: relative;
+}
+
+
+
+/* Settings */
+
+.settings {
+  @include tx-extend-image('cog');
+  position: absolute;
+  top: 110px;
+  left: 50%;
+  display: block;
+  overflow: hidden;
+  width: $settings-size;
+  height: 0;
+  padding: $settings-size 0 0;
+  margin: ($settings-size / -2) 0 0 ($settings-size / -2 + 110px);
+  transition: none;
+
+  .interface-is-disabled & {
+    opacity: .3;
+  }
+
+}
+
+
+
+/* Small Phone UI */
+
+@media handheld, only screen and (max-height: 667px) {
+
+  @import 'phone/ui-phone';
+
+}

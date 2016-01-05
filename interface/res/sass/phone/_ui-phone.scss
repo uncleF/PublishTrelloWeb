@@ -1,0 +1,30 @@
+/* Buttons */
+
+.button {
+  $button-height: 70px;
+
+  @extend %tx-button-input;
+  bottom: 10px;
+  left: 0;
+  box-sizing: border-box;
+  width: 100%;
+  height: $button-height;
+  margin: 0;
+}
+
+
+
+/* Select */
+
+.select {
+  margin: 0 0 20px;
+}
+
+
+
+/* Settings */
+
+.settings {
+  top: 60px;
+  margin: ($settings-size / -2) 0 0 ($settings-size / -2 + 100px);
+}

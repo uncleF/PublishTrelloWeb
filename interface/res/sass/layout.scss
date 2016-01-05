@@ -1,0 +1,133 @@
+@import 'project/project';
+
+@import 'components/tx-button';
+
+
+
+// Layout
+
+
+
+/* Layout Base */
+
+html {
+  height: 100%;
+  -webkit-overflow-scrolling: touch;
+}
+
+body {
+  @include tx-scroll-bar(false);
+  position: relative;
+  overflow: hidden;
+  height: 100%;
+  padding: 0;
+  margin: 0;
+  background: $background;
+  font-size: 0;
+  text-align: center;
+  white-space: nowrap;
+
+  &:before {
+    @include tx-pseudo-va;
+    width: 0;
+  }
+
+}
+
+
+
+/* Interface */
+
+.interface {
+  $interface-width: 320px;
+  $interface-height: 667px;
+  $interface-paddingTop: 220px;
+  $interface-paddingBottom: 200px;
+
+  @include tx-font-size($fontSize);
+  @include tx-inline-block;
+  position: relative;
+  width: $interface-width;
+  height: ($interface-height - $interface-paddingTop - $interface-paddingBottom);
+  padding: $interface-paddingTop 0 $interface-paddingBottom;
+  vertical-align: middle;
+
+  &-is-disabled {
+    pointer-events: none;
+
+    &:before {
+      @include tx-pseudo;
+      z-index: 1;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+    }
+
+    &:after {
+      $loadingIcon-width: 52px;
+      $loadingIcon-height: 22px;
+
+      @include tx-pseudo;
+      @include tx-extend-image('loading');
+      bottom: (50px + $tx-button-height / 2);
+      left: 50%;
+      width: $loadingIcon-width;
+      height: $loadingIcon-height;
+      margin: 0 0 ($loadingIcon-height / -2) ($loadingIcon-width / -2);
+      background-position: 0 0;
+      transform: translateZ(0);
+    }
+
+  }
+
+}
+
+.avatar {
+  $avatar-size: 120px;
+  $avatar-background: $white;
+  $avatar-borderWidth: 10px;
+
+  position: absolute;
+  top: 50px;
+  left: 50%;
+  width: ($avatar-size - $avatar-borderWidth * 2);
+  height: ($avatar-size - $avatar-borderWidth * 2);
+  border: $avatar-borderWidth solid $avatar-background;
+  border-radius: 50%;
+  margin: 0 0 0 ($avatar-size / -2);
+  background: $avatar-background;
+}
+
+
+/* Form */
+
+.form {
+
+  .interface-is-disabled & {
+    opacity: .3;
+  }
+
+}
+
+
+
+/* Message */
+
+.message {
+  $message-fontSize: 25px;
+
+  @include tx-font-size($message-fontSize);
+  @include tx-rhythm(-.5, 0);
+  white-space: normal;
+}
+
+
+
+/* Small Phone Layout */
+
+@media handheld, only screen and (max-height: 667px) {
+
+  @import 'phone/layout-phone';
+
+}

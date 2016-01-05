@@ -1,0 +1,56 @@
+{
+  "folders":
+  [
+    {
+      "folder_exclude_patterns":
+      [
+        "*"
+      ],
+      "file_exclude_patterns":
+      [
+        "*.zip",
+        "*.sublime-project"
+      ],
+      "follow_symlinks": true,
+      "name": "PublishTrelloWeb: Project",
+      "path": "."
+    }, {
+      "file_exclude_patterns":
+      [
+        "data",
+        "public"
+      ],
+      "follow_symlinks": true,
+      "name": "PublishTrelloWeb: App",
+      "path": "app"
+    }, {
+      "follow_symlinks": true,
+      "name": "PublishTrelloWeb: HTML",
+      "path": "interface/res/templates"
+    }, {
+      "follow_symlinks": true,
+      "name": "PublishTrelloWeb: Sass",
+      "path": "interface/res/sass"
+    }, {
+      "follow_symlinks": true,
+      "name": "PublishTrelloWeb: JavaScript",
+      "path": "interface/res/js-dev"
+    }, {
+      "file_exclude_patterns":
+      [
+        "*.jpg",
+        "*.gif",
+        "*.png",
+        "*.ico",
+        "*.svg"
+      ],
+      "follow_symlinks": true,
+      "name": "TBDInterface: Meta",
+      "path": "meta"
+    }, {
+      "follow_symlinks": true,
+      "name": "TBDInterface: Docs",
+      "path": "docs"
+    }
+  ]
+}

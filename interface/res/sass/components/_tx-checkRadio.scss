@@ -1,0 +1,56 @@
+/* Checkbox & Radio Button */
+
+$tx-checkboxLabel-height: 70px;
+$tx-checkboxLabel-color: $blue;
+$tx-checkboxLabel-checked: $white;
+$tx-checkboxLabel-background: $white;
+$tx-checkboxLabel-backgroundChecked: $blue;
+$tx-checkboxLabel-borderWidth: 1px;
+$tx-checkboxLabel-borderColor: $tx-checkboxLabel-backgroundChecked;
+
+%tx-checkRadio {
+  position: absolute;
+  z-index: -1;
+  left: -10000px;
+}
+
+%tx-checkRadioLabel {
+  position: relative;
+  display: block;
+  border-width: 0 $tx-checkboxLabel-borderWidth;
+  border-style: solid;
+  border-color: $tx-checkboxLabel-borderColor;
+  color: $tx-checkboxLabel-color;
+  background: $tx-checkboxLabel-background;
+  line-height: $tx-checkboxLabel-height;
+  user-select: none;
+  transition: color $UITransition, background;
+}
+
+%tx-checkRadioFocus {
+  outline: $focus-outlineWidth dotted $focus-outlineColor;
+  outline-offset: 2px;
+}
+
+
+
+/* Checkbox */
+
+%tx-checkbox {
+  @extend %tx-checkRadio;
+
+  &:checked + %tx-checkboxLabel {
+    color: $tx-checkboxLabel-checked;
+    background: $tx-checkboxLabel-backgroundChecked;
+  }
+
+  &:focus + %tx-checkboxLabel {
+    @extend %tx-checkRadioFocus;
+    z-index: 1;
+  }
+
+}
+
+%tx-checkboxLabel {
+  @extend %tx-checkRadioLabel;
+}
