@@ -2,6 +2,8 @@
 
 var SEND_DATA = (function() {
 
+  var event = require('./components/tx-event.js');
+
   var serialize = require('form-serialize');
   var request = require('browser-request');
 
@@ -11,13 +13,16 @@ var SEND_DATA = (function() {
 
   function init() {
     form = document.getElementById('options');
-    form.addEventListener('submit', send);
+    event.bind(form, 'submit', send);
   }
 
   function send(event) {
     event.preventDefault();
-    var args = 'args=' + serialize(form).replace(/(&*)(.*?)(?:=on)/g, '$1--$2').replace(/&/g, ',');
-    request((LINK + '?' + args), function(error, response, body) {});
+    request((LINK + '?' + serialize(form)), onResponse);
+  }
+
+  function onResponse(error, response, body) {
+    console.log(response);
   }
 
   return {

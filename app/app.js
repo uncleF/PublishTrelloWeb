@@ -25,10 +25,10 @@ function showInterface(request, response) {
 }
 
 function generateOutput(request, response) {
-  var options = url.parse(request.url).query;
-  var dir = __dirname + 'output';
+  var options = JSON.parse('{"' + url.parse(request.url).query.replace(/=/g, '":"').replace(/&/g, '","') + '"}');
+  var dir = __dirname + '/output';
   var dataURL = 'http://192.168.1.101:8000/data';
-  // publish.init(dataURL, dir, options);
+  publish.init(dataURL, dir, options);
 }
 
 function getData(request, response) {

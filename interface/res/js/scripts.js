@@ -28,40 +28,59 @@
 }({
   1: [
     function (require, module, exports) {
+      var TX_EVENT = function () {
+        function bind(object, type, callback) {
+          if (document.addEventListener) {
+            object.addEventListener(type, callback);
+          } else {
+            object.attachEvent(type, callback);
+          }
+        }
+        return { bind: bind };
+      }();
+      module.exports = TX_EVENT;
+    },
+    {}
+  ],
+  2: [
+    function (require, module, exports) {
       var SEND_DATA = function () {
+        var event = require('./components/tx-event.js');
         var serialize = require('form-serialize');
         var request = require('browser-request');
         var form;
         var LINK = 'http://192.168.1.101:8000/generate';
         function init() {
           form = document.getElementById('options');
-          form.addEventListener('submit', send);
+          event.bind(form, 'submit', send);
         }
         function send(event) {
           event.preventDefault();
-          var args = 'args=' + serialize(form).replace(/(&*)(.*?)(?:=on)/g, '$1--$2').replace(/&/g, ',');
-          request(LINK + '?' + args, function (error, response, body) {
-          });
+          request(LINK + '?' + serialize(form), onResponse);
+        }
+        function onResponse(error, response, body) {
+          console.log(response);
         }
         return { init: init };
       }();
       module.exports = SEND_DATA;
     },
     {
-      'browser-request': 3,
-      'form-serialize': 4
+      './components/tx-event.js': 1,
+      'browser-request': 4,
+      'form-serialize': 5
     }
   ],
-  2: [
+  3: [
     function (require, module, exports) {
       (function () {
         var data = require('./data.js');
         data.init();
       }());
     },
-    { './data.js': 1 }
+    { './data.js': 2 }
   ],
-  3: [
+  4: [
     function (require, module, exports) {
       // Browser Request
       //
@@ -492,7 +511,11 @@
           }
           var ajaxLocParts = rurl.exec(ajaxLocation.toLowerCase()) || [], parts = rurl.exec(url.toLowerCase());
           var result = !!(parts && (parts[1] !== ajaxLocParts[1] || parts[2] !== ajaxLocParts[2] || (parts[3] || (parts[1] === 'http:' ? 80 : 443)) !== (ajaxLocParts[3] || (ajaxLocParts[1] === 'http:' ? 80 : 443))));
-          //{
+          //console.debug('is_crossDomain('+url+') -> ' + result)
+          return result;
+        }
+        // MIT License from http://phpjs.org/functions/base64_encode:358
+        function b64_enc(data) {
           // Encodes string using MIME base64 algorithm
           var b64 = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=';
           var o1, o2, o3, h1, h2, h3, h4, bits, i = 0, ac = 0, enc = '', tmpArr = [];
@@ -530,7 +553,7 @@
     },
     {}
   ],
-  4: [
+  5: [
     function (require, module, exports) {
       // get successful control from form and assemble into object
       // http://www.w3.org/TR/html401/interact/forms.html#h-17.13.2
@@ -740,4 +763,4 @@
     },
     {}
   ]
-}, {}, [2]));
+}, {}, [3]));

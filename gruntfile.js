@@ -346,25 +346,6 @@ module.exports = function(grunt) {
         }.bundleFiles()
       }
     },
-    removelogging: {
-      jsClean: {
-        cwd: project.res.js.dir,
-        src: ['*.js'],
-        dest: project.res.js.dir,
-        expand: true
-      }
-    },
-    fixmyjs: {
-      options: {
-        config: '.jshintrc'
-      },
-      fixMyJS: {
-        cwd: project.res.js.dir,
-        src: ['*.js'],
-        dest: project.res.js.dir,
-        expand: true
-      }
-    },
     uglify: {
       options: {
         preserveComments: false
@@ -561,7 +542,7 @@ module.exports = function(grunt) {
           }
           return config;
         }
-      }
+      }.checkDataURI()
     },
     imagemin: {
       images: {
@@ -835,8 +816,6 @@ module.exports = function(grunt) {
 
   grunt.registerTask('process-js', [
     'browserify',
-    'removelogging',
-    'fixmyjs',
     'string-replace:jshint',
     'uglify'
   ]);
