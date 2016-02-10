@@ -3,22 +3,13 @@ var publish = require('publishtrello');
 var path = require('path');
 var url = require('url');
 var fs = require('fs');
+var qconf = require('qconf');
 
 var app = express();
+var config = qconf();
 
-var public = '/public/';
-var data = 'app/data/board.json';
-
-function init() {
-  app.set('views', __dirname + public);
-  app.use(express.static(path.join(__dirname, public)));
-  app.engine('.html', require('ejs').renderFile);
-  app.get('/', showInterface);
-  app.get('/generate', generateOutput);
-  app.get('/data', getData);
-  app.get('*', pageNotFound);
-  app.listen(8000);
-}
+var public = config.get('public');
+var data = config.get('data');
 
 function showInterface(request, response) {
   response.render('app.html');
@@ -41,8 +32,15 @@ function pageNotFound(request, response) {
   response.send('404');
 }
 
-function runScript(path, args) {
-  var process = childProcess.fork(path, args);
+function init() {
+  app.set('views', __dirname + public);
+  app.use(express.static(path.join(__dirname, public)));
+  app.engine('.html', require('ejs').renderFile);
+  app.get('/', showInterface);
+  app.get('/generate', generateOutput);
+  app.get('/data', getData);
+  app.get('*', pageNotFound);
+  app.listen(8000);
 }
 
 init();
