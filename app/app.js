@@ -1,3 +1,5 @@
+/*jslint node: true */
+
 var express = require('express');
 var publish = require('publishtrello');
 var path = require('path');
@@ -9,21 +11,32 @@ var app = express();
 var config = qconf();
 
 var public = config.get('public');
-var data = config.get('data');
+
+var fileReadyPromise;
 
 function showInterface(request, response) {
   response.render('app.html');
 }
 
 function generateOutput(request, response) {
-  var options = JSON.parse('{"' + url.parse(request.url).query.replace(/=/g, '":"').replace(/&/g, '","') + '"}');
-  var dir = __dirname + '/output';
-  var dataURL = 'http://192.168.1.101:8000/data';
-  publish.init(dataURL, dir, options);
+  var options = {
+    link: 'http://localhost:8000/data',
+    dir: __dirname + '/output',
+    output: JSON.parse('{"' + url.parse(request.url).query.replace(/=/g, '":"').replace(/&/g, '","') + '"}'),
+    arch: true
+  };
+  fileReadyPromise = publish.output(options);
+  response.end();
+}
+
+function download(request, response) {
+  fileReadyPromise.then(function(options) {
+    response.download(options.dir + '/' + 'trelloBoard.tar.gz');
+  });
 }
 
 function getData(request, response) {
-  fs.readFile(data, function(error, data) {
+  fs.readFile('app/data/board.json', function(error, data) {
     response.json(JSON.parse(data));
   });
 }
@@ -38,6 +51,7 @@ function init() {
   app.engine('.html', require('ejs').renderFile);
   app.get('/', showInterface);
   app.get('/generate', generateOutput);
+  app.get('/download', download);
   app.get('/data', getData);
   app.get('*', pageNotFound);
   app.listen(8000);

@@ -9,7 +9,7 @@ var SEND_DATA = (function() {
 
   var form;
 
-  var LINK = 'http://192.168.1.101:8000/generate';
+  var LINK = 'http://localhost:8000/generate';
 
   function init() {
     form = document.getElementById('options');
@@ -22,7 +22,11 @@ var SEND_DATA = (function() {
   }
 
   function onResponse(error, response, body) {
-    console.log(response);
+    if (response.statusCode === 200) {
+      window.location = '/download';
+    } else {
+
+    }
   }
 
   return {
