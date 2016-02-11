@@ -31,7 +31,7 @@ function generateOutput(request, response) {
 
 function download(request, response) {
   fileReadyPromise.then(function(options) {
-    response.download(options.dir + '/' + 'trelloBoard.tar.gz');
+    response.download(options.dir + '/' + 'trelloBoard.zip');
   });
 }
 
