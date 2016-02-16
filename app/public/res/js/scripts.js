@@ -1,11 +1,11 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
-"use strict";
+'use strict';
 
 function bind(object, type, callback) {
   if (document.addEventListener) {
     object.addEventListener(type, callback);
   } else {
-    object.attachEvent(type, callback);
+    object.attachEvent('on' + type, callback);
   }
 }
 
@@ -13,12 +13,25 @@ function unbind(object, type, callback) {
   if (document.removeEventListener) {
     object.removeEventListener(type, callback);
   } else {
-    object.detachEvent(type, callback);
+    object.detachEvent('on' + type, callback);
+  }
+}
+
+function trigger(object, event) {
+  var eventObj;
+  if (document.createEvent) {
+    eventObj = document.createEvent('MouseEvents');
+    eventObj.initEvent(event, true, false);
+    object.dispatchEvent(eventObj);
+  } else {
+    eventObj = document.createEventObject();
+    object.fireEvent('on' + event, eventObj);
   }
 }
 
 exports.bind = bind;
 exports.unbind = unbind;
+exports.trigger = trigger;
 
 },{}],2:[function(require,module,exports){
 'use strict';
@@ -59,9 +72,22 @@ exports.toggle = toggle;
 
 var request = require('browser-request');
 var serialize = require('form-serialize');
-var addEvent = require('./components/tx-event.js');
+var eventsTool = require('./components/tx-event.js');
 
-var form;
+var form = document.getElementById('options');
+var board = document.getElementById('boardURL');
+var download = document.getElementById('download');
+var options = {
+  html: document.getElementById('html'),
+  md: document.getElementById('md'),
+  pdf: document.getElementById('pdf'),
+  epub: document.getElementById('epub')
+};
+var cssToggle = document.getElementById('cssOption');
+var cssForm = document.getElementById('cssOptionsForm');
+var cssActiveClass = ' cssOptionsForm-is-active';
+var cssBrowse = document.getElementById('uploadCSSBrowse');
+var cssUpload = document.getElementById('uploadCSS');
 
 var LINK = 'http://localhost:8000/generate';
 
@@ -78,9 +104,38 @@ function send(event) {
   request(LINK + '?' + serialize(form), onResponse);
 }
 
+function toggleCSS(event) {
+  var currentClassName = cssForm.className;
+  cssForm.className = currentClassName.indexOf(cssActiveClass) > -1 ? currentClassName.replace(cssActiveClass, '') : currentClassName + cssActiveClass;
+}
+
+function browseCSS(event) {
+  event.preventDefault();
+  eventsTool.trigger(cssUpload, 'click');
+}
+
+function toggleDownload() {
+  download.disabled = !download.disabled;
+}
+
+function validate() {
+  if (download.disabled && board.value !== '' && (options.html.checked || options.md.checked || options.pdf.checked || options.epub.checked)) {
+    toggleDownload();
+  } else if (!download.disabled && (board.value === '' || !options.html.checked && !options.md.checked && !options.pdf.checked && !options.epub.checked)) {
+    toggleDownload();
+  }
+}
+
 function init(node) {
-  form = node;
-  addEvent.bind(form, 'submit', send);
+  eventsTool.bind(form, 'submit', send);
+  eventsTool.bind(form, 'change', validate);
+  if ('oninput' in window) {
+    eventsTool.bind(form, 'input', validate);
+  } else {
+    eventsTool.bind(form, 'keyup', validate);
+  }
+  eventsTool.bind(cssToggle, 'change', toggleCSS);
+  eventsTool.bind(cssBrowse, 'click', browseCSS);
 }
 
 exports.init = init;
@@ -89,18 +144,15 @@ exports.init = init;
 'use strict';
 
 var overlay = require('./components/tx-overlay.js');
-var addEvent = require('./components/tx-event.js');
+var eventsTool = require('./components/tx-event.js');
 
-var overlayLayer;
-var messageText;
-var closeLink;
+var overlayLayer = document.getElementById('overlay');
+var messageText = document.getElementById('messageText');
+var closeLink = document.getElementById('close');
 
-function init(layerNode, textNode, closeNode) {
-  overlayLayer = layerNode;
-  messageText = textNode;
-  closeLink = closeNode;
+function init() {
   overlay.init(overlayLayer);
-  addEvent.bind(closeLink, 'click', overlay.toggle);
+  eventsTool.bind(closeLink, 'click', overlay.toggle);
 }
 
 function show(message) {
@@ -116,15 +168,14 @@ exports.show = show;
 
 (function () {
 
-  var data = require('./data');
+  var form = require('./form');
   var message = require('./messages');
 
-  data.init(document.getElementById('options'));
-
-  message.init(document.getElementById('overlay'), document.getElementById('messageText'), document.getElementById('close'));
+  form.init();
+  message.init();
 })();
 
-},{"./data":3,"./messages":4}],6:[function(require,module,exports){
+},{"./form":3,"./messages":4}],6:[function(require,module,exports){
 // Browser Request
 //
 // Licensed under the Apache License, Version 2.0 (the "License");

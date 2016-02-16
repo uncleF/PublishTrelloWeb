@@ -261,9 +261,9 @@ textarea {
 
 /* Board URL */
 
-.boardURL {
+%formFieldStyle {
   @extend %formStyle;
-  @include tx-form-height(2);
+  @include tx-form-height(2.10);
   box-sizing: border-box;
   width: 100%;
   padding: 0 ($gap / 2);
@@ -274,19 +274,21 @@ textarea {
 
 }
 
+.boardURL {
+  @extend %formFieldStyle;
+}
+
 
 
 /* Download */
 
-.download {
-  $downloadButton-color: $white;
+%formButtonStyle {
+  $formButtonStyle-color: $white;
 
   @extend %touchAction;
-  @include tx-grid-height(2, $lh: false);
   display: block;
-  width: 100%;
   padding: 0;
-  color: $downloadButton-color;
+  color: $formButtonStyle-color;
   background: $ui-color;
   border-radius: $ui-borderRadius;
   cursor: pointer;
@@ -300,6 +302,12 @@ textarea {
     @extend %formFocusStyle;
   }
 
+}
+
+.download {
+  @extend %formButtonStyle;
+  @include tx-grid-height(2, $lh: false);
+  width: 100%;
 }
 
 
@@ -422,102 +430,122 @@ textarea {
 
 /* Upload */
 
-.upload {
-  display: none;
+.uploadCSS {
+  position: absolute;
+  visibility: hidden;
 }
+
+.linkCSS {
+  @extend %formFieldStyle;
+}
+
+.uploadCSSBrowse {
+  $uploadCSSBrowse-width: 75px;
+  $uploadCSSBrowse-color: $white;
+
+  @extend %formButtonStyle;
+  @include tx-grid-height(1.75);
+  position: absolute;
+  top: 3px;
+  right: 3px;
+  width: $uploadCSSBrowse-width;
+  text-align: center;
+  text-decoration: none;
+
+  &:visited,
+  &:hover,
+  &:active {
+    color: $uploadCSSBrowse-color;
+  }
+
+}
+
 
 
 
 /* Share */
 
 .shareLink {
-  $shareLink-width: 20px;
+  $shareLink-width: 15px;
+  $shareLink-color: $white;
 
   position: relative;
   display: block;
   text-decoration: none;
+  white-space: nowrap;
 
   &:before {
     @include tx-pseudo(relative, inline-block);
     width: $shareLink-width;
     height: $shareLink-width;
-    margin: 2px 5px 0;
-    background: red;
+    margin: 5px 5px 0;
     vertical-align: top;
   }
 
   &-GH {
-    $shareLinkGH-color: #000;
-
-    color: $shareLinkGH-color;
 
     &:before {
-      background: $shareLinkGH-color;
-    }
 
-    &:visited,
-    &:hover,
-    &:active {
-      color: $shareLinkGH-color;
     }
 
   }
 
   &-TW {
-    $shareLinkTW-color: #2eb7ed;
-
-    color: $shareLinkTW-color;
 
     &:before {
-      background: $shareLinkTW-color;
-    }
 
-    &:visited,
-    &:hover,
-    &:active {
-      color: $shareLinkTW-color;
     }
 
   }
 
   &-FB {
-    $shareLinkFB-color: #3b5998;
-
-    color: $shareLinkFB-color;
 
     &:before {
-      background: $shareLinkFB-color;
-    }
 
-    &:visited,
-    &:hover,
-    &:active {
-      color: $shareLinkFB-color;
     }
 
   }
 
   &-GP {
-    $shareLinkGP-color: #dd4b39;
-
-    color: $shareLinkGP-color;
 
     &:before {
-      background: $shareLinkGP-color;
+
     }
 
-    &:visited,
-    &:hover,
-    &:active {
-      color: $shareLinkGP-color;
-    }
+  }
 
+  &:visited,
+  &:hover,
+  &:active {
+    color: $shareLink-color;
+  }
+
+  &:focus {
+    outline-offset: 2px;
   }
 
 }
 
 .shareLinkCount {
-  @include tx-font-size($fontSize);
+  $shareLinkCountTail-size: 10px;
+
+  @include tx-font-size(small);
+  position: relative;
+  padding: 2px 5px;
+  background: $ui-color;
+
+  &:before {
+    @include tx-pseudo;
+    z-index: -1;
+    top: 50%;
+    left: -2px;
+    width: $shareLinkCountTail-size;
+    height: $shareLinkCountTail-size;
+    margin: ($shareLinkCountTail-size / -2) 0 0;
+    background: inherit;
+    transform: translateY(.5px) rotate(45deg);
+  }
+
 }
 
 

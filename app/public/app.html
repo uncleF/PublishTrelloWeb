@@ -31,30 +31,32 @@
     <section id="app" class="app">
       <form action="/download" type="get" id="options" class="form">
         <input type="url" class="boardURL" name="boardURL" id="boardURL" placeholder="Trello Board Link">
-        <div>
-          <input type="checkbox" class="cssOption" name="cssOption" id="cssOption">
-          <label for="cssOption" class="cssOptionLabel">Custom CSS Styles</label>
-          <input type="file" class="upload" name="cssUpload" id="cssUpload">
+        <input type="checkbox" class="cssOption" name="cssOption" id="cssOption">
+        <label for="cssOption" class="cssOptionLabel">Custom CSS Styles</label>
+        <div id="cssOptionsForm" class="cssOptionsForm">
+          <input type="url" class="linkCSS" name="linkCSS" id="linkCSS" placeholder="Link or Choose a CSS File">
+          <a href="#" id="uploadCSSBrowse" class="uploadCSSBrowse" tabindex="-1">Browse</a>
+          <input type="file" class="uploadCSS" name="uploadCSS" id="uploadCSS">
         </div>
-        <ul class="options">
-          <li class="option">
+        <ul class="formatOptions">
+          <li class="formatOption">
             <input type="checkbox" class="optionCheckbox" name="html" id="html">
             <label for="html" class="optionLabel">HTML</label>
           </li>
-          <li class="option">
+          <li class="formatOption">
             <input type="checkbox" class="optionCheckbox" name="md" id="md">
             <label for="md" class="optionLabel">MD</label>
           </li>
-          <li class="option">
+          <li class="formatOption">
             <input type="checkbox" class="optionCheckbox" name="pdf" id="pdf">
             <label for="pdf" class="optionLabel">PDF</label>
           </li>
-          <li class="option">
+          <li class="formatOption">
             <input type="checkbox" class="optionCheckbox" name="epub" id="epub">
             <label for="epub" class="optionLabel">ePUB</label>
           </li>
         </ul>
-        <input type="submit" class="download" value="Download Board">
+        <input type="submit" class="download" name="download" id="download" value="Download Board" disabled>
       </form>
       <ul class="shareLinks">
         <li class="shareItem">

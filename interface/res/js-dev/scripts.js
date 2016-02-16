@@ -2,11 +2,10 @@
 
 (function() {
 
-  var data = require('./data');
+  var form = require('./form');
   var message = require('./messages');
 
-  data.init(document.getElementById('options'));
-
-  message.init(document.getElementById('overlay'), document.getElementById('messageText'), document.getElementById('close'));
+  form.init();
+  message.init();
 
 })();

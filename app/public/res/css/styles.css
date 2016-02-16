@@ -159,7 +159,7 @@ body:before {
 
 /* Options */
 
-.options, .shareLinks {
+.formatOptions, .shareLinks {
   padding: 0;
   font-size: 0;
   text-align: center;
@@ -171,12 +171,12 @@ body:before {
   user-select: none;
 }
 
-.options {
-  margin: 24px 0 36px;
-  margin: 1.5rem 0 2.25rem;
+.formatOptions {
+  margin: 24px 0;
+  margin: 1.5rem 0;
 }
 
-.option {
+.formatOption {
   display: inline-block;
   width: 25%;
   font-size: 16px;
@@ -194,8 +194,21 @@ body:before {
 
 .shareItem {
   display: inline-block;
-  width: 15%;
-  vertical-align: middle;
+  margin: 0 10px;
+  vertical-align: top;
+}
+
+/* CSS Option */
+
+.cssOptionsForm {
+  position: relative;
+  margin: 36px 0 0;
+  margin: 2.25rem 0 0;
+  visibility: hidden;
+}
+
+.cssOptionsForm-is-active {
+  visibility: visible;
 }
 
 /* Message */
@@ -262,7 +275,7 @@ a:focus, input:focus {
 
 /* Fast Touch */
 
-a, label, .download {
+a, label, .download, .uploadCSSBrowse {
   -ms-touch-action: manipulation;
   touch-action: manipulation;
 }
@@ -332,13 +345,19 @@ input {
   vertical-align: top;
 }
 
-.boardURL {
+.boardURL, .linkCSS {
   border: 1px solid #cccccc;
 }
 
 input[type="checkbox"] {
   box-sizing: border-box;
   vertical-align: middle;
+}
+
+input[disabled] {
+  opacity: .5;
+  cursor: default;
+  cursor: not-allowed;
 }
 
 input::-moz-placeholder, textarea::-moz-placeholder {
@@ -363,28 +382,25 @@ input[type="file"] {
 
 /* Form Focus */
 
-.boardURL:focus, .download:focus, .optionCheckbox:focus + .optionLabel, .cssOption:focus + .cssOptionLabel {
+.boardURL:focus, .linkCSS:focus, .download:focus, .uploadCSSBrowse:focus, .optionCheckbox:focus + .optionLabel, .cssOption:focus + .cssOptionLabel {
   outline: 1px dotted #cccccc;
   outline-offset: 2px;
 }
 
 /* Board URL */
 
-.boardURL {
+.boardURL, .linkCSS {
   box-sizing: border-box;
   width: 100%;
-  height: 46px;
-  height: 2.875rem;
+  height: 48.4px;
+  height: 3.025rem;
   padding: 0 15px;
 }
 
 /* Download */
 
-.download {
+.download, .uploadCSSBrowse {
   display: block;
-  width: 100%;
-  height: 48px;
-  height: 3rem;
   padding: 0;
   border-radius: 4px;
   color: #ffffff;
@@ -392,8 +408,14 @@ input[type="file"] {
   cursor: pointer;
 }
 
-.download:hover, .download:active {
+.download:hover, .uploadCSSBrowse:hover, .download:active, .uploadCSSBrowse:active {
   background: #23527c;
+}
+
+.download {
+  width: 100%;
+  height: 48px;
+  height: 3rem;
 }
 
 /* Options */
@@ -497,8 +519,25 @@ input[type="file"] {
 
 /* Upload */
 
-.upload {
-  display: none;
+.uploadCSS {
+  position: absolute;
+  visibility: hidden;
+}
+
+.uploadCSSBrowse {
+  position: absolute;
+  top: 3px;
+  right: 3px;
+  width: 75px;
+  height: 42px;
+  height: 2.625rem;
+  text-align: center;
+  text-decoration: none;
+  line-height: 2.625;
+}
+
+.uploadCSSBrowse:visited, .uploadCSSBrowse:hover, .uploadCSSBrowse:active {
+  color: #ffffff;
 }
 
 /* Share */
@@ -507,71 +546,50 @@ input[type="file"] {
   position: relative;
   display: block;
   text-decoration: none;
+  white-space: nowrap;
 }
 
 .shareLink:before {
   position: relative;
   content: "";
   display: inline-block;
-  width: 20px;
-  height: 20px;
-  margin: 2px 5px 0;
-  background: red;
+  width: 15px;
+  height: 15px;
+  margin: 5px 5px 0;
   vertical-align: top;
 }
 
-.shareLink-GH {
-  color: #000000;
+.shareLink:visited, .shareLink:hover, .shareLink:active {
+  color: #ffffff;
 }
 
-.shareLink-GH:before {
-  background: #000000;
-}
-
-.shareLink-GH:visited, .shareLink-GH:hover, .shareLink-GH:active {
-  color: #000000;
-}
-
-.shareLink-TW {
-  color: #2eb7ed;
-}
-
-.shareLink-TW:before {
-  background: #2eb7ed;
-}
-
-.shareLink-TW:visited, .shareLink-TW:hover, .shareLink-TW:active {
-  color: #2eb7ed;
-}
-
-.shareLink-FB {
-  color: #3b5998;
-}
-
-.shareLink-FB:before {
-  background: #3b5998;
-}
-
-.shareLink-FB:visited, .shareLink-FB:hover, .shareLink-FB:active {
-  color: #3b5998;
-}
-
-.shareLink-GP {
-  color: #dd4b39;
-}
-
-.shareLink-GP:before {
-  background: #dd4b39;
-}
-
-.shareLink-GP:visited, .shareLink-GP:hover, .shareLink-GP:active {
-  color: #dd4b39;
+.shareLink:focus {
+  outline-offset: 2px;
 }
 
 .shareLinkCount {
-  font-size: 16px;
-  font-size: 1rem;
-  line-height: 1.5;
+  position: relative;
+  padding: 2px 5px;
+  background: #337ab7;
+  font-size: 12px;
+  font-size: .75rem;
+  line-height: 2;
+}
+
+.shareLinkCount:before {
+  position: absolute;
+  z-index: -1;
+  top: 50%;
+  left: -2px;
+  content: "";
+  display: block;
+  width: 10px;
+  height: 10px;
+  margin: -5px 0 0;
+  background: inherit;
+  -webkit-transform: translateY(.5px) rotate(45deg);
+  -ms-transform: translateY(.5px) rotate(45deg);
+  transform: translateY(.5px) rotate(45deg);
 }
 
 /* Close */

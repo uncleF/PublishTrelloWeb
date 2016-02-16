@@ -1,18 +1,15 @@
 /* jshint browser:true */
 
 var overlay = require('./components/tx-overlay.js');
-var addEvent = require('./components/tx-event.js');
+var eventsTool = require('./components/tx-event.js');
 
-var overlayLayer;
-var messageText;
-var closeLink;
+var overlayLayer = document.getElementById('overlay');
+var messageText = document.getElementById('messageText');
+var closeLink = document.getElementById('close');
 
-function init(layerNode, textNode, closeNode) {
-  overlayLayer = layerNode;
-  messageText = textNode;
-  closeLink = closeNode;
+function init() {
   overlay.init(overlayLayer);
-  addEvent.bind(closeLink, 'click', overlay.toggle);
+  eventsTool.bind(closeLink, 'click', overlay.toggle);
 }
 
 function show(message) {

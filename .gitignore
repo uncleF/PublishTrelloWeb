@@ -26,7 +26,6 @@ config
 
 build
 design
-tests
 
 *.build.zip
 *.sublime-workspace
