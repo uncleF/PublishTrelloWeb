@@ -1,75 +1,130 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+"use strict";
 
-var TX_EVENT = (function() {
-
-  function bind(object, type, callback) {
-    if (document.addEventListener) {
-      object.addEventListener(type, callback);
-    } else {
-      object.attachEvent(type, callback);
-    }
+function bind(object, type, callback) {
+  if (document.addEventListener) {
+    object.addEventListener(type, callback);
+  } else {
+    object.attachEvent(type, callback);
   }
+}
 
-  return {
-    bind: bind
-  };
+function unbind(object, type, callback) {
+  if (document.removeEventListener) {
+    object.removeEventListener(type, callback);
+  } else {
+    object.detachEvent(type, callback);
+  }
+}
 
-})();
-
-module.exports = TX_EVENT;
+exports.bind = bind;
+exports.unbind = unbind;
 
 },{}],2:[function(require,module,exports){
+'use strict';
 
-var SEND_DATA = (function() {
+var addEvent = require('./tx-event');
 
-  var event = require('./components/tx-event.js');
+var object;
+var activeClassName;
 
-  var serialize = require('form-serialize');
-  var request = require('browser-request');
-
-  var form;
-
-  var LINK = 'http://localhost:8000/generate';
-
-  function init() {
-    form = document.getElementById('options');
-    event.bind(form, 'submit', send);
-  }
-
-  function send(event) {
+function toggle(event) {
+  var currentClassName = object.className;
+  if (event) {
     event.preventDefault();
-    request((LINK + '?' + serialize(form)), onResponse);
   }
+  object.className = currentClassName.indexOf(activeClassName) > -1 ? currentClassName.replace(activeClassName, '') : currentClassName + activeClassName;
+}
 
-  function onResponse(error, response, body) {
-    if (response.statusCode === 200) {
-      window.location = '/download';
-    } else {
-
-    }
+function clicked(event) {
+  var target = event.target ? event.target : event.srcElement;
+  if (target.className.indexOf(activeClassName) > -1) {
+    toggle(event);
   }
+}
 
-  return {
-    init: init
-  };
+function init(node) {
+  if (node) {
+    object = node;
+    activeClassName = ' ' + object.className + '-is-active';
+    addEvent.bind(object, 'click', clicked);
+  }
+}
 
+exports.init = init;
+exports.toggle = toggle;
+
+},{"./tx-event":1}],3:[function(require,module,exports){
+'use strict';
+
+var request = require('browser-request');
+var serialize = require('form-serialize');
+var addEvent = require('./components/tx-event.js');
+
+var form;
+
+var LINK = 'http://localhost:8000/generate';
+
+function onResponse(error, response) {
+  if (response.statusCode === 200) {
+    window.location = '/download';
+  } else {
+    console.log(error);
+  }
+}
+
+function send(event) {
+  event.preventDefault();
+  request(LINK + '?' + serialize(form), onResponse);
+}
+
+function init(node) {
+  form = node;
+  addEvent.bind(form, 'submit', send);
+}
+
+exports.init = init;
+
+},{"./components/tx-event.js":1,"browser-request":6,"form-serialize":7}],4:[function(require,module,exports){
+'use strict';
+
+var overlay = require('./components/tx-overlay.js');
+var addEvent = require('./components/tx-event.js');
+
+var overlayLayer;
+var messageText;
+var closeLink;
+
+function init(layerNode, textNode, closeNode) {
+  overlayLayer = layerNode;
+  messageText = textNode;
+  closeLink = closeNode;
+  overlay.init(overlayLayer);
+  addEvent.bind(closeLink, 'click', overlay.toggle);
+}
+
+function show(message) {
+  messageText.textContent = message;
+  overlay.toggle();
+}
+
+exports.init = init;
+exports.show = show;
+
+},{"./components/tx-event.js":1,"./components/tx-overlay.js":2}],5:[function(require,module,exports){
+'use strict';
+
+(function () {
+
+  var data = require('./data');
+  var message = require('./messages');
+
+  data.init(document.getElementById('options'));
+
+  message.init(document.getElementById('overlay'), document.getElementById('messageText'), document.getElementById('close'));
 })();
 
-module.exports = SEND_DATA;
-
-},{"./components/tx-event.js":1,"browser-request":4,"form-serialize":5}],3:[function(require,module,exports){
-
-(function() {
-
-  // var screens = require('./screens.js');
-  var data = require('./data.js');
-
-  data.init();
-  // screens.init('start');
-
-})();
-
-},{"./data.js":2}],4:[function(require,module,exports){
+},{"./data":3,"./messages":4}],6:[function(require,module,exports){
 // Browser Request
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -565,7 +620,7 @@ function b64_enc (data) {
 }));
 //UMD FOOTER END
 
-},{}],5:[function(require,module,exports){
+},{}],7:[function(require,module,exports){
 // get successful control from form and assemble into object
 // http://www.w3.org/TR/html401/interact/forms.html#h-17.13.2
 
@@ -824,4 +879,4 @@ function str_serialize(result, key, value) {
 
 module.exports = serialize;
 
-},{}]},{},[3]);
+},{}]},{},[5]);

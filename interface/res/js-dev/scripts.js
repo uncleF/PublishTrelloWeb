@@ -2,32 +2,11 @@
 
 (function() {
 
-  var request = require('browser-request');
-  var serialize = require('form-serialize');
-  var addEvent = require('./components/tx-event.js');
+  var data = require('./data');
+  var message = require('./messages');
 
-  var form;
+  data.init(document.getElementById('options'));
 
-  const LINK = 'http://localhost:8000/generate';
-
-  function init() {
-    form = document.getElementById('options');
-    addEvent.bind(form, 'submit', send);
-  }
-
-  function send(event) {
-    event.preventDefault();
-    request((LINK + '?' + serialize(form)), onResponse);
-  }
-
-  function onResponse(error, response) {
-    if (response.statusCode === 200) {
-      window.location = '/download';
-    } else {
-      console.log(error);
-    }
-  }
-
-  init();
+  message.init(document.getElementById('overlay'), document.getElementById('messageText'), document.getElementById('close'));
 
 })();

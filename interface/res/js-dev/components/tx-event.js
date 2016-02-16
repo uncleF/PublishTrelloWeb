@@ -1,19 +1,20 @@
 /* jshint browser:true */
 
-var TX_EVENT = (function() {
-
-  function bind(object, type, callback) {
-    if (document.addEventListener) {
-      object.addEventListener(type, callback);
-    } else {
-      object.attachEvent(type, callback);
-    }
+function bind(object, type, callback) {
+  if (document.addEventListener) {
+    object.addEventListener(type, callback);
+  } else {
+    object.attachEvent(type, callback);
   }
+}
 
-  return {
-    bind: bind
-  };
+function unbind(object, type, callback) {
+  if (document.removeEventListener) {
+    object.removeEventListener(type, callback);
+  } else {
+    object.detachEvent(type, callback);
+  }
+}
 
-})();
-
-module.exports = TX_EVENT;
+exports.bind = bind;
+exports.unbind = unbind;

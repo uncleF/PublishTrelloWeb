@@ -1,42 +1,7 @@
-/* Base Layout */
+/* App */
 
-body {
-  margin: 0 10px;
-
-  &:before {
-    display: none;
-  }
-
-}
-
-
-/* Interface */
-
-.interface {
-  position: static;
-  display: block;
-  width: auto;
-  height: auto;
-  padding: 120px 0;
-
-  &-is-disabled {
-
-    &:after {
-      bottom: 45px;
-    }
-
-  }
-
-}
-
-.avatar {
-  $avatar-size: 80px;
-  $avatar-borderWidth: 5px;
-
-  top: 20px;
-  left: 50%;
-  width: ($avatar-size - $avatar-borderWidth * 2);
-  height: ($avatar-size - $avatar-borderWidth * 2);
-  border-width: $avatar-borderWidth;
-  margin: 0 0 0 ($avatar-size / -2);
+.app {
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
 }

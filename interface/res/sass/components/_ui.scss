@@ -1,8 +1,3 @@
-@import 'patterns/_tx-button';
-@import 'patterns/_tx-checkRadio';
-
-
-
 /* Selection */
 
 ::selection {
@@ -18,9 +13,16 @@
 
   &:focus {
     outline: $focus-outlineWidth dotted $focus-outlineColor;
-    outline-offset: 2px;
   }
 
+}
+
+
+
+/* Fast Touch */
+
+%touchAction {
+  touch-action: manipulation;
 }
 
 
@@ -29,10 +31,11 @@
 
 a {
   @extend %focusStyle;
+  @extend %touchAction;
   color: $link;
   text-decoration: underline;
   text-decoration-color: rgba($link, $underlineOpacity);
-  transition: $UITransition;
+  transition: color $UITransition, text-decoration-color $UITransition;
 
   &:visited {
     color: $visited;
@@ -56,17 +59,18 @@ a {
 /* Forms */
 
 label {
+  @extend %touchAction;
   cursor: pointer;
 }
 
 %formBaselineStyle {
   @extend %focusStyle;
   margin: 0;
-  font-family: $font-sans;
+  font-family: inherit;
 }
 
 %formFontStyle {
-  @include tx-font-size($fontSize, none);
+  font-size: inherit;
 }
 
 %formBoxSizingStyle {
@@ -110,12 +114,27 @@ label {
   cursor: not-allowed;
 }
 
+%formPlaceholderStyle {
+  $formPlaceholderStyle-color: $gray;
+
+  &::placeholder {
+    color: $formPlaceholderStyle-color;
+    opacity: 1;
+  }
+
+  &:placeholder-shown {
+
+  }
+
+}
+
 input {
   @extend %formBaselineStyle;
   @extend %formFontStyle;
   @extend %formBoxSizingStyle;
   @extend %formBorderResetStyle;
   @extend %formAlignStyle;
+  @extend %formPlaceholderStyle;
 
   &[type='radio'] {
     @extend %formRadioCheckboxStyle;
@@ -138,7 +157,7 @@ input {
     @extend %formAppearanceResetStyle;
 
     &::-webkit-inner-spin-button {
-      -webkit-appearance: none;
+      appearance: none;
     }
 
   }
@@ -159,6 +178,7 @@ select {
   @extend %formTextResetStyle;
   @extend %formAlignStyle;
   @extend %formStyle;
+  @extend %touchAction;
   @include tx-grid-height(1.5, $lh: false);
   vertical-align: top;
 
@@ -169,6 +189,7 @@ select {
 }
 
 %buttonStyle {
+  @extend %touchAction;
   @include tx-grid-height(1.5, $lh: false);
   padding: 0 ($gap / 2);
   cursor: pointer;
@@ -192,11 +213,12 @@ textarea {
   @extend %formBaselineStyle;
   @extend %formBoxSizingStyle;
   @extend %formStyle;
-  @include tx-form-height(9, 1, $lh: false);
+  @extend %formPlaceholderStyle;
+  @include tx-form-height(9, 1);
   @include tx-rhythm-padding(.25, .25, $prgt: ($gap / 2), $plft: ($gap / 2));
-  @include tx-font-size($fontSize, 1);
   display: block;
   overflow: auto;
+  font-size: inherit;
 
   &[disabled] {
     @extend %formInactiveStyle;
@@ -223,114 +245,351 @@ textarea {
 /* Buttons */
 
 .button {
-  @extend %tx-button-input;
-  position: absolute;
-  bottom: 50px;
-  left: 50%;
-  display: block;
-  margin: 0 0 0 ($tx-button-width / -2);
+  @extend %buttonStyle;
 }
 
 
 
-/* Select */
+/* Form Focus */
 
-.select {
-  $select-height: 70px;
-  $select-color: $blue;
+%formFocusStyle {
+  outline: $focus-outlineWidth dotted $focus-outlineColor;
+  outline-offset: 2px;
+}
 
-  @include tx-extend-image('select');
-  appearance: none;
+
+
+/* Board URL */
+
+.boardURL {
+  @extend %formStyle;
+  @include tx-form-height(2);
+  box-sizing: border-box;
   width: 100%;
-  height: $select-height;
-  padding: 0 50px 0 5%;
-  border: 0;
-  border-radius: 10px;
-  margin: 0 0 50px;
-  color: $select-color;
-  background-position: 95% 50%;
-  background-repeat: no-repeat;
-}
+  padding: 0 ($gap / 2);
 
-
-
-/* Stepper */
-
-.stepper {
-  padding: 0;
-  border-radius: 10px;
-  margin: 0;
-  font-size: 0;
-  list-style: none;
-
-  >li {
-    @include tx-inline-block;
-    @include tx-font-size($fontSize);
-    width: 25%;
-    margin: 0;
-    vertical-align: top;
-
-    &:first-child {
-
-      .optionLabel {
-        border-width: 0 $tx-checkboxLabel-borderWidth 0 0;
-        border-radius: 10px 0 0 10px;
-      }
-
-    }
-
-    &:last-child {
-
-      .optionLabel {
-        border-width: 0 0 0 $tx-checkboxLabel-borderWidth;
-        border-radius: 0 10px 10px 0;
-      }
-
-    }
-
+  &:focus {
+    @extend %formFocusStyle;
   }
 
 }
 
-.option {
-  @extend %tx-checkRadio;
-  @extend %tx-checkbox;
+
+
+/* Download */
+
+.download {
+  $downloadButton-color: $white;
+
+  @extend %touchAction;
+  @include tx-grid-height(2, $lh: false);
+  display: block;
+  width: 100%;
+  padding: 0;
+  color: $downloadButton-color;
+  background: $ui-color;
+  border-radius: $ui-borderRadius;
+  cursor: pointer;
+
+  &:hover,
+  &:active {
+    background: $ui-active;
+  }
+
+  &:focus {
+    @extend %formFocusStyle;
+  }
+
+}
+
+
+
+/* Options */
+
+.optionCheckbox {
+  position: absolute;
+  left: -1000px;
+
+  &:checked + .optionLabel {
+
+    &:before {
+      background: $ui-color;
+    }
+
+    &:after {
+      visibility: visible;
+    }
+
+  }
+
+  &:focus + .optionLabel {
+    @extend %formFocusStyle;
+  }
+
 }
 
 .optionLabel {
-  @extend %tx-checkboxLabel;
+  $optionLabelCheck-size: 30px;
+  $optionLabelCheck-borderWidth: 2px;
+
+  @include tx-inline-block;
   position: relative;
-}
+  color: $ui-color;
+  line-height: $optionLabelCheck-size;
 
+  &:before {
+    @include tx-pseudo(relative, inline-block);
+    width: ($optionLabelCheck-size - $optionLabelCheck-borderWidth * 2);
+    height: ($optionLabelCheck-size - $optionLabelCheck-borderWidth * 2);
+    margin: -4px 5px 0 0;
+    border: $optionLabelCheck-borderWidth solid $ui-color;
+    border-radius: $ui-borderRadius;
+    vertical-align: middle;
+  }
 
-
-/* Settings */
-
-.settings {
-  @include tx-extend-image('cog');
-  position: absolute;
-  top: 110px;
-  left: 50%;
-  display: block;
-  overflow: hidden;
-  width: $settings-size;
-  height: 0;
-  padding: $settings-size 0 0;
-  margin: ($settings-size / -2) 0 0 ($settings-size / -2 + 110px);
-  transition: none;
-
-  .interface-is-disabled & {
-    opacity: .3;
+  &:after {
+    @include tx-pseudo;
+    top: 0;
+    left: 0;
+    width: $optionLabelCheck-size;
+    height: $optionLabelCheck-size;
+    visibility: hidden;
   }
 
 }
 
 
 
-/* Small Phone UI */
+/* CSS Options */
 
-@media handheld, only screen and (max-height: 667px) {
+.cssOption {
+  position: absolute;
+  left: -1000px;
 
-  @import 'phone/ui-phone';
+  &:checked + .cssOptionLabel {
+
+    &:before {
+      background: $ui-color;
+      border-color: $ui-color;
+    }
+
+    &:after {
+      visibility: visible;
+    }
+
+  }
+
+  &:focus + .cssOptionLabel {
+    @extend %formFocusStyle;
+  }
 
 }
+
+.cssOptionLabel {
+  $cssOptionCheck-size: 15px;
+  $cssOptionCheck-borderWidth: 1px;
+  $cssOptionCheck-borderColor: $gray;
+
+  @include tx-inline-block;
+  @include tx-font-size(small);
+  position: relative;
+  color: $ui-color;
+  line-height: $cssOptionCheck-size;
+  user-select: none;
+
+  &:before {
+    @include tx-pseudo(relative, inline-block);
+    width: ($cssOptionCheck-size - $cssOptionCheck-borderWidth * 2);
+    height: ($cssOptionCheck-size - $cssOptionCheck-borderWidth * 2);
+    margin: -2px 5px 0 0;
+    border: $cssOptionCheck-borderWidth solid $cssOptionCheck-borderColor;
+    border-radius: 2px;
+    vertical-align: middle;
+  }
+
+  &:after {
+    @include tx-pseudo;
+    top: 0;
+    left: 0;
+    width: $cssOptionCheck-size;
+    height: $cssOptionCheck-size;
+    visibility: hidden;
+  }
+
+}
+
+
+
+/* Upload */
+
+.upload {
+  display: none;
+}
+
+
+
+/* Share */
+
+.shareLink {
+  $shareLink-width: 20px;
+
+  position: relative;
+  display: block;
+  text-decoration: none;
+
+  &:before {
+    @include tx-pseudo(relative, inline-block);
+    width: $shareLink-width;
+    height: $shareLink-width;
+    margin: 2px 5px 0;
+    background: red;
+    vertical-align: top;
+  }
+
+  &-GH {
+    $shareLinkGH-color: #000;
+
+    color: $shareLinkGH-color;
+
+    &:before {
+      background: $shareLinkGH-color;
+    }
+
+    &:visited,
+    &:hover,
+    &:active {
+      color: $shareLinkGH-color;
+    }
+
+  }
+
+  &-TW {
+    $shareLinkTW-color: #2eb7ed;
+
+    color: $shareLinkTW-color;
+
+    &:before {
+      background: $shareLinkTW-color;
+    }
+
+    &:visited,
+    &:hover,
+    &:active {
+      color: $shareLinkTW-color;
+    }
+
+  }
+
+  &-FB {
+    $shareLinkFB-color: #3b5998;
+
+    color: $shareLinkFB-color;
+
+    &:before {
+      background: $shareLinkFB-color;
+    }
+
+    &:visited,
+    &:hover,
+    &:active {
+      color: $shareLinkFB-color;
+    }
+
+  }
+
+  &-GP {
+    $shareLinkGP-color: #dd4b39;
+
+    color: $shareLinkGP-color;
+
+    &:before {
+      background: $shareLinkGP-color;
+    }
+
+    &:visited,
+    &:hover,
+    &:active {
+      color: $shareLinkGP-color;
+    }
+
+  }
+
+}
+
+.shareLinkCount {
+  @include tx-font-size($fontSize);
+}
+
+
+
+/* Close */
+
+.close {
+  $close-size: 30px;
+  $close-position: 5px;
+
+  display: block;
+  position: absolute;
+  top: $close-position;
+  right: $close-position;
+  overflow: hidden;
+  width: $close-size;
+  height: 0;
+  padding: $close-size 0 0;
+  background: $ui-color;
+  border-radius: $ui-borderRadius;
+}
+
+
+
+/* HDPI UI */
+
+@media only screen and (min-resolution: 1.5dppx), only screen and (-webkit-min-device-pixel-ratio: 1.5), only screen and (min--moz-device-pixel-ratio: 1.5), only screen and (-o-min-device-pixel-ratio: 3 / 2), only screen and (min-device-pixel-ratio: 1.5), only screen and (min-resolution: 150dpi) {}
+
+
+
+/* Large Resolution UI */
+
+@media only screen and (min-width: txf-breakpoint(desktopWide)) {}
+
+
+
+/* Tablet UI */
+
+@media only screen and (max-width: txf-breakpoint(desktopMin)) {}
+
+@media only screen and (max-width: txf-breakpoint(desktopMin)) and (min-resolution: 1.5dppx), only screen and (max-width: txf-breakpoint(desktopMin)) and (-webkit-min-device-pixel-ratio: 1.5), only screen and (max-width: txf-breakpoint(desktopMin)) and (min--moz-device-pixel-ratio: 1.5), only screen and (max-width: txf-breakpoint(desktopMin)) and (-o-min-device-pixel-ratio: 3 / 2), only screen and (max-width: txf-breakpoint(desktopMin)) and (min-device-pixel-ratio: 1.5), only screen and (max-width: txf-breakpoint(desktopMin)) and (min-resolution: 150dpi) {}
+
+
+
+/* Phone UI */
+
+@media handheld, only screen and (max-width: txf-breakpoint(phoneMax)) {
+
+  @import 'phone/_ui-phone';
+
+}
+
+@media only screen and (max-width: txf-breakpoint(phoneMax)) and (min-resolution: 1.5dppx), only screen and (max-width: txf-breakpoint(phoneMax)) and (-webkit-min-device-pixel-ratio: 1.5), only screen and (max-width: txf-breakpoint(phoneMax)) and (min--moz-device-pixel-ratio: 1.5), only screen and (max-width: txf-breakpoint(phoneMax)) and (-o-min-device-pixel-ratio: 3 / 2), only screen and (max-width: txf-breakpoint(phoneMax)) and (min-device-pixel-ratio: 1.5), only screen and (max-width: txf-breakpoint(phoneMax)) and (min-resolution: 150dpi) {}
+
+
+
+/* Print Typography */
+
+@media print {
+
+  @import 'print/_ui-print';
+
+}
+
+
+
+/* TV UI */
+
+@media projection, tv {}
+
+
+
+/* Audio UI */
+
+@media aural {}

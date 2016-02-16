@@ -1,4 +1,8 @@
 {
+  "color_variables_files":
+  [
+    "/Users/uncleFucka/Projects/PublishTrelloWeb/interface/res/sass/project/_project.scss"
+  ],
   "folders":
   [
     {
@@ -39,6 +43,14 @@
       "follow_symlinks": true,
       "name": "PublishTrelloWeb: JavaScript",
       "path": "interface/res/js-dev"
+    }, {
+      "folder_exclude_patterns":
+      [
+        "backstop"
+      ],
+      "follow_symlinks": true,
+      "name": "PublishTrelloWeb: Tests",
+      "path": "tests"
     }, {
       "file_exclude_patterns":
       [

@@ -1,7 +1,6 @@
 /* Button */
 
-$tx-button-width: 320px;
-$tx-button-height: 100px;
+$tx-button-height: 48px;
 $tx-button-padding: $gap;
 $tx-button-color: $white;
 $tx-button-hover: $blue;
@@ -9,17 +8,12 @@ $tx-button-background: $blue;
 $tx-button-backgroundHover: $white;
 $tx-button-borderWidth: 2px;
 $tx-button-borderColor: $tx-button-background;
-$tx-button-borderRadius: 10px;
-$tx-button-fontSize: 25px;
 
 %tx-button {
   @extend %tx-buttonHover;
-  @include tx-font-size($tx-button-fontSize);
-  width: ($tx-button-width - $tx-button-borderWidth * 2);
   height: ($tx-button-height - $tx-button-borderWidth * 2);
-  padding: 0;
+  padding: 0 ($tx-button-padding - $tx-button-borderWidth);
   border: $tx-button-borderWidth solid $tx-button-borderColor;
-  border-radius: $tx-button-borderRadius;
   color: $tx-button-color;
   background: $tx-button-background;
   transition: $UITransition;

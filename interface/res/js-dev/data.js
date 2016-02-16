@@ -1,38 +1,29 @@
 /* jshint browser:true */
 
-var SEND_DATA = (function() {
+var request = require('browser-request');
+var serialize = require('form-serialize');
+var addEvent = require('./components/tx-event.js');
 
-  var event = require('./components/tx-event.js');
+var form;
 
-  var serialize = require('form-serialize');
-  var request = require('browser-request');
+const LINK = 'http://localhost:8000/generate';
 
-  var form;
-
-  var LINK = 'http://localhost:8000/generate';
-
-  function init() {
-    form = document.getElementById('options');
-    event.bind(form, 'submit', send);
+function onResponse(error, response) {
+  if (response.statusCode === 200) {
+    window.location = '/download';
+  } else {
+    console.log(error);
   }
+}
 
-  function send(event) {
-    event.preventDefault();
-    request((LINK + '?' + serialize(form)), onResponse);
-  }
+function send(event) {
+  event.preventDefault();
+  request((LINK + '?' + serialize(form)), onResponse);
+}
 
-  function onResponse(error, response, body) {
-    if (response.statusCode === 200) {
-      window.location = '/download';
-    } else {
+function init(node) {
+  form = node;
+  addEvent.bind(form, 'submit', send);
+}
 
-    }
-  }
-
-  return {
-    init: init
-  };
-
-})();
-
-module.exports = SEND_DATA;
+exports.init = init;

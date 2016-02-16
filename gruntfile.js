@@ -4,14 +4,15 @@ var PROJECT           = 'PublishTrelloWeb';   // Project Name
 var LANGUAGE          = 'en';                 // Language
 
 var DEVELOPMENT_DIR   = 'interface';          // Development
-var BUILD_DIR         = 'app/public'          // Build
+var BUILD_DIR         = 'app/public';         // Build
 var META_DIR          = 'meta';               // Meta Content
+var TESTS_DIR         = 'tests';              // Tests
 var IMAGES_DIR        = 'images';             // Content Images
 var RESOURCES_DIR     = 'res';                // Resources (CSS, JavaScript, Fonts, etc.)
 var TEMPLATES_DIR     = 'templates';          // Templates
 var COMPONENTS_DIR    = 'components';         // Components
 
-var INDEX_PAGE        = 'app.html';         // Index Page
+var INDEX_PAGE        = 'app.html';           // Index Page
 
 var CRITICAL_DESK_W   = 1280;                 // Horizontal Fold on Desktop
 var CRITICAL_DESK_H   = 800;                  // Vertical Fold on Desktop
@@ -20,11 +21,7 @@ var CRITICAL_MOBILE_H = 640;                  // Vertical Fold on Mobile
 
 var CSS_IMAGES_DIR    = 'images';             // CSS Images (Sprites, Icons, etc.)
 var SPRITES           = [];                   // CSS Images to Compile into Separate Sprite Sheets
-var DATA_URI          = [                     // CSS Images to Convert to DataURI
-                          'cog.svg',
-                          'select.svg',
-                          'loading.svg'
-                        ];
+var DATA_URI          = [];                   // CSS Images to Convert to DataURI
 
 var SASS_DIR          = 'sass';               // Sass
 var CSS_DIR           = 'css';                // CSS
@@ -44,7 +41,8 @@ module.exports = function(grunt) {
         name: PROJECT,
         language: LANGUAGE,
         dir: developmentDirCompiled,
-        meta: META_DIR,
+        meta: META_DIR + '/',
+        tests: TESTS_DIR + '/',
         images: developmentDirCompiled + IMAGES_DIR + '/',
         index: INDEX_PAGE,
         res: {
@@ -179,6 +177,39 @@ module.exports = function(grunt) {
       ananlyzeCSS: {
         cwd: project.res.css.dir,
         src: ['*.css', '!*-IE.css'],
+        expand: true
+      }
+    },
+
+    backstop: {
+      options: {
+        'backstop_path': 'node_modules/backstopjs',
+        'test_path': project.tests + 'backstop'
+      },
+      test: {
+        options: {
+          setup: false,
+          configure: false,
+          'create_references': false,
+          'run_tests': true
+        }
+      },
+      ref: {
+        options: {
+          setup: false,
+          configure: false,
+          'create_references': true,
+          'run_tests': false
+        }
+      }
+    },
+    mochaTest: {
+      tests: {
+        options: {
+          quiet: false
+        },
+        cwd: project.tests,
+        src: ['**/*.js'],
         expand: true
       }
     },
@@ -337,6 +368,9 @@ module.exports = function(grunt) {
 
     browserify: {
       bundle: {
+        options: {
+          transform: [['babelify', {'presets': ['es2015']}]]
+        },
         files: {
           bundleFiles: function() {
             var bundleFilesObject = {};
@@ -344,6 +378,25 @@ module.exports = function(grunt) {
             return bundleFilesObject;
           }
         }.bundleFiles()
+      }
+    },
+    removelogging: {
+      jsClean: {
+        cwd: project.res.js.dir,
+        src: ['*.js'],
+        dest: project.res.js.dir,
+        expand: true
+      }
+    },
+    fixmyjs: {
+      options: {
+        config: '.jshintrc'
+      },
+      fixMyJS: {
+        cwd: project.res.js.dir,
+        src: ['*.js'],
+        dest: project.res.js.dir,
+        expand: true
       }
     },
     uglify: {
@@ -581,7 +634,16 @@ module.exports = function(grunt) {
     clean: {
       res: [project.res.css.dir, project.res.js.dir + '*.js'],
       reports: [project.res.js.dir + '*.txt'],
+      images: [project.res.css.sass + 'project/tx/'],
       build: [project.build.dir]
+    },
+    cleanempty: {
+      options: {
+        noJunk: true
+      },
+      build: {
+        src: [project.build.dir + '**/*']
+      }
     },
     copy: {
       build: {
@@ -627,6 +689,23 @@ module.exports = function(grunt) {
         src: ['**'],
         dest: '.',
         expand: true
+      }
+    },
+
+    connect: {
+      options: {
+        keepalive: true,
+        port: 8000
+      },
+      dev: {
+        options: {
+          base: project.dir
+        }
+      },
+      build: {
+        options: {
+          base: project.build.dir
+        }
       }
     },
 
@@ -676,15 +755,6 @@ module.exports = function(grunt) {
     }
     if (scssIE !== '') {
       grunt.file.write(project.res.css.sass + 'project/tx/_tx-projectImages-IE.scss', scssIE);
-    }
-  });
-
-  grunt.registerTask('datauri-cleanup', 'Cleanup After datauri-fallback', function() {
-    if (grunt.file.isFile(project.res.css.sass + 'project/tx/_tx-projectImages-base64.scss')) {
-      grunt.file.delete(project.res.css.sass + 'project/tx/_tx-projectImages-base64.scss');
-    }
-    if (grunt.file.isFile(project.res.css.sass + 'project/tx/_tx-projectImages-IE.scss')) {
-      grunt.file.delete(project.res.css.sass + 'project/tx/_tx-projectImages-IE.scss');
     }
   });
 
@@ -745,6 +815,16 @@ module.exports = function(grunt) {
     });
   });
 
+  grunt.registerTask('reminder', 'Reminder', function() {
+    var list = grunt.file.readJSON('.reminderrc').reminders;
+    if (list.length > 0) {
+      grunt.log.writeln('\nDon\'t Forget to Check:'['magenta']);
+      list.forEach(function(value) {
+        grunt.log.writeln('✔'['green'] + ' ' + value);
+      });
+    }
+  });
+
   grunt.registerTask('compileTasks', 'compiling', function() {
     if (project.res.images.sprites.length > 0) {
       grunt.task.run([
@@ -782,11 +862,17 @@ module.exports = function(grunt) {
     'analyzecss'
   ]);
 
+  grunt.registerTask('test', [
+    'quality',
+    'performance',
+    'mochaTest',
+    'backstop:test'
+  ]);
+
   grunt.registerTask('images-datauri', [
     'datauri',
     'datauri-fallback',
-    'concat:datauri',
-    'datauri-cleanup'
+    'concat:datauri'
   ]);
 
   grunt.registerTask('process-sprites', [
@@ -797,7 +883,8 @@ module.exports = function(grunt) {
   grunt.registerTask('images', [
     'imagemin:images',
     'svgmin:images',
-    'images-datauri'
+    'images-datauri',
+    'clean:images'
   ]);
 
   grunt.registerTask('process-html', [
@@ -847,7 +934,9 @@ module.exports = function(grunt) {
     'prettify',
     'string-replace:indentation',
     'compress:cssGzip',
-    'compress:jsGzip'
+    'compress:jsGzip',
+    'cleanempty:build',
+    'reminder'
   ]);
 
   grunt.registerTask('build-critical', [

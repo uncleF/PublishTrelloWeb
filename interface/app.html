@@ -7,47 +7,76 @@
 <!--[if gt IE 9]><!--><html class="mdz-no-js" lang="@tx-language"><!--<![endif]-->
 
   <head>
+    <title>@tx-title</title>
+    <meta name="title" content="@tx-title">
     <meta http-equiv="content-type" content="text/html; charset=utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
     <meta http-equiv="cleartype" content="on">
+    <link type="text/plain" rel="author" href="/humans.txt">
     <link rel="stylesheet" type="text/css" href="res/css/styles.css">
     <!--[if lte IE 7]> <link rel="stylesheet" type="text/css" href="res/css/styles-IE.css"> <![endif]-->
+    <link rel="stylesheet" type="text/css" href="res/css/tx/tx-debug.css">
     <script type="text/javascript" src="res/js/Modernizr/modernizr.min.js"></script>
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <!--[if IE]> <link rel="shortcut icon" type="image/x-icon" href="favicon.ico"> <![endif]-->
+    <link rel="mask-icon" type="image/svg+xml" href="maskIcon.svg" color="#fd746c">
+    <meta name="theme-color" content="#fd746c">
   </head>
 
   <body>
-    <div class="interface">
-      <img src="images/avatar.png" class="avatar" width="100" height="100" alt="">
-      <a href="#" class="settings">Settings</a>
+    <section id="app" class="app">
       <form action="/download" type="get" id="options" class="form">
-        <select class="select" name="board" id="board">
-          <option value="b1">Board Name</option>
-          <option value="b2">Trello Board</option>
-          <option value="b3">Next Board</option>
-          <option value="b4">Trello Board With A Really Long Name</option>
-          <option value="b5">Last Trello Board</option>
-        </select>
-        <ul class="stepper">
-          <li>
-            <input type="checkbox" class="option" name="html" id="html">
+        <input type="url" class="boardURL" name="boardURL" id="boardURL" placeholder="Trello Board Link">
+        <div>
+          <input type="checkbox" class="cssOption" name="cssOption" id="cssOption">
+          <label for="cssOption" class="cssOptionLabel">Custom CSS Styles</label>
+          <input type="file" class="upload" name="cssUpload" id="cssUpload">
+        </div>
+        <ul class="options">
+          <li class="option">
+            <input type="checkbox" class="optionCheckbox" name="html" id="html">
             <label for="html" class="optionLabel">HTML</label>
           </li>
-          <li>
-            <input type="checkbox" class="option" name="md" id="md">
+          <li class="option">
+            <input type="checkbox" class="optionCheckbox" name="md" id="md">
             <label for="md" class="optionLabel">MD</label>
           </li>
-          <li>
-            <input type="checkbox" class="option" name="pdf" id="pdf">
+          <li class="option">
+            <input type="checkbox" class="optionCheckbox" name="pdf" id="pdf">
             <label for="pdf" class="optionLabel">PDF</label>
           </li>
-          <li>
-            <input type="checkbox" class="option" name="epub" id="epub">
+          <li class="option">
+            <input type="checkbox" class="optionCheckbox" name="epub" id="epub">
             <label for="epub" class="optionLabel">ePUB</label>
           </li>
         </ul>
-        <input type="submit" class="button" value="Download Board">
+        <input type="submit" class="download" value="Download Board">
       </form>
+      <ul class="shareLinks">
+        <li class="shareItem">
+          <a href="#" class="shareLink shareLink-GH">GitHub <span class="shareLinkCount">100</span></a>
+        </li>
+        <li class="shareItem">
+          <a href="#" class="shareLink shareLink-TW">Twitter <span class="shareLinkCount">3</span></a>
+        </li>
+        <li class="shareItem">
+          <a href="#" class="shareLink shareLink-FB">Facebook <span class="shareLinkCount">0</span></a>
+        </li>
+        <li class="shareItem">
+          <a href="#" class="shareLink shareLink-GP">Google+ <span class="shareLinkCount">324</span></a>
+        </li>
+      </ul>
+    </section>
+    <div id="overlay" class="overlay">
+      <article class="message">
+        <div id="messageText"></div>
+        <a href="#" id="close" class="close">Close</a>
+      </article>
     </div>
     <script type="text/javascript" src="res/js/scripts.js" defer></script>
   </body>

@@ -1,6 +1,6 @@
 @import 'project/_project';
 
-@import 'tx/_tx';
+$tx-IE: true;
 
 @import 'components/_baseline-IE';
 @import 'components/_layout-IE';

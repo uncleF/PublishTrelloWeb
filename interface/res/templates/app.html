@@ -1,37 +1,54 @@
 <!-- @tx-process:include _head.html --><!-- /@tx-process -->
 
   <body>
-    <div class="interface">
-      <img src="images/avatar.png" class="avatar" width="100" height="100" alt="">
-      <a href="#" class="settings">Settings</a>
+    <section id="app" class="app">
       <form action="/download" type="get" id="options" class="form">
-        <select class="select" name="board" id="board">
-          <option value="b1">Board Name</option>
-          <option value="b2">Trello Board</option>
-          <option value="b3">Next Board</option>
-          <option value="b4">Trello Board With A Really Long Name</option>
-          <option value="b5">Last Trello Board</option>
-        </select>
-        <ul class="stepper">
-          <li>
-            <input type="checkbox" class="option" name="html" id="html">
+        <input type="url" class="boardURL" name="boardURL" id="boardURL" placeholder="Trello Board Link">
+        <div>
+          <input type="checkbox" class="cssOption" name="cssOption" id="cssOption">
+          <label for="cssOption" class="cssOptionLabel">Custom CSS Styles</label>
+          <input type="file" class="upload" name="cssUpload" id="cssUpload">
+        </div>
+        <ul class="options">
+          <li class="option">
+            <input type="checkbox" class="optionCheckbox" name="html" id="html">
             <label for="html" class="optionLabel">HTML</label>
           </li>
-          <li>
-            <input type="checkbox" class="option" name="md" id="md">
+          <li class="option">
+            <input type="checkbox" class="optionCheckbox" name="md" id="md">
             <label for="md" class="optionLabel">MD</label>
           </li>
-          <li>
-            <input type="checkbox" class="option" name="pdf" id="pdf">
+          <li class="option">
+            <input type="checkbox" class="optionCheckbox" name="pdf" id="pdf">
             <label for="pdf" class="optionLabel">PDF</label>
           </li>
-          <li>
-            <input type="checkbox" class="option" name="epub" id="epub">
+          <li class="option">
+            <input type="checkbox" class="optionCheckbox" name="epub" id="epub">
             <label for="epub" class="optionLabel">ePUB</label>
           </li>
         </ul>
-        <input type="submit" class="button" value="Download Board">
+        <input type="submit" class="download" value="Download Board">
       </form>
+      <ul class="shareLinks">
+        <li class="shareItem">
+          <a href="#" class="shareLink shareLink-GH">GitHub <span class="shareLinkCount">100</span></a>
+        </li>
+        <li class="shareItem">
+          <a href="#" class="shareLink shareLink-TW">Twitter <span class="shareLinkCount">3</span></a>
+        </li>
+        <li class="shareItem">
+          <a href="#" class="shareLink shareLink-FB">Facebook <span class="shareLinkCount">0</span></a>
+        </li>
+        <li class="shareItem">
+          <a href="#" class="shareLink shareLink-GP">Google+ <span class="shareLinkCount">324</span></a>
+        </li>
+      </ul>
+    </section>
+    <div id="overlay" class="overlay">
+      <article class="message">
+        <div id="messageText"></div>
+        <a href="#" id="close" class="close">Close</a>
+      </article>
     </div>
     <!-- @tx-process:include _scripts.html --><!-- /@tx-process -->
   </body>
