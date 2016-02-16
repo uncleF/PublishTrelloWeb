@@ -3,11 +3,11 @@
   <body>
     <section id="app" class="app">
       <form action="/download" type="get" id="options" class="form">
-        <input type="url" class="boardURL" name="boardURL" id="boardURL" placeholder="Trello Board Link">
+        <input type="url" class="boardURL" name="boardURL" id="boardURL" placeholder="Trello Board Link – https://trello.com/b/...">
         <input type="checkbox" class="cssOption" name="cssOption" id="cssOption">
         <label for="cssOption" class="cssOptionLabel">Custom CSS Styles</label>
         <div id="cssOptionsForm" class="cssOptionsForm">
-          <input type="url" class="linkCSS" name="linkCSS" id="linkCSS" placeholder="Link or Choose a CSS File">
+          <input class="linkCSS" name="linkCSS" id="linkCSS" placeholder="Link or Choose a CSS File">
           <a href="#" id="uploadCSSBrowse" class="uploadCSSBrowse" tabindex="-1">Browse</a>
           <input type="file" class="uploadCSS" name="uploadCSS" id="uploadCSS">
         </div>
@@ -18,7 +18,7 @@
           </li>
           <li class="formatOption">
             <input type="checkbox" class="optionCheckbox" name="md" id="md">
-            <label for="md" class="optionLabel">MD</label>
+            <label for="md" class="optionLabel">Markdown</label>
           </li>
           <li class="formatOption">
             <input type="checkbox" class="optionCheckbox" name="pdf" id="pdf">
@@ -29,6 +29,7 @@
             <label for="epub" class="optionLabel">ePUB</label>
           </li>
         </ul>
+        <input type="hidden" name="uploadFlag" id="uploadFlag">
         <input type="submit" class="download" name="download" id="download" value="Download Board" disabled="disabled">
       </form>
       <ul class="shareLinks">

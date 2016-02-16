@@ -469,8 +469,8 @@ textarea {
   $shareLink-width: 15px;
   $shareLink-color: $white;
 
+  @include tx-inline-block;
   position: relative;
-  display: block;
   text-decoration: none;
   white-space: nowrap;
 

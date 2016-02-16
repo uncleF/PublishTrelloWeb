@@ -46,8 +46,8 @@ body {
 /* Options */
 
 %UIListStyle {
+  display: flex;
   padding: 0;
-  font-size: 0;
   list-style: none;
   text-align: center;
   user-select: none;
@@ -56,12 +56,11 @@ body {
 .formatOptions {
   @extend %UIListStyle;
   @include tx-rhythm(1, 1);
+  justify-content: space-between;
 }
 
 .formatOption {
-  @include tx-inline-block;
   @include tx-font-size($fontSize);
-  width: 25%;
 }
 
 
@@ -70,14 +69,10 @@ body {
 
 .shareLinks {
   @extend %UIListStyle;
-  @include tx-rhythm(1.5, 0);
+  @include tx-rhythm(1.5, 0, $mrgt: 75px, $mlft: 75px);
+  justify-content: space-around;
+  font-size: 0;
   text-align: center;
-}
-
-.shareItem {
-  @include tx-inline-block;
-  margin: 0 10px;
-  vertical-align: top;
 }
 
 

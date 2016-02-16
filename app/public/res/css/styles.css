@@ -160,8 +160,11 @@ body:before {
 /* Options */
 
 .formatOptions, .shareLinks {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
   padding: 0;
-  font-size: 0;
   text-align: center;
   list-style: none;
 
@@ -172,13 +175,15 @@ body:before {
 }
 
 .formatOptions {
+  -webkit-box-pack: justify;
+  -webkit-justify-content: space-between;
+  -ms-flex-pack: justify;
+  justify-content: space-between;
   margin: 24px 0;
   margin: 1.5rem 0;
 }
 
 .formatOption {
-  display: inline-block;
-  width: 25%;
   font-size: 16px;
   font-size: 1rem;
   line-height: 1.5;
@@ -187,15 +192,13 @@ body:before {
 /* Share Links */
 
 .shareLinks {
-  margin: 36px 0 0;
-  margin: 2.25rem 0 0;
+  -webkit-justify-content: space-around;
+  -ms-flex-pack: distribute;
+  justify-content: space-around;
+  margin: 36px 75px 0;
+  margin: 2.25rem 75px 0;
+  font-size: 0;
   text-align: center;
-}
-
-.shareItem {
-  display: inline-block;
-  margin: 0 10px;
-  vertical-align: top;
 }
 
 /* CSS Option */
@@ -544,7 +547,7 @@ input[type="file"] {
 
 .shareLink {
   position: relative;
-  display: block;
+  display: inline-block;
   text-decoration: none;
   white-space: nowrap;
 }
@@ -650,38 +653,3 @@ input[type="file"] {
   }
 
 }
-
-/* TX Rhythm Lines */
-
-.page-is-showingRhythmLines {
-  position: relative;
-  top: -1px;
-  padding: 1px 30px 0;
-}
-
-.page-is-showingRhythmLines .debugToolsRhythm {
-  display: block;
-}
-
-/* TX Debuging Console */
-
-.page-is-showingConsole .debugConsole {
-  display: block;
-}
-
-/* TX Debuging Controls */
-
-.page-is-showingDebugTools .debugTools {
-  transform: translate(0, 0);
-}
-
-.page-is-showingDebugTools .debugToolsToggle {
-  top: 5px;
-  left: 5px;
-  width: 30px;
-  height: 30px;
-  margin: 0;
-  background: #ffffff;
-  opacity: 1;
-}
-
