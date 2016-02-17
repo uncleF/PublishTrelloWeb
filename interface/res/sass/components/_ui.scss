@@ -261,12 +261,12 @@ textarea {
 
 /* Board URL */
 
-%formFieldStyle {
+.board {
   @extend %formStyle;
   @include tx-form-height(2.10);
   box-sizing: border-box;
   width: 100%;
-  padding: 0 ($gap / 2);
+  padding: 0 50px 0 ($gap / 2);
 
   &:focus {
     @extend %formFocusStyle;
@@ -274,24 +274,31 @@ textarea {
 
 }
 
-.boardURL {
-  @extend %formFieldStyle;
-}
-
 
 
 /* Download */
 
-%formButtonStyle {
+.download {
   $formButtonStyle-color: $white;
 
   @extend %touchAction;
+  @include tx-grid-height(2, $lh: false);
+  position: relative;
   display: block;
+  overflow: hidden;
+  width: 100%;
   padding: 0;
   color: $formButtonStyle-color;
   background: $ui-color;
   border-radius: $ui-borderRadius;
   cursor: pointer;
+
+  &:before {
+    @include tx-pseudo(relative, inline-block);
+    @include tx-sprite($spt-download, $block: true);
+    margin: 0 5px 0 0;
+    vertical-align: middle;
+  }
 
   &:hover,
   &:active {
@@ -302,12 +309,42 @@ textarea {
     @extend %formFocusStyle;
   }
 
+  &[disabled] {
+    background: $ui-disabled;
+    opacity: 1;
+  }
+
+  &-is-busy {
+
+    &:before {
+      position: absolute;
+      bottom: 100%;
+      left: 50%;
+      margin: 0 0 0 ($spt-download-width / -2);
+      z-index: 1;
+      animation: downloadAnimation 1s infinite;
+    }
+
+    &:after {
+      @include tx-pseudo;
+      top: $ui-borderRadius;
+      right: $ui-borderRadius;
+      bottom: $ui-borderRadius;
+      left: $ui-borderRadius;
+      background: $ui-disabled;
+    }
+
+  }
+
 }
 
-.download {
-  @extend %formButtonStyle;
-  @include tx-grid-height(2, $lh: false);
-  width: 100%;
+@keyframes downloadAnimation {
+  from {
+    transform: translateY(0)
+  }
+  to {
+    transform: translateY(48px + $spt-download-height)
+  }
 }
 
 
@@ -337,18 +374,19 @@ textarea {
 }
 
 .optionLabel {
-  $optionLabelCheck-size: 30px;
+  $optionLabelCheck-size: 20px;
   $optionLabelCheck-borderWidth: 2px;
+  $optionLabelCheckBackground-size: 30px;
 
   @include tx-inline-block;
   position: relative;
   color: $ui-color;
-  line-height: $optionLabelCheck-size;
+  line-height: $optionLabelCheckBackground-size;
 
   &:before {
     @include tx-pseudo(relative, inline-block);
-    width: ($optionLabelCheck-size - $optionLabelCheck-borderWidth * 2);
-    height: ($optionLabelCheck-size - $optionLabelCheck-borderWidth * 2);
+    width: ($optionLabelCheckBackground-size - $optionLabelCheck-borderWidth * 2);
+    height: ($optionLabelCheckBackground-size - $optionLabelCheck-borderWidth * 2);
     margin: -4px 5px 0 0;
     border: $optionLabelCheck-borderWidth solid $ui-color;
     border-radius: $ui-borderRadius;
@@ -357,116 +395,20 @@ textarea {
 
   &:after {
     @include tx-pseudo;
-    top: 0;
-    left: 0;
-    width: $optionLabelCheck-size;
-    height: $optionLabelCheck-size;
+    @include tx-sprite($spt-check, $block: true);
+    top: 50%;
+    left: ($optionLabelCheckBackground-size - $spt-check-width) / 2;
+    margin: ($spt-check-height / -2) 0 0;
     visibility: hidden;
   }
 
 }
-
-
-
-/* CSS Options */
-
-.cssOption {
-  position: absolute;
-  left: -1000px;
-
-  &:checked + .cssOptionLabel {
-
-    &:before {
-      background: $ui-color;
-      border-color: $ui-color;
-    }
-
-    &:after {
-      visibility: visible;
-    }
-
-  }
-
-  &:focus + .cssOptionLabel {
-    @extend %formFocusStyle;
-  }
-
-}
-
-.cssOptionLabel {
-  $cssOptionCheck-size: 15px;
-  $cssOptionCheck-borderWidth: 1px;
-  $cssOptionCheck-borderColor: $gray;
-
-  @include tx-inline-block;
-  @include tx-font-size(small);
-  position: relative;
-  color: $ui-color;
-  line-height: $cssOptionCheck-size;
-  user-select: none;
-
-  &:before {
-    @include tx-pseudo(relative, inline-block);
-    width: ($cssOptionCheck-size - $cssOptionCheck-borderWidth * 2);
-    height: ($cssOptionCheck-size - $cssOptionCheck-borderWidth * 2);
-    margin: -2px 5px 0 0;
-    border: $cssOptionCheck-borderWidth solid $cssOptionCheck-borderColor;
-    border-radius: 2px;
-    vertical-align: middle;
-  }
-
-  &:after {
-    @include tx-pseudo;
-    top: 0;
-    left: 0;
-    width: $cssOptionCheck-size;
-    height: $cssOptionCheck-size;
-    visibility: hidden;
-  }
-
-}
-
-
-
-/* Upload */
-
-.uploadCSS {
-  position: absolute;
-  visibility: hidden;
-}
-
-.linkCSS {
-  @extend %formFieldStyle;
-}
-
-.uploadCSSBrowse {
-  $uploadCSSBrowse-width: 75px;
-  $uploadCSSBrowse-color: $white;
-
-  @extend %formButtonStyle;
-  @include tx-grid-height(1.75);
-  position: absolute;
-  top: 3px;
-  right: 3px;
-  width: $uploadCSSBrowse-width;
-  text-align: center;
-  text-decoration: none;
-
-  &:visited,
-  &:hover,
-  &:active {
-    color: $uploadCSSBrowse-color;
-  }
-
-}
-
 
 
 
 /* Share */
 
 .shareLink {
-  $shareLink-width: 15px;
   $shareLink-color: $white;
 
   @include tx-inline-block;
@@ -476,16 +418,15 @@ textarea {
 
   &:before {
     @include tx-pseudo(relative, inline-block);
-    width: $shareLink-width;
-    height: $shareLink-width;
-    margin: 5px 5px 0;
+    margin: 0 9px 0 0;
     vertical-align: top;
+    opacity: .35;
   }
 
   &-GH {
 
     &:before {
-
+      @include tx-sprite($spt-github, $block: true);
     }
 
   }
@@ -493,7 +434,7 @@ textarea {
   &-TW {
 
     &:before {
-
+      @include tx-sprite($spt-twitter, $block: true);
     }
 
   }
@@ -501,7 +442,7 @@ textarea {
   &-FB {
 
     &:before {
-
+      @include tx-sprite($spt-facebook, $block: true);
     }
 
   }
@@ -509,7 +450,7 @@ textarea {
   &-GP {
 
     &:before {
-
+      @include tx-sprite($spt-google, $block: true);
     }
 
   }
@@ -518,6 +459,19 @@ textarea {
   &:hover,
   &:active {
     color: $shareLink-color;
+  }
+
+  &:hover,
+  &:active {
+
+    &:before {
+      opacity: 1;
+    }
+
+    .shareLinkCount {
+      opacity: 1;
+    }
+
   }
 
   &:focus {
@@ -529,43 +483,57 @@ textarea {
 .shareLinkCount {
   $shareLinkCountTail-size: 10px;
 
+  @include tx-inline-block;
   @include tx-font-size(small);
   position: relative;
-  padding: 2px 5px;
-  background: $ui-color;
-
-  &:before {
-    @include tx-pseudo;
-    z-index: -1;
-    top: 50%;
-    left: -2px;
-    width: $shareLinkCountTail-size;
-    height: $shareLinkCountTail-size;
-    margin: ($shareLinkCountTail-size / -2) 0 0;
-    background: inherit;
-    transform: translateY(.5px) rotate(45deg);
-  }
-
+  color: $ui-color;
+  line-height: 1.725;
+  opacity: .35;
 }
 
 
 
-/* Close */
+/* Message */
 
 .close {
-  $close-size: 30px;
   $close-position: 5px;
 
+  @include tx-sprite($spt-close, $block: true, $pd: true, $color: $ui-color);
   display: block;
   position: absolute;
   top: $close-position;
   right: $close-position;
   overflow: hidden;
-  width: $close-size;
-  height: 0;
-  padding: $close-size 0 0;
-  background: $ui-color;
+
+  &:hover,
+  &:active {
+    background-color: $ui-active;
+  }
+
+}
+
+.ok {
+  $ok-color: $white;
+
+  @include tx-inline-block;
+  @include tx-grid-height(1.5);
+  padding: 0 35px;
+  color: $ok-color;
   border-radius: $ui-borderRadius;
+  background: $ui-color;
+  text-decoration: none;
+
+  &:visited,
+  &:hover,
+  &:active {
+    color: $ok-color;
+  }
+
+  &:hover,
+  &:active {
+    background: $ui-active;
+  }
+
 }
 
 

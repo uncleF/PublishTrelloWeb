@@ -10,7 +10,8 @@
     "express": "^4.13.3",
     "form-serialize": "^0.7.0",
     "publishtrello": "https://github.com/uncleF/PublishTrello#master",
-    "qconf": "^2.2.0"
+    "qconf": "^2.2.0",
+    "shortid": "^2.2.4"
   },
   "devDependencies": {
     "babelify": "*",

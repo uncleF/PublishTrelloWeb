@@ -157,9 +157,37 @@ body:before {
   white-space: normal;
 }
 
+/* Form */
+
+.form {
+  position: relative;
+}
+
+.form-is-validBoard:before {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  content: "";
+  display: block;
+  width: 22px;
+  height: 20px;
+  background: url(../images/sprites.png) -37px -27px;
+}
+
+.form-is-invalidBoard:before {
+  position: absolute;
+  top: 13px;
+  right: 15px;
+  content: "";
+  display: block;
+  width: 22px;
+  height: 22px;
+  background: url(../images/sprites.png) -37px 0;
+}
+
 /* Options */
 
-.formatOptions, .shareLinks {
+.options, .shareLinks {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -174,7 +202,7 @@ body:before {
   user-select: none;
 }
 
-.formatOptions {
+.options {
   -webkit-box-pack: justify;
   -webkit-justify-content: space-between;
   -ms-flex-pack: justify;
@@ -183,7 +211,7 @@ body:before {
   margin: 1.5rem 0;
 }
 
-.formatOption {
+.option {
   font-size: 16px;
   font-size: 1rem;
   line-height: 1.5;
@@ -195,23 +223,10 @@ body:before {
   -webkit-justify-content: space-around;
   -ms-flex-pack: distribute;
   justify-content: space-around;
-  margin: 36px 75px 0;
-  margin: 2.25rem 75px 0;
+  margin: 36px 50px 0;
+  margin: 2.25rem 50px 0;
   font-size: 0;
   text-align: center;
-}
-
-/* CSS Option */
-
-.cssOptionsForm {
-  position: relative;
-  margin: 36px 0 0;
-  margin: 2.25rem 0 0;
-  visibility: hidden;
-}
-
-.cssOptionsForm-is-active {
-  visibility: visible;
 }
 
 /* Message */
@@ -227,6 +242,11 @@ body:before {
   background: #ffffff;
   vertical-align: middle;
   white-space: normal;
+}
+
+.messageText {
+  margin: 0 0 24px;
+  margin: 0 0 1.5rem;
 }
 
 /* Phone Layout */
@@ -272,13 +292,13 @@ body:before {
 
 /* Focus */
 
-a:focus, input:focus {
+a:focus, input:focus, button:focus {
   outline: 1px dotted #cccccc;
 }
 
 /* Fast Touch */
 
-a, label, .download, .uploadCSSBrowse {
+a, label, button, .download {
   -ms-touch-action: manipulation;
   touch-action: manipulation;
 }
@@ -322,20 +342,20 @@ label {
   cursor: pointer;
 }
 
-input {
+input, button {
   margin: 0;
   font-family: inherit;
 }
 
-input {
+input, button {
   font-size: inherit;
 }
 
-input {
+input, button {
   box-sizing: content-box;
 }
 
-input {
+input, button {
   border: 0;
 }
 
@@ -344,11 +364,15 @@ input::-moz-focus-inner, button::-moz-focus-inner {
   border: 0;
 }
 
+button {
+  text-transform: none;
+}
+
 input {
   vertical-align: top;
 }
 
-.boardURL, .linkCSS {
+.board {
   border: 1px solid #cccccc;
 }
 
@@ -357,7 +381,7 @@ input[type="checkbox"] {
   vertical-align: middle;
 }
 
-input[disabled] {
+button[disabled] {
   opacity: .5;
   cursor: default;
   cursor: not-allowed;
@@ -378,32 +402,39 @@ input::placeholder, textarea::placeholder {
   opacity: 1;
 }
 
-input[type="file"] {
-  height: auto;
-  border: 0;
+button {
+  height: 36px;
+  height: 2.25rem;
+  padding: 0 15px;
+  cursor: pointer;
 }
 
 /* Form Focus */
 
-.boardURL:focus, .linkCSS:focus, .download:focus, .uploadCSSBrowse:focus, .optionCheckbox:focus + .optionLabel, .cssOption:focus + .cssOptionLabel {
+.board:focus, .download:focus, .optionCheckbox:focus + .optionLabel {
   outline: 1px dotted #cccccc;
   outline-offset: 2px;
 }
 
 /* Board URL */
 
-.boardURL, .linkCSS {
+.board {
   box-sizing: border-box;
   width: 100%;
   height: 48.4px;
   height: 3.025rem;
-  padding: 0 15px;
+  padding: 0 50px 0 15px;
 }
 
 /* Download */
 
-.download, .uploadCSSBrowse {
+.download {
+  position: relative;
   display: block;
+  overflow: hidden;
+  width: 100%;
+  height: 48px;
+  height: 3rem;
   padding: 0;
   border-radius: 4px;
   color: #ffffff;
@@ -411,14 +442,71 @@ input[type="file"] {
   cursor: pointer;
 }
 
-.download:hover, .uploadCSSBrowse:hover, .download:active, .uploadCSSBrowse:active {
+.download:before {
+  position: relative;
+  content: "";
+  display: inline-block;
+  width: 18px;
+  height: 19px;
+  margin: 0 5px 0 0;
+  background: url(../images/sprites.png) -50px -52px;
+  vertical-align: middle;
+}
+
+.download:hover, .download:active {
   background: #23527c;
 }
 
-.download {
-  width: 100%;
-  height: 48px;
-  height: 3rem;
+.download[disabled] {
+  background: #cccccc;
+  opacity: 1;
+}
+
+.download-is-busy:before {
+  position: absolute;
+  z-index: 1;
+  bottom: 100%;
+  left: 50%;
+  margin: 0 0 0 -9px;
+  -webkit-animation: downloadAnimation 1s infinite;
+  animation: downloadAnimation 1s infinite;
+}
+
+.download-is-busy:after {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  bottom: 4px;
+  left: 4px;
+  content: "";
+  display: block;
+  background: #cccccc;
+}
+
+@-webkit-keyframes downloadAnimation {
+  from {
+    -webkit-transform: translateY(0);
+    transform: translateY(0);
+  }
+
+  to {
+    -webkit-transform: translateY(67px);
+    transform: translateY(67px);
+  }
+
+}
+
+@keyframes downloadAnimation {
+  from {
+    -webkit-transform: translateY(0);
+    transform: translateY(0);
+  }
+
+  to {
+    -webkit-transform: translateY(67px);
+    transform: translateY(67px);
+  }
+
 }
 
 /* Options */
@@ -457,90 +545,15 @@ input[type="file"] {
 
 .optionLabel:after {
   position: absolute;
-  top: 0;
-  left: 0;
+  top: 50%;
+  left: 4px;
   content: "";
   display: block;
-  width: 30px;
-  height: 30px;
+  width: 22px;
+  height: 20px;
+  margin: -10px 0 0;
+  background: url(../images/sprites.png) -64px -25px;
   visibility: hidden;
-}
-
-/* CSS Options */
-
-.cssOption {
-  position: absolute;
-  left: -1000px;
-}
-
-.cssOption:checked + .cssOptionLabel:before {
-  border-color: #337ab7;
-  background: #337ab7;
-}
-
-.cssOption:checked + .cssOptionLabel:after {
-  visibility: visible;
-}
-
-.cssOptionLabel {
-  position: relative;
-  display: inline-block;
-  color: #337ab7;
-  font-size: 12px;
-  font-size: .75rem;
-  line-height: 2;
-  line-height: 15px;
-
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-}
-
-.cssOptionLabel:before {
-  position: relative;
-  content: "";
-  display: inline-block;
-  width: 13px;
-  height: 13px;
-  border: 1px solid #cccccc;
-  border-radius: 2px;
-  margin: -2px 5px 0 0;
-  vertical-align: middle;
-}
-
-.cssOptionLabel:after {
-  position: absolute;
-  top: 0;
-  left: 0;
-  content: "";
-  display: block;
-  width: 15px;
-  height: 15px;
-  visibility: hidden;
-}
-
-/* Upload */
-
-.uploadCSS {
-  position: absolute;
-  visibility: hidden;
-}
-
-.uploadCSSBrowse {
-  position: absolute;
-  top: 3px;
-  right: 3px;
-  width: 75px;
-  height: 42px;
-  height: 2.625rem;
-  text-align: center;
-  text-decoration: none;
-  line-height: 2.625;
-}
-
-.uploadCSSBrowse:visited, .uploadCSSBrowse:hover, .uploadCSSBrowse:active {
-  color: #ffffff;
 }
 
 /* Share */
@@ -556,14 +569,45 @@ input[type="file"] {
   position: relative;
   content: "";
   display: inline-block;
-  width: 15px;
-  height: 15px;
-  margin: 5px 5px 0;
+  margin: 0 9px 0 0;
   vertical-align: top;
+  opacity: .35;
+}
+
+.shareLink-GH:before {
+  width: 20px;
+  height: 20px;
+  background: url(../images/sprites.png) -25px -52px;
+}
+
+.shareLink-TW:before {
+  width: 24px;
+  height: 20px;
+  background: url(../images/sprites.png) -64px 0;
+}
+
+.shareLink-FB:before {
+  width: 20px;
+  height: 20px;
+  background: url(../images/sprites.png) 0 -52px;
+}
+
+.shareLink-GP:before {
+  width: 32px;
+  height: 20px;
+  background: url(../images/sprites.png) 0 0;
 }
 
 .shareLink:visited, .shareLink:hover, .shareLink:active {
   color: #ffffff;
+}
+
+.shareLink:hover:before, .shareLink:active:before {
+  opacity: 1;
+}
+
+.shareLink:hover .shareLinkCount, .shareLink:active .shareLinkCount {
+  opacity: 1;
 }
 
 .shareLink:focus {
@@ -572,30 +616,16 @@ input[type="file"] {
 
 .shareLinkCount {
   position: relative;
-  padding: 2px 5px;
-  background: #337ab7;
+  display: inline-block;
+  color: #337ab7;
   font-size: 12px;
   font-size: .75rem;
   line-height: 2;
+  line-height: 1.725;
+  opacity: .35;
 }
 
-.shareLinkCount:before {
-  position: absolute;
-  z-index: -1;
-  top: 50%;
-  left: -2px;
-  content: "";
-  display: block;
-  width: 10px;
-  height: 10px;
-  margin: -5px 0 0;
-  background: inherit;
-  -webkit-transform: translateY(.5px) rotate(45deg);
-  -ms-transform: translateY(.5px) rotate(45deg);
-  transform: translateY(.5px) rotate(45deg);
-}
-
-/* Close */
+/* Message */
 
 .close {
   position: absolute;
@@ -603,11 +633,35 @@ input[type="file"] {
   right: 5px;
   display: block;
   overflow: hidden;
-  width: 30px;
+  overflow: hidden;
+  width: 22px;
   height: 0;
-  padding: 30px 0 0;
+  padding: 22px 0 0;
+  background: #337ab7 url(../images/sprites.png) 0 -25px;
+}
+
+.close:hover, .close:active {
+  background-color: #23527c;
+}
+
+.ok {
+  display: inline-block;
+  height: 36px;
+  height: 2.25rem;
+  padding: 0 35px;
   border-radius: 4px;
+  color: #ffffff;
   background: #337ab7;
+  text-decoration: none;
+  line-height: 2.25;
+}
+
+.ok:visited, .ok:hover, .ok:active {
+  color: #ffffff;
+}
+
+.ok:hover, .ok:active {
+  background: #23527c;
 }
 
 /* Phone UI */

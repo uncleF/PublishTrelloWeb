@@ -1,10 +1,6 @@
 {
   "viewports" : [
     {
-      "name": "phone",
-      "width": 320,
-      "height": 480
-    },{
       "name": "desktop_min",
       "width": 980,
       "height": 768
@@ -13,7 +9,7 @@
   "scenarios": [
     {
       "label": "Style Guide",
-      "url": "../../build/styleGuide.html",
+      "url": "../../intyerface/app.html",
       "selectors": ["body"],
       "hideSelectors": [],
       "removeSelectors": []

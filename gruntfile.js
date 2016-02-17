@@ -20,7 +20,7 @@ var CRITICAL_MOBILE_W = 320;                  // Horizontal Fold on Mobile
 var CRITICAL_MOBILE_H = 640;                  // Vertical Fold on Mobile
 
 var CSS_IMAGES_DIR    = 'images';             // CSS Images (Sprites, Icons, etc.)
-var SPRITES           = [];                   // CSS Images to Compile into Separate Sprite Sheets
+var SPRITES           = ['sprites.png'];      // CSS Images to Compile into Separate Sprite Sheets
 var DATA_URI          = [];                   // CSS Images to Convert to DataURI
 
 var SASS_DIR          = 'sass';               // Sass
@@ -32,6 +32,16 @@ var JS_DIR            = 'js';                 // JavaScript
 var JS_FILENAME       = 'scripts';            // JavaScript Filename
 
 module.exports = function(grunt) {
+
+  function spritesFolders() {
+    var folders = [];
+    var index = 0;
+    var length = SPRITES.length;
+    for (index; index < length; index += 1) {
+      folders.push('!**/' + SPRITES[index].split('.')[0] + '/*.*');
+    }
+    return folders;
+  }
 
   var project = {
     init: function() {
@@ -54,6 +64,7 @@ module.exports = function(grunt) {
           images: {
             dir: resourcesDirCompiled + CSS_IMAGES_DIR + '/',
             sprites: SPRITES,
+            spritesDir: spritesFolders(),
             dataURI: DATA_URI
           },
           css: {
@@ -648,7 +659,7 @@ module.exports = function(grunt) {
     copy: {
       build: {
         cwd: project.dir,
-        src: [project.index, 'res/**/*.*', '!**/templates/**', '!**/sass/**', '!**/*.map', '!**/**-dev/**', '!**/tx-*.*', '!**/tx/**'],
+        src: [project.index, 'res/**/*.*', '!**/templates/**', '!**/sass/**', '!**/*.map', '!**/**-dev/**', '!**/tx-*.*', '!**/tx/**'].concat(project.res.images.spritesDir),
         dest: project.build.dir,
         expand: true
       },
@@ -733,7 +744,8 @@ module.exports = function(grunt) {
         options: {
           livereload: true
         },
-        files: [project.dir + '**/*.{html,png,jpg,gif,svg}', project.res.css.dir + '**/*.css', project.res.js.dir + '**/*.js']
+        files: [project.dir + '*.html', project.res.css.dir + '**/*.css', project.res.js.dir + '**/*.js', project.dir + '**/*.{png,jpg,gif,svg}'],
+        tasks: ['copy:build']
       }
     },
     concurrent: {

@@ -6,33 +6,37 @@ var path = require('path');
 var url = require('url');
 var fs = require('fs');
 var qconf = require('qconf');
+var shortid = require('shortid');
 
 var app = express();
 var config = qconf();
 
 var public = config.get('public');
 
-var fileReadyPromise;
+var options;
 
 function showInterface(request, response) {
   response.render('app.html');
 }
 
+function folderName() {
+  return shortid.generate();
+}
+
 function generateOutput(request, response) {
-  var options = {
+  options = {
     link: 'http://localhost:8000/data',
-    dir: __dirname + '/output',
+    dir: __dirname + '/output/' + folderName(),
     output: JSON.parse('{"' + url.parse(request.url).query.replace(/=/g, '":"').replace(/&/g, '","') + '"}'),
     arch: true
   };
-  fileReadyPromise = publish.output(options);
-  response.end();
+  publish.output(options).then(function() {
+    response.end();
+  });
 }
 
 function download(request, response) {
-  fileReadyPromise.then(function(options) {
-    response.download(options.dir + '/' + 'trelloBoard.zip');
-  });
+  response.download(options.dir + '/' + 'trelloBoard.zip');
 }
 
 function getData(request, response) {

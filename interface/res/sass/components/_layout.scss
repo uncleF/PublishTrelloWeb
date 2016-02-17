@@ -43,6 +43,37 @@ body {
 
 
 
+/* Form */
+
+.form {
+  position: relative;
+
+  &-is-validBoard {
+
+    &:before {
+      @include tx-pseudo();
+      right: 15px;
+      top: 15px;
+      @include tx-sprite($spt-valid, $block: true);
+    }
+
+  }
+
+  &-is-invalidBoard {
+
+    &:before {
+      @include tx-pseudo();
+      right: 15px;
+      top: 13px;
+      @include tx-sprite($spt-invalid, $block: true);
+    }
+
+  }
+
+}
+
+
+
 /* Options */
 
 %UIListStyle {
@@ -53,13 +84,13 @@ body {
   user-select: none;
 }
 
-.formatOptions {
+.options {
   @extend %UIListStyle;
   @include tx-rhythm(1, 1);
   justify-content: space-between;
 }
 
-.formatOption {
+.option {
   @include tx-font-size($fontSize);
 }
 
@@ -69,25 +100,10 @@ body {
 
 .shareLinks {
   @extend %UIListStyle;
-  @include tx-rhythm(1.5, 0, $mrgt: 75px, $mlft: 75px);
+  @include tx-rhythm(1.5, 0, $mrgt: 50px, $mlft: 50px);
   justify-content: space-around;
   font-size: 0;
   text-align: center;
-}
-
-
-
-/* CSS Option */
-
-.cssOptionsForm {
-  @include tx-rhythm(1.5, 0);
-  position: relative;
-  visibility: hidden;
-
-  &-is-active {
-    visibility: visible;
-  }
-
 }
 
 
@@ -113,12 +129,16 @@ body {
   position: relative;
   min-width: $message-minWidth;
   max-width: $message-maxWidth;
-  padding: ($gap* 1.5) $gap;
+  padding: ($gap * 1.5) $gap;
   color: $message-color;
   background: $message-background;
   border-radius: $ui-borderRadius;
   white-space: normal;
   vertical-align: middle;
+}
+
+.messageText {
+  @include tx-rhythm(0, 1);
 }
 
 

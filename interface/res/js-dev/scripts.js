@@ -7,8 +7,8 @@
   var message = require('./messages');
   var eventsTool = require('./components/tx-event.js');
 
-  var form = document.getElementById('options');
-  var board = document.getElementById('boardURL');
+  var form = document.getElementById('form');
+  var board = document.getElementById('board');
   var download = document.getElementById('download');
   var options = {
     html: document.getElementById('html'),
@@ -16,19 +16,46 @@
     pdf: document.getElementById('pdf'),
     epub: document.getElementById('epub')
   };
-  var cssToggle = document.getElementById('cssOption');
-  var cssForm = document.getElementById('cssOptionsForm');
-  var cssActiveClass = ' cssOptionsForm-is-active';
-  var cssLink = document.getElementById('linkCSS');
-  var cssBrowse = document.getElementById('uploadCSSBrowse');
-  var cssUpload = document.getElementById('uploadCSS');
-  var cssUploadFlag = document.getElementById('uploadFlag');
 
-  const LINK = 'http://localhost:8000/generate';
+  const TRELLO_URL = new RegExp(/https*:\/\/(?:www\.)*trello.com\/b\//);
+
+  function toggleDownload() {
+    download.disabled = !download.disabled;
+    download.className = 'download';
+  }
+
+  function validateBoard() {
+    if (board.value !== '') {
+      if (board.value.match(TRELLO_URL)) {
+        form.className = 'form form-is-validBoard';
+      } else {
+        form.className = 'form form-is-invalidBoard';
+      }
+    } else {
+      form.className = 'form';
+    }
+  }
+
+  function resetForm() {
+    form.reset();
+    validateBoard();
+    toggleDownload();
+  }
+
+  function busyDownload() {
+    toggleDownload();
+    download.className = 'download download-is-busy';
+  }
+
+  function startDownload() {
+    resetForm();
+    window.location = '/download';
+  }
 
   function onResponse(error, response) {
+    // @todo respond with explicit success or error messages form the server, output errors in the popup window
     if (response.statusCode === 200) {
-      window.location = '/download';
+      startDownload();
     } else {
       console.log(error);
     }
@@ -36,57 +63,14 @@
 
   function send(event) {
     event.preventDefault();
-    var params = serialize(form, {hash: true});
-    if (cssUploadFlag.value === 'true') {
-      console.log('upload');
-    } else {
-      console.log('link');
-    }
-    request({uri: LINK, body: params, json: true}, onResponse);
-  }
-
-  function toggleCSS(event) {
-    var currentClassName = cssForm.className;
-    cssForm.className = currentClassName.indexOf(cssActiveClass) > -1 ? currentClassName.replace(cssActiveClass, '') : currentClassName + cssActiveClass;
-  }
-
-  function browseCSS(event) {
-    event.preventDefault();
-    eventsTool.trigger(cssUpload, 'click');
-  }
-
-  function toggleDownload() {
-    download.disabled = !download.disabled;
-  }
-
-  function extractName(filePath) {
-    var fileSplit = filePath.split('\\');
-    return fileSplit[fileSplit.length - 1];
-  }
-
-  function updateCSSFile() {
-    var value = cssUpload.value;
-    if (value) {
-      cssLink.value = extractName(value);
-      cssUploadFlag.value = true;
-    }
-  }
-
-  function updateCSSLink() {
-    var valueLink = cssLink.value;
-    var valueFile = extractName(cssUpload.value);
-    if (cssUploadFlag.value === 'true' && valueLink !== valueFile) {
-      cssUpload.value = '';
-      cssUploadFlag.value = false;
-    } else if (cssUploadFlag.value === 'false' && valueLink === valueFile) {
-      cssUploadFlag.value = true;
-    }
+    busyDownload();
+    request('/generate?' + serialize(form), onResponse);
   }
 
   function validate() {
-    if (download.disabled && (board.value !== '' && (options.html.checked || options.md.checked || options.pdf.checked || options.epub.checked))) {
+    if (download.className !== 'download download-is-busy' && download.disabled && (form.className === 'form form-is-validBoard' && (options.html.checked || options.md.checked || options.pdf.checked || options.epub.checked))) {
       toggleDownload();
-    } else if (!download.disabled && (board.value === '' || (!options.html.checked && !options.md.checked && !options.pdf.checked && !options.epub.checked))) {
+    } else if (download.className !== 'download download-is-busy' && !download.disabled && (form.className !== 'form form-is-validBoard' || (!options.html.checked && !options.md.checked && !options.pdf.checked && !options.epub.checked))) {
       toggleDownload();
     }
   }
@@ -95,11 +79,9 @@
     var inputEvent = 'oninput' in window ? 'input' : 'keyup';
     eventsTool.bind(form, 'submit', send);
     eventsTool.bind(form, 'change', validate);
-    eventsTool.bind(cssLink, inputEvent, validate);
-    eventsTool.bind(cssLink, inputEvent, updateCSSLink);
-    eventsTool.bind(cssUpload, 'change', updateCSSFile);
-    eventsTool.bind(cssToggle, 'change', toggleCSS);
-    eventsTool.bind(cssBrowse, 'click', browseCSS);
+    eventsTool.bind(form, inputEvent, validate);
+    eventsTool.bind(board, 'change', validateBoard);
+    eventsTool.bind(board, inputEvent, validateBoard);
   }
 
   init();

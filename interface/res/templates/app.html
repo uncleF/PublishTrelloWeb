@@ -2,35 +2,27 @@
 
   <body>
     <section id="app" class="app">
-      <form action="/download" type="get" id="options" class="form">
-        <input type="url" class="boardURL" name="boardURL" id="boardURL" placeholder="Trello Board Link – https://trello.com/b/...">
-        <input type="checkbox" class="cssOption" name="cssOption" id="cssOption">
-        <label for="cssOption" class="cssOptionLabel">Custom CSS Styles</label>
-        <div id="cssOptionsForm" class="cssOptionsForm">
-          <input class="linkCSS" name="linkCSS" id="linkCSS" placeholder="Link or Choose a CSS File">
-          <a href="#" id="uploadCSSBrowse" class="uploadCSSBrowse" tabindex="-1">Browse</a>
-          <input type="file" class="uploadCSS" name="uploadCSS" id="uploadCSS">
-        </div>
-        <ul class="formatOptions">
-          <li class="formatOption">
+      <form action="/download" type="get" id="form" class="form">
+        <input class="board" name="board" id="board" placeholder="Trello Board Link – https://trello.com/b/...">
+        <ul class="options">
+          <li class="option">
             <input type="checkbox" class="optionCheckbox" name="html" id="html">
             <label for="html" class="optionLabel">HTML</label>
           </li>
-          <li class="formatOption">
+          <li class="option">
             <input type="checkbox" class="optionCheckbox" name="md" id="md">
             <label for="md" class="optionLabel">Markdown</label>
           </li>
-          <li class="formatOption">
+          <li class="option">
             <input type="checkbox" class="optionCheckbox" name="pdf" id="pdf">
             <label for="pdf" class="optionLabel">PDF</label>
           </li>
-          <li class="formatOption">
+          <li class="option">
             <input type="checkbox" class="optionCheckbox" name="epub" id="epub">
             <label for="epub" class="optionLabel">ePUB</label>
           </li>
         </ul>
-        <input type="hidden" name="uploadFlag" id="uploadFlag">
-        <input type="submit" class="download" name="download" id="download" value="Download Board" disabled="disabled">
+        <button type="submit" class="download" name="download" id="download" disabled="disabled">Download Board</button>
       </form>
       <ul class="shareLinks">
         <li class="shareItem">
@@ -49,7 +41,8 @@
     </section>
     <div id="overlay" class="overlay">
       <article class="message">
-        <div id="messageText"></div>
+        <div id="messageText" class="messageText"></div>
+        <a href="#" id="ok" class="ok">OK</a>
         <a href="#" id="close" class="close">Close</a>
       </article>
     </div>
