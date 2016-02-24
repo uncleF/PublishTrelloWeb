@@ -111,7 +111,7 @@ body {
 
 .shareLinks {
   @extend %UIListStyle;
-  @include tx-rhythm(1.5, 0, $mrgt: 50px, $mlft: 50px);
+  @include tx-rhythm(3, 0, $mrgt: 50px, $mlft: 50px);
   justify-content: space-between;
   font-size: 0;
   text-align: center;
@@ -167,6 +167,22 @@ body {
   @include tx-font-size($fontSize * 8);
   color: $ui-color;
   font-weight: bold;
+}
+
+
+
+/* Disclaimer */
+
+.disclaimer {
+  $disclaimer-maxWidth: 320px;
+  $disclaimer-color: $black;
+
+  @include tx-font-size(small, .75);
+  @include tx-rhythm(1, 0, $mrgt: auto, $mlft: auto);
+  max-width: $disclaimer-maxWidth;
+  color: $disclaimer-color;
+  text-align: center;
+  opacity: .5;
 }
 
 
