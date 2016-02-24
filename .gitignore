@@ -24,8 +24,5 @@ config
 
 #TX
 
-build
-design
-
 *.build.zip
 *.sublime-workspace

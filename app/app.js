@@ -45,19 +45,26 @@ function getData(request, response) {
   });
 }
 
-function pageNotFound(request, response) {
-  response.send('404');
+function error404(request, response) {
+  response.status(400);
+  response.render('404.html', {title: '404'});
+}
+
+function error500(error, request, response, next) {
+  response.status(500);
+  response.render('500.html', {title:'500', error: error});
 }
 
 function init() {
   app.set('views', __dirname + public);
+  app.engine('.html', require('nunjucks').render);
   app.use(express.static(path.join(__dirname, public)));
-  app.engine('.html', require('ejs').renderFile);
   app.get('/', showInterface);
   app.get('/generate', generateOutput);
   app.get('/download', download);
   app.get('/data', getData);
-  app.get('*', pageNotFound);
+  app.use(error404);
+  app.use(error500);
   app.listen(8000);
 }
 

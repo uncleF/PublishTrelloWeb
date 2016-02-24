@@ -38,7 +38,7 @@ module.exports = function(grunt) {
     var index = 0;
     var length = SPRITES.length;
     for (index; index < length; index += 1) {
-      folders.push('!**/' + SPRITES[index].split('.')[0] + '/*.*');
+      folders.push('!**/' + SPRITES[index].split('.')[0] + '/*.*', '!**/' + SPRITES[index].split('.')[0] + '@2x/*.*', '!**/' + SPRITES[index].split('.')[0] + '@3x/*.*');
     }
     return folders;
   }
@@ -289,6 +289,12 @@ module.exports = function(grunt) {
           }, {
             pattern: /(?:\s|\t)*.*tx-debug.*(?:\r?\n|\r)/gi,
             replacement: ''
+          }, {
+            pattern: /<!-- %=/gi,
+            replacement: '<%='
+          }, {
+            pattern: /-- %>/gi,
+            replacement: '%>'
           }]
         },
         files: {
@@ -659,7 +665,7 @@ module.exports = function(grunt) {
     copy: {
       build: {
         cwd: project.dir,
-        src: [project.index, 'res/**/*.*', '!**/templates/**', '!**/sass/**', '!**/*.map', '!**/**-dev/**', '!**/tx-*.*', '!**/tx/**'].concat(project.res.images.spritesDir),
+        src: ['*.html', 'res/**/*.*', '!**/templates/**', '!**/sass/**', '!**/*.map', '!**/**-dev/**', '!**/tx-*.*', '!**/tx/**'].concat(project.res.images.spritesDir),
         dest: project.build.dir,
         expand: true
       },
@@ -827,16 +833,6 @@ module.exports = function(grunt) {
     });
   });
 
-  grunt.registerTask('reminder', 'Reminder', function() {
-    var list = grunt.file.readJSON('.reminderrc').reminders;
-    if (list.length > 0) {
-      grunt.log.writeln('\nDon\'t Forget to Check:'['magenta']);
-      list.forEach(function(value) {
-        grunt.log.writeln('✔'['green'] + ' ' + value);
-      });
-    }
-  });
-
   grunt.registerTask('compileTasks', 'compiling', function() {
     if (project.res.images.sprites.length > 0) {
       grunt.task.run([
@@ -947,8 +943,7 @@ module.exports = function(grunt) {
     'string-replace:indentation',
     'compress:cssGzip',
     'compress:jsGzip',
-    'cleanempty:build',
-    'reminder'
+    'cleanempty:build'
   ]);
 
   grunt.registerTask('build-critical', [

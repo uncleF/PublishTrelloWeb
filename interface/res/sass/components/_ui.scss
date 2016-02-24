@@ -374,10 +374,6 @@ textarea {
 }
 
 .optionLabel {
-  $optionLabelCheck-size: 20px;
-  $optionLabelCheck-borderWidth: 2px;
-  $optionLabelCheckBackground-size: 30px;
-
   @include tx-inline-block;
   position: relative;
   color: $ui-color;
@@ -418,6 +414,7 @@ textarea {
 
   &:before {
     @include tx-pseudo(relative, inline-block);
+    @include tx-sprite-image($ssh-sprites);
     margin: 0 9px 0 0;
     vertical-align: top;
     opacity: .35;
@@ -426,7 +423,10 @@ textarea {
   &-GH {
 
     &:before {
-      @include tx-sprite($spt-github, $block: true);
+      $icon: $spt-github;
+
+      @include tx-sprite-block($icon);
+      @include tx-sprite-position($icon);
     }
 
   }
@@ -434,7 +434,10 @@ textarea {
   &-TW {
 
     &:before {
-      @include tx-sprite($spt-twitter, $block: true);
+      $icon: $spt-twitter;
+
+      @include tx-sprite-block($icon);
+      @include tx-sprite-position($icon);
     }
 
   }
@@ -442,7 +445,10 @@ textarea {
   &-FB {
 
     &:before {
-      @include tx-sprite($spt-facebook, $block: true);
+      $icon: $spt-facebook;
+
+      @include tx-sprite-block($icon);
+      @include tx-sprite-position($icon);
     }
 
   }
@@ -450,7 +456,10 @@ textarea {
   &-GP {
 
     &:before {
-      @include tx-sprite($spt-google, $block: true);
+      $icon: $spt-google;
+
+      @include tx-sprite-block($icon);
+      @include tx-sprite-position($icon);
     }
 
   }
@@ -540,7 +549,21 @@ textarea {
 
 /* HDPI UI */
 
-@media only screen and (min-resolution: 1.5dppx), only screen and (-webkit-min-device-pixel-ratio: 1.5), only screen and (min--moz-device-pixel-ratio: 1.5), only screen and (-o-min-device-pixel-ratio: 3 / 2), only screen and (min-device-pixel-ratio: 1.5), only screen and (min-resolution: 150dpi) {}
+@media only screen and (min-resolution: 1.5dppx), only screen and (-webkit-min-device-pixel-ratio: 1.5), only screen and (min--moz-device-pixel-ratio: 1.5), only screen and (-o-min-device-pixel-ratio: 3 / 2), only screen and (min-device-pixel-ratio: 1.5), only screen and (min-resolution: 150dpi) {
+
+  .download:before, .optionLabel:after, .shareLink:before, .close {
+    @include tx-sprite-dpi($ssh-sprites-2x, $ssh-sprites);
+  }
+
+}
+
+@media only screen and (min-resolution: 2.5dppx), only screen and (-webkit-min-device-pixel-ratio: 2.5), only screen and (min--moz-device-pixel-ratio: 2.5), only screen and (-o-min-device-pixel-ratio: 5 / 2), only screen and (min-device-pixel-ratio: 2.5), only screen and (min-resolution: 250dpi) {
+
+  .download:before, .optionLabel:after, .shareLink:before, .close {
+    @include tx-sprite-dpi($ssh-sprites-3x, $ssh-sprites);
+  }
+
+}
 
 
 

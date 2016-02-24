@@ -8,8 +8,9 @@
   }
 
   &:after {
-    top: 0;
+    top: ($optionLabelCheckBackground-size / 2);
     left: 50%;
+    margin: ($spt-check-height / -2) 0 0 ($spt-check-width / -2);
   }
 
 }

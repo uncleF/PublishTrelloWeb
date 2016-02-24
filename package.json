@@ -6,9 +6,9 @@
   "private": true,
   "dependencies": {
     "browser-request": "^0.3.3",
-    "ejs": "^2.3.4",
     "express": "^4.13.3",
     "form-serialize": "^0.7.0",
+    "nunjucks": "^2.3.0",
     "publishtrello": "https://github.com/uncleF/PublishTrello#master",
     "qconf": "^2.2.0",
     "shortid": "^2.2.4"
@@ -62,7 +62,7 @@
     "mocha": "*"
   },
   "scripts": {
-    "start": "node app/app.js"
+    "start": "nodemon app/app.js"
   },
   "author": "unclef.npm@gmail.com",
   "license": "ISC",

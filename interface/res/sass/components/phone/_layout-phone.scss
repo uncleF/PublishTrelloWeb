@@ -5,3 +5,11 @@
   width: 100%;
   min-width: 0;
 }
+
+
+
+/* Share Links */
+
+.shareLinks {
+  @include tx-rhythm(1.5, 0);
+}
