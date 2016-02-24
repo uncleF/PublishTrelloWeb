@@ -148,18 +148,28 @@ exports.show = show;
   }
 
   function onResponse(error, response) {
-    // @todo respond with explicit success or error messages form the server, output errors in the popup window
     if (response.statusCode === 200) {
       startDownload();
     } else {
-      console.log(error);
+      message.show('Something went wrong!');
     }
+  }
+
+  function outputOptions() {
+    var options = serialize(form, { hash: true });
+    options.board = options.board.replace(/http.*\/b\//g, '').replace(/\/.*/g, '');
+    return options;
   }
 
   function send(event) {
     event.preventDefault();
     busyDownload();
-    request('/generate?' + serialize(form), onResponse);
+    request({
+      method: 'POST',
+      uri: '/generate',
+      body: outputOptions(),
+      json: true
+    }, onResponse);
   }
 
   function validate() {

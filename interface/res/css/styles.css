@@ -246,6 +246,9 @@ body:before {
   border-radius: 4px;
   color: #337ab7;
   background: #ffffff;
+  font-size: 16px;
+  font-size: 1rem;
+  line-height: 1.5;
   vertical-align: middle;
   white-space: normal;
 }

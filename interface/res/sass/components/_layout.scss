@@ -137,6 +137,7 @@ body {
   $message-background: $white;
 
   @include tx-inline-block;
+  @include tx-font-size($fontSize);
   position: relative;
   min-width: $message-minWidth;
   max-width: $message-maxWidth;
