@@ -7,10 +7,12 @@
   "dependencies": {
     "body-parser": "^1.15.0",
     "browser-request": "^0.3.3",
+    "compress": "^0.99.0",
+    "compression": "^1.6.1",
     "express": "^4.13.3",
     "form-serialize": "^0.7.0",
     "nunjucks": "^2.3.0",
-    "publishtrello": "https://github.com/uncleF/PublishTrello#master",
+    "publishtrello": "git+https://github.com/uncleF/PublishTrello.git#master",
     "qconf": "^2.2.0",
     "shortid": "^2.2.4"
   },

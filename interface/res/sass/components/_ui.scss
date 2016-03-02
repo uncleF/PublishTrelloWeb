@@ -339,12 +339,15 @@ textarea {
 }
 
 @keyframes downloadAnimation {
+
   from {
-    transform: translateY(0)
+    transform: translateY(0);
   }
+
   to {
-    transform: translateY(48px + $spt-download-height)
+    transform: translateY(48px + $spt-download-height);
   }
+
 }
 
 
@@ -365,6 +368,15 @@ textarea {
       visibility: visible;
     }
 
+    &:hover,
+    &:active {
+
+      &:before {
+        background: $ui-active;
+      }
+
+    }
+
   }
 
   &:focus + .optionLabel {
@@ -383,9 +395,9 @@ textarea {
     @include tx-pseudo(relative, inline-block);
     width: ($optionLabelCheckBackground-size - $optionLabelCheck-borderWidth * 2);
     height: ($optionLabelCheckBackground-size - $optionLabelCheck-borderWidth * 2);
-    margin: -4px 5px 0 0;
     border: $optionLabelCheck-borderWidth solid $ui-color;
     border-radius: $ui-borderRadius;
+    margin: -4px 5px 0 0;
     vertical-align: middle;
   }
 
@@ -396,6 +408,16 @@ textarea {
     left: ($optionLabelCheckBackground-size - $spt-check-width) / 2;
     margin: ($spt-check-height / -2) 0 0;
     visibility: hidden;
+  }
+
+  &:hover,
+  &:active {
+    color: $ui-active;
+
+    &:before {
+      border-color: $ui-active;
+    }
+
   }
 
 }
@@ -417,7 +439,7 @@ textarea {
     @include tx-sprite-image($ssh-sprites);
     margin: 0 9px 0 0;
     vertical-align: top;
-    opacity: .35;
+    opacity: .5;
   }
 
   &-GH {
@@ -483,10 +505,6 @@ textarea {
 
   }
 
-  &:focus {
-    outline-offset: 2px;
-  }
-
 }
 
 .shareLinkCount {
@@ -547,11 +565,136 @@ textarea {
 
 
 
+/* Help */
+
+%navLinkStyle {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  height: 0;
+
+  &:before {
+    @include tx-pseudo;
+    top: 50%;
+    left: 50%;
+  }
+
+  &:hover,
+  &:active {
+
+    &:before {
+      background-color: $ui-active;
+    }
+
+  }
+
+  &:focus {
+    outline-offset: 2px;
+  }
+
+}
+
+.helpToggle {
+  $help-size: $spt-help-height + 8px;
+  $help-borderWidth: 2px;
+
+  @extend %navLinkStyle;
+  width: $help-size - $help-borderWidth * 2;
+  padding: ($help-size - $help-borderWidth * 2) 0 0;
+  border: $help-borderWidth solid $ui-color;
+  border-radius: 50%;
+
+  &:before {
+    @include tx-sprite($spt-help, $block: true, $color: $ui-color);
+    margin: ($spt-help-height /  -2) 0 0 ($spt-help-width / -2);
+  }
+
+  &:hover,
+  &:active {
+    border-color: $ui-active;
+  }
+
+}
+
+
+
+// /* Settings */
+
+// .settings {
+//   $settings-size: $spt-settings-height;
+
+//   @extend %navLinkStyle;
+//   width: $settings-size;
+//   padding: $settings-size 0 0;
+
+//   &:before {
+//     @include tx-sprite($spt-settings, $block: true, $color: $ui-color);
+//     margin: ($spt-settings-height /  -2) 0 0 ($spt-settings-width / -2);
+//   }
+
+// }
+
+
+
+/* Authorization */
+
+.authorization {
+  position: relative;
+  display: block;
+  width: $spt-trello-width;
+  height: $spt-trello-height;
+
+  &:before {
+    @include tx-pseudo;
+    @include tx-sprite($spt-trello, $block: true, $pd: true);
+  }
+
+  &:after {
+    @include tx-pseudo;
+    @include tx-sprite-image($ssh-sprites);
+    top: 0;
+    right: 0;
+  }
+
+  &-is-authorized {
+
+    &:after {
+      @include tx-sprite-position($spt-auth);
+      width: $spt-auth-width;
+      height: $spt-auth-height;
+      margin: 12px -7px 0 0;
+    }
+
+  }
+
+  &-is-unauthorized {
+
+    &:after {
+      @include tx-sprite-position($spt-unauth);
+      width: $spt-unauth-width;
+      height: $spt-unauth-height;
+      margin: 13px -7px 0 0;
+    }
+
+  }
+
+  &:focus {
+    outline-offset: 2px;
+  }
+
+}
+
+
+
 /* HDPI UI */
 
 @media only screen and (min-resolution: 1.5dppx), only screen and (-webkit-min-device-pixel-ratio: 1.5), only screen and (min--moz-device-pixel-ratio: 1.5), only screen and (-o-min-device-pixel-ratio: 3 / 2), only screen and (min-device-pixel-ratio: 1.5), only screen and (min-resolution: 150dpi) {
 
-  .download:before, .optionLabel:after, .shareLink:before, .close {
+  .download:before,
+  .optionLabel:after,
+  .shareLink:before,
+  .close,
+  .help:before {
     @include tx-sprite-dpi($ssh-sprites-2x, $ssh-sprites);
   }
 
@@ -559,7 +702,11 @@ textarea {
 
 @media only screen and (min-resolution: 2.5dppx), only screen and (-webkit-min-device-pixel-ratio: 2.5), only screen and (min--moz-device-pixel-ratio: 2.5), only screen and (-o-min-device-pixel-ratio: 5 / 2), only screen and (min-device-pixel-ratio: 2.5), only screen and (min-resolution: 250dpi) {
 
-  .download:before, .optionLabel:after, .shareLink:before, .close {
+  .download:before,
+  .optionLabel:after,
+  .shareLink:before,
+  .close,
+  .help:before {
     @include tx-sprite-dpi($ssh-sprites-3x, $ssh-sprites);
   }
 

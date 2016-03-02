@@ -390,17 +390,17 @@
   background-position: nth($name, 3) nth($name, 4);
 }
 
+@mixin tx-sprite-dpi($sptsX, $spts) {
+  background-image: url(#{nth($sptsX, 3)});
+  background-size: nth($spts, 1) nth($spts, 2);
+}
+
 @function txf-sprite-width($name) {
   @return nth($name, 5);
 }
 
 @function txf-sprite-height($name) {
   @return nth($name, 6);
-}
-
-@mixin tx-sprite-dpi($sptsX, $spts) {
-  background-image: url(#{nth($sptsX, 3)});
-  background-size: nth($spts, 1) nth($spts, 2);
 }
 
 

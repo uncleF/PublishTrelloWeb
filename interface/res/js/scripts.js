@@ -1,4 +1,5 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+
 'use strict';
 
 function bind(object, type, callback) {
@@ -17,11 +18,12 @@ function unbind(object, type, callback) {
   }
 }
 
-function trigger(object, event) {
+function trigger(object, event, propagate) {
+  propagate = propagate || false;
   var eventObj;
   if (document.createEvent) {
     eventObj = document.createEvent('MouseEvents');
-    eventObj.initEvent(event, true, false);
+    eventObj.initEvent(event, propagate, false);
     object.dispatchEvent(eventObj);
   } else {
     eventObj = document.createEventObject();
@@ -34,52 +36,110 @@ exports.unbind = unbind;
 exports.trigger = trigger;
 
 },{}],2:[function(require,module,exports){
+
 'use strict';
 
 var addEvent = require('./tx-event');
 
-var object;
-var activeClassName;
+function Overlay(element) {
 
-function toggle(event) {
-  var currentClassName = object.className;
+  var object;
+  var activeClassName;
+
+  function toggle(event) {
+    var currentClassName = object.className;
+    if (event) {
+      event.preventDefault();
+    }
+    object.className = currentClassName.indexOf(activeClassName) > -1 ? currentClassName.replace(activeClassName, '') : currentClassName + ' ' + activeClassName;
+  }
+
+  function clicked(event) {
+    var target = event.target ? event.target : event.srcElement;
+    if (target.className.indexOf(activeClassName) > -1) {
+      toggle(event);
+    }
+  }
+
+  function setup() {
+    if (element) {
+      object = element;
+      activeClassName = object.className.split(' ')[0] + '-is-active';
+      addEvent.bind(object, 'click', clicked);
+    }
+  }
+
+  setup();
+
+  return {
+    toggle: toggle
+  };
+}
+
+function init(element) {
+  return new Overlay(element);
+}
+
+exports.init = init;
+
+},{"./tx-event":1}],3:[function(require,module,exports){
+
+'use strict';
+
+var overlayLayer = document.getElementById('help');
+var closeLink = document.getElementById('closeHelp');
+var authHelp = document.getElementById('authorizationHelp');
+var authHelpToggle = document.getElementById('authorizationHelpToggle');
+
+var authorization;
+
+var overlay = require('./components/tx-overlay.js').init(overlayLayer);
+var eventsTool = require('./components/tx-event.js');
+
+function authFromHelp(event) {
+  event.preventDefault();
+  authorization();
+}
+
+function init(auth) {
+  authorization = auth;
+  eventsTool.bind(closeLink, 'click', overlay.toggle);
+  eventsTool.bind(authHelpToggle, 'click', authFromHelp);
+}
+
+function show(event) {
   if (event) {
     event.preventDefault();
   }
-  object.className = currentClassName.indexOf(activeClassName) > -1 ? currentClassName.replace(activeClassName, '') : currentClassName + activeClassName;
+  overlay.toggle();
+  closeLink.focus();
 }
 
-function clicked(event) {
-  var target = event.target ? event.target : event.srcElement;
-  if (target.className.indexOf(activeClassName) > -1) {
-    toggle(event);
-  }
-}
-
-function init(node) {
-  if (node) {
-    object = node;
-    activeClassName = ' ' + object.className + '-is-active';
-    addEvent.bind(object, 'click', clicked);
+function toggleHelp() {
+  if (authHelp.className.match('authorizationHelp-is-invisible')) {
+    authHelp.className = 'authorizationHelp';
+  } else {
+    authHelp.className = 'authorizationHelp authorizationHelp-is-invisible';
   }
 }
 
 exports.init = init;
-exports.toggle = toggle;
+exports.show = show;
+exports.toggleHelp = toggleHelp;
 
-},{"./tx-event":1}],3:[function(require,module,exports){
+},{"./components/tx-event.js":1,"./components/tx-overlay.js":2}],4:[function(require,module,exports){
+
 'use strict';
 
-var overlay = require('./components/tx-overlay.js');
+var overlayLayer = document.getElementById('message');
+var messageText = document.getElementById('messageText');
+var closeLink = document.getElementById('closeMessage');
+var okButton = document.getElementById('okMessage');
+
+var overlay = require('./components/tx-overlay.js').init(overlayLayer);
 var eventsTool = require('./components/tx-event.js');
 
-var overlayLayer = document.getElementById('overlay');
-var messageText = document.getElementById('messageText');
-var closeLink = document.getElementById('close');
-var okButton = document.getElementById('ok');
-
 function init() {
-  overlay.init(overlayLayer);
   eventsTool.bind(closeLink, 'click', overlay.toggle);
   eventsTool.bind(okButton, 'click', overlay.toggle);
 }
@@ -87,12 +147,14 @@ function init() {
 function show(message) {
   messageText.textContent = message;
   overlay.toggle();
+  closeLink.focus();
 }
 
 exports.init = init;
 exports.show = show;
 
-},{"./components/tx-event.js":1,"./components/tx-overlay.js":2}],4:[function(require,module,exports){
+},{"./components/tx-event.js":1,"./components/tx-overlay.js":2}],5:[function(require,module,exports){
+
 'use strict';
 
 (function () {
@@ -100,6 +162,7 @@ exports.show = show;
   var request = require('browser-request');
   var serialize = require('form-serialize');
   var message = require('./messages');
+  var help = require('./help');
   var eventsTool = require('./components/tx-event.js');
 
   var form = document.getElementById('form');
@@ -112,7 +175,10 @@ exports.show = show;
     epub: document.getElementById('epub')
   };
 
-  var TRELLO_URL = new RegExp(/https*:\/\/(?:www\.)*trello.com\/b\//);
+  var auth = document.getElementById('auth');
+  var helpToggle = document.getElementById('helpToggle');
+
+  var TRELLO_URL = new RegExp(/(?:^(https?:\/\/)?|^(w{3}\.)?|^(https?:\/\/w{3}\.)?)trello\.com\/b\//);
 
   function toggleDownload() {
     download.disabled = !download.disabled;
@@ -142,14 +208,15 @@ exports.show = show;
     download.className = 'download download-is-busy';
   }
 
-  function startDownload() {
+  function startDownload(dir, file) {
     resetForm();
-    window.location = '/download';
+    window.location = '/download?dir=' + dir + '&file=' + file;
   }
 
   function onResponse(error, response) {
     if (response.statusCode === 200) {
-      startDownload();
+      var json = JSON.parse(response.responseText);
+      startDownload(json.dir, json.file);
     } else {
       message.show('Something went wrong!');
     }
@@ -158,11 +225,11 @@ exports.show = show;
   function outputOptions() {
     var options = serialize(form, { hash: true });
     options.board = options.board.replace(/http.*\/b\//g, '').replace(/\/.*/g, '');
+    options.token = Trello.token();
     return options;
   }
 
-  function send(event) {
-    event.preventDefault();
+  function send() {
     busyDownload();
     request({
       method: 'POST',
@@ -170,6 +237,35 @@ exports.show = show;
       body: outputOptions(),
       json: true
     }, onResponse);
+  }
+
+  function authenticationSuccess() {
+    help.toggleHelp();
+    auth.className = 'authorization authorization-is-authorized';
+  }
+
+  function authenticationFailure() {
+    help.toggleHelp();
+    auth.className = 'authorization authorization-is-unauthorized';
+  }
+
+  function authorizeTrello() {
+    Trello.authorize({
+      type: 'popup',
+      name: 'PublishTrello',
+      expiration: 'never',
+      success: authenticationSuccess,
+      error: authenticationFailure
+    });
+  }
+
+  function submit(event) {
+    event.preventDefault();
+    if (Trello.authorized()) {
+      send();
+    } else {
+      authorizeTrello();
+    }
   }
 
   function validate() {
@@ -180,20 +276,29 @@ exports.show = show;
     }
   }
 
+  function authToggle(event) {
+    event.preventDefault();
+    authorizeTrello();
+  }
+
   function init() {
     var inputEvent = 'oninput' in window ? 'input' : 'keyup';
-    eventsTool.bind(form, 'submit', send);
+    authorizeTrello();
+    message.init();
+    help.init(authorizeTrello);
+    eventsTool.bind(form, 'submit', submit);
     eventsTool.bind(form, 'change', validate);
     eventsTool.bind(form, inputEvent, validate);
     eventsTool.bind(board, 'change', validateBoard);
     eventsTool.bind(board, inputEvent, validateBoard);
+    eventsTool.bind(auth, 'click', authToggle);
+    eventsTool.bind(helpToggle, 'click', help.show);
   }
 
   init();
-  message.init();
 })();
 
-},{"./components/tx-event.js":1,"./messages":3,"browser-request":5,"form-serialize":6}],5:[function(require,module,exports){
+},{"./components/tx-event.js":1,"./help":3,"./messages":4,"browser-request":6,"form-serialize":7}],6:[function(require,module,exports){
 // Browser Request
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -689,7 +794,7 @@ function b64_enc (data) {
 }));
 //UMD FOOTER END
 
-},{}],6:[function(require,module,exports){
+},{}],7:[function(require,module,exports){
 // get successful control from form and assemble into object
 // http://www.w3.org/TR/html401/interact/forms.html#h-17.13.2
 
@@ -948,4 +1053,4 @@ function str_serialize(result, key, value) {
 
 module.exports = serialize;
 
-},{}]},{},[4]);
+},{}]},{},[5]);

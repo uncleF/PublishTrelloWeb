@@ -2,6 +2,7 @@
 
 var express = require('express');
 var bodyParser = require('body-parser');
+var compress = require('compression');
 var publish = require('publishtrello');
 var path = require('path');
 var qconf = require('qconf');
@@ -12,7 +13,6 @@ var config = qconf();
 
 var PUBLIC = config.get('public');
 var KEY =  config.get('key');
-var TOKEN =  config.get('token');
 
 var options;
 
@@ -36,15 +36,19 @@ function generateOutput(request, response) {
     },
     arch: true,
     key: KEY,
-    token: TOKEN
+    token: request.body.token
   };
-  publish.output(options).then(function() {
+  publish.output(options).then(function(outputOptions) {
+    response.json({
+      dir: outputOptions.dir,
+      file: outputOptions.file
+    });
     response.end();
   });
 }
 
 function download(request, response) {
-  response.download(options.dir + '/' + 'trelloBoard.zip');
+  response.download(`${request.query.dir}/${request.query.file}.zip`);
 }
 
 function error404(request, response) {
@@ -60,6 +64,7 @@ function error500(error, request, response, next) {
 function init() {
   app.set('views', __dirname + PUBLIC);
   app.engine('.html', require('nunjucks').render);
+  app.use(compress());
   app.use(express.static(path.join(__dirname, PUBLIC)));
   app.use(bodyParser.json());
   app.get('/', showInterface);

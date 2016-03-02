@@ -1,15 +1,16 @@
 /* jshint browser:true */
 
-var overlay = require('./components/tx-overlay.js');
+'use strict';
+
+var overlayLayer = document.getElementById('message');
+var messageText = document.getElementById('messageText');
+var closeLink = document.getElementById('closeMessage');
+var okButton = document.getElementById('okMessage');
+
+var overlay = require('./components/tx-overlay.js').init(overlayLayer);
 var eventsTool = require('./components/tx-event.js');
 
-var overlayLayer = document.getElementById('overlay');
-var messageText = document.getElementById('messageText');
-var closeLink = document.getElementById('close');
-var okButton = document.getElementById('ok');
-
 function init() {
-  overlay.init(overlayLayer);
   eventsTool.bind(closeLink, 'click', overlay.toggle);
   eventsTool.bind(okButton, 'click', overlay.toggle);
 }
@@ -17,6 +18,7 @@ function init() {
 function show(message) {
   messageText.textContent = message;
   overlay.toggle();
+  closeLink.focus();
 }
 
 exports.init = init;

@@ -1,10 +1,14 @@
 /* jshint browser:true */
+/* global Trello */
+
+'use strict';
 
 (function() {
 
   var request = require('browser-request');
   var serialize = require('form-serialize');
   var message = require('./messages');
+  var help = require('./help');
   var eventsTool = require('./components/tx-event.js');
 
   var form = document.getElementById('form');
@@ -17,7 +21,10 @@
     epub: document.getElementById('epub')
   };
 
-  const TRELLO_URL = new RegExp(/https*:\/\/(?:www\.)*trello.com\/b\//);
+  var auth = document.getElementById('auth');
+  var helpToggle = document.getElementById('helpToggle');
+
+  const TRELLO_URL = new RegExp(/(?:^(https?:\/\/)?|^(w{3}\.)?|^(https?:\/\/w{3}\.)?)trello\.com\/b\//);
 
   function toggleDownload() {
     download.disabled = !download.disabled;
@@ -47,14 +54,15 @@
     download.className = 'download download-is-busy';
   }
 
-  function startDownload() {
+  function startDownload(dir, file) {
     resetForm();
-    window.location = '/download';
+    window.location = `/download?dir=${dir}&file=${file}`;
   }
 
   function onResponse(error, response) {
     if (response.statusCode === 200) {
-      startDownload();
+      var json = JSON.parse(response.responseText);
+      startDownload(json.dir, json.file);
     } else {
       message.show('Something went wrong!');
     }
@@ -63,11 +71,11 @@
   function outputOptions() {
     var options = serialize(form, {hash: true});
     options.board = options.board.replace(/http.*\/b\//g, '').replace(/\/.*/g, '');
+    options.token = Trello.token();
     return options;
   }
 
-  function send(event) {
-    event.preventDefault();
+  function send() {
     busyDownload();
     request({
       method: 'POST',
@@ -75,6 +83,35 @@
       body: outputOptions(),
       json: true
     }, onResponse);
+  }
+
+  function authenticationSuccess() {
+    help.toggleHelp();
+    auth.className = 'authorization authorization-is-authorized';
+  }
+
+  function authenticationFailure() {
+    help.toggleHelp();
+    auth.className = 'authorization authorization-is-unauthorized';
+  }
+
+  function authorizeTrello() {
+    Trello.authorize({
+      type: 'popup',
+      name: 'PublishTrello',
+      expiration: 'never',
+      success: authenticationSuccess,
+      error: authenticationFailure
+    });
+  }
+
+  function submit(event) {
+    event.preventDefault();
+    if (Trello.authorized()) {
+      send();
+    } else {
+      authorizeTrello();
+    }
   }
 
   function validate() {
@@ -85,16 +122,25 @@
     }
   }
 
+  function authToggle(event) {
+    event.preventDefault();
+    authorizeTrello();
+  }
+
   function init() {
     var inputEvent = 'oninput' in window ? 'input' : 'keyup';
-    eventsTool.bind(form, 'submit', send);
+    authorizeTrello();
+    message.init();
+    help.init(authorizeTrello);
+    eventsTool.bind(form, 'submit', submit);
     eventsTool.bind(form, 'change', validate);
     eventsTool.bind(form, inputEvent, validate);
     eventsTool.bind(board, 'change', validateBoard);
     eventsTool.bind(board, inputEvent, validateBoard);
+    eventsTool.bind(auth, 'click', authToggle);
+    eventsTool.bind(helpToggle, 'click', help.show);
   }
 
   init();
-  message.init();
 
 })();

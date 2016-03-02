@@ -649,6 +649,9 @@ module.exports = function(grunt) {
     },
 
     clean: {
+      options: {
+        force: true
+      },
       res: [project.res.css.dir, project.res.js.dir + '*.js'],
       reports: [project.res.js.dir + '*.txt'],
       images: [project.res.css.sass + 'project/tx/'],
@@ -778,7 +781,7 @@ module.exports = function(grunt) {
 
   grunt.registerTask('spritesSCSS', 'processing sprites styles', function() {
     var scss = '';
-    grunt.file.delete(project.res.css.sass + 'project/_project-sprites.scss');
+    grunt.file.delete(project.res.css.sass + 'project/_project-sprites.scss', {force: true});
     if (project.res.images.sprites.length > 0) {
       project.res.images.sprites.forEach(function(sprite) {
         var name = sprite.split('.')[0];
@@ -793,19 +796,19 @@ module.exports = function(grunt) {
           } else {
             scss += '\n\n\n' + scssBlock;
           }
-          grunt.file.delete(scssPath + '.scss');
+          grunt.file.delete(scssPath + '.scss', {force: true});
         }
         if (grunt.file.isFile(scssPath + '@2x.scss')) {
           scssBlock = grunt.file.read(scssPath + '@2x.scss').replace(/(?:\r?\n|\r){2,}/gm, '');
           scssBlock = '// ' + name + '@2x.' + ext + '\n\n' + scssBlock + '\n\n\n\n';
           scss += scssBlock;
-          grunt.file.delete(scssPath + '@2x.scss');
+          grunt.file.delete(scssPath + '@2x.scss', {force: true});
         }
         if (grunt.file.isFile(scssPath + '@3x.scss')) {
           scssBlock = grunt.file.read(scssPath + '@3x.scss').replace(/(?:\r?\n|\r){2,}/gm, '');
           scssBlock = '// ' + name + '@3x.' + ext + '\n\n' + scssBlock + '\n\n\n\n';
           scss += scssBlock;
-          grunt.file.delete(scssPath + '@3x.scss');
+          grunt.file.delete(scssPath + '@3x.scss', {force: true});
         }
         scss = scss.replace(/\/\*[^*]*\*+([^/*][^*]*\*+)*\/(?:\r?\n|\r)/gm, '').replace(/\, \)/gm, ')').replace(/(\s|\()0px/gm, '$1' + '0') + '//eof';
         scss = scss.replace('\n\n\n\n//eof', '\n');
