@@ -18,7 +18,6 @@ function init() {
 function show(message) {
   messageText.textContent = message;
   overlay.toggle();
-  closeLink.focus();
 }
 
 exports.init = init;

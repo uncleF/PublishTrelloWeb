@@ -1,4 +1,4 @@
-/*jslint node: true */
+/* jslint node: true */
 
 var express = require('express');
 var bodyParser = require('body-parser');
@@ -14,8 +14,6 @@ var config = qconf();
 var PUBLIC = config.get('public');
 var KEY =  config.get('key');
 
-var options;
-
 function showInterface(request, response) {
   response.render('app.html');
 }
@@ -25,9 +23,9 @@ function folderName() {
 }
 
 function generateOutput(request, response) {
-  options = {
-    url: 'https://trello.com/b/' + request.body.board,
-    dir: __dirname + '/output/' + folderName(),
+  var options = {
+    url: `https://trello.com/b/${request.body.board}`,
+    dir: `${__dirname}/output/${folderName()}`,
     output: {
       md: request.body.md || false,
       html: request.body.html || false,
@@ -65,8 +63,9 @@ function init() {
   app.set('views', __dirname + PUBLIC);
   app.engine('.html', require('nunjucks').render);
   app.use(compress());
-  app.use(express.static(path.join(__dirname, PUBLIC)));
   app.use(bodyParser.json());
+  app.use(express.static(path.join(__dirname, PUBLIC)));
+  app.use('/service.js', express.static(`${path.join(__dirname, PUBLIC)}/res/js/service.js`));
   app.get('/', showInterface);
   app.post('/generate', generateOutput);
   app.get('/download', download);

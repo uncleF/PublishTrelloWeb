@@ -288,9 +288,9 @@ textarea {
   overflow: hidden;
   width: 100%;
   padding: 0;
+  border-radius: $ui-borderRadius;
   color: $formButtonStyle-color;
   background: $ui-color;
-  border-radius: $ui-borderRadius;
   cursor: pointer;
 
   &:before {
@@ -318,10 +318,10 @@ textarea {
 
     &:before {
       position: absolute;
+      z-index: 1;
       bottom: 100%;
       left: 50%;
       margin: 0 0 0 ($spt-download-width / -2);
-      z-index: 1;
       animation: downloadAnimation 1s infinite;
     }
 
@@ -636,6 +636,68 @@ textarea {
 
 
 
+// /* Language */
+
+// .language {
+//   $language-borderWidth: 1px;
+//   $language-borderColor: $gray;
+
+//   &:before {
+//     @include tx-pseudo(relative, inline-block);
+//     @include tx-sprite-image($ssh-sprites);
+//     @include tx-sprite-block($spt-british);
+//     top: 3px;
+//     margin: 0 .25em 0 0;
+//   }
+
+//   &-is-en {
+
+//     &:before {
+//       @include tx-sprite-position($spt-british);
+//     }
+
+//   }
+
+//   &-is-ru {
+
+//     &:before {
+//       @include tx-sprite-position($spt-russian);
+//     }
+
+//   }
+
+//   &-is-pt {
+
+//     &:before {
+//       @include tx-sprite-position($spt-brazilian);
+//     }
+
+//   }
+
+//   &-is-ko {
+
+//     &:before {
+//       @include tx-sprite-position($spt-korean);
+//     }
+
+//   }
+
+//   &-is-fr {
+
+//     &:before {
+//       @include tx-sprite-position($spt-french);
+//     }
+
+//   }
+
+//   &:focus {
+//     outline-offset: 2px;
+//   }
+
+// }
+
+
+
 /* Authorization */
 
 .authorization {
@@ -694,7 +756,11 @@ textarea {
   .optionLabel:after,
   .shareLink:before,
   .close,
-  .help:before {
+  .helpToggle:before,
+  .authorization:before,
+  .authorization:after,
+  .settings:before,
+  .language:before {
     @include tx-sprite-dpi($ssh-sprites-2x, $ssh-sprites);
   }
 
@@ -706,7 +772,11 @@ textarea {
   .optionLabel:after,
   .shareLink:before,
   .close,
-  .help:before {
+  .helpToggle:before,
+  .authorization:before,
+  .authorization:after,
+  .settings:before,
+  .language:before {
     @include tx-sprite-dpi($ssh-sprites-3x, $ssh-sprites);
   }
 

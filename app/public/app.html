@@ -1,14 +1,10 @@
 <!DOCTYPE html>
 
-<!--[if lt IE 7 ]><html class="mdz-no-js ie ie6"><![endif]-->
-<!--[if (IE 7) & !(IEMobile) ]><html class="mdz-no-js ie ie7"><![endif]-->
-<!--[if (IE 8) & !(IEMobile) ]><html class="mdz-no-js ie ie8"><![endif]-->
-<!--[if (IE 9) & !(IEMobile) ]><html class="mdz-no-js ie ie9"><![endif]-->
-<!--[if gt IE 9]><!--><html class="mdz-no-js" lang="en"><!--<![endif]-->
+<html class="mdz-no-js" lang="en">
 
   <head>
-    <title>PublishTrelloWeb</title>
-    <meta name="title" content="PublishTrelloWeb">
+    <title>Publish Trello</title>
+    <meta name="title" content="Publish Trello">
     <meta http-equiv="content-type" content="text/html; charset=utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="HandheldFriendly" content="True">
@@ -17,23 +13,23 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="mobile-web-app-capable" content="yes">
     <meta http-equiv="cleartype" content="on">
-    <link type="text/plain" rel="author" href="/humans.txt">
-    <link rel="stylesheet" type="text/css" href="res/css/styles.min.css">
+    <link rel="stylesheet" type="text/css" href="res/css/styles.css">
     <script type="text/javascript" src="res/js/Modernizr/modernizr.min.js"></script>
     <link rel="icon" type="image/x-icon" href="favicon.ico">
-    <!--[if IE]><link rel="shortcut icon" type="image/x-icon" href="favicon.ico"><![endif]-->
-    <link rel="mask-icon" type="image/svg+xml" href="maskIcon.svg" color="#fd746c">
+<!--[if IE]><link rel="shortcut icon" type="image/x-icon" href="favicon.ico"><![endif]-->
+<link rel="mask-icon" type="image/svg+xml" href="maskIcon.svg" color="#fd746c">
     <meta name="theme-color" content="#fd746c">
   </head>
 
   <body>
     <section id="app" class="app">
+      <h1 class="logo">Publish Trello</h1>
       <nav class="navigation">
         <ul class="navItems">
           <li class="navItem">
             <a href="#auth" id="auth" class="authorization authorization-is-unauthorized">Authorization</a>
           </li>
-
+          
           <li class="navItem">
             <a href="#help" id="helpToggle" class="helpToggle">Help</a>
           </li>
@@ -61,10 +57,10 @@
         </ul>
         <button type="submit" class="download" name="download" id="download" disabled>Download Board</button>
       </form>
-
+      
       <article class="disclaimer">
-        <p>An open source application without any affiliation with Trello. All access to your (and public) boards is done through <a href="https://developers.trello.com/">Trello API</a>.</p>
-
+      <p>An open source application without any affiliation with Trello. All access to your (and public) boards is done through <a href="https://developers.trello.com/">Trello API</a>.</p>
+      
       </article>
     </section>
     <div id="message" class="overlay">
@@ -88,8 +84,8 @@
       </article>
     </div>
     <script type="text/javascript" src="res/js/jQuery/jquery.min.js" defer></script>
-    <script type="text/javascript" src="https://api.trello.com/1/client.js?key=84e8362bd7d7fefaab5498e386897312" defer></script>
-    <script type="text/javascript" src="res/js/scripts.min.js" defer></script>
+<script type="text/javascript" src="https://api.trello.com/1/client.js?key=84e8362bd7d7fefaab5498e386897312" defer></script>
+<script type="text/javascript" src="res/js/scripts.js" defer></script>
   </body>
 
 </html>

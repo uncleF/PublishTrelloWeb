@@ -1,4 +1,5 @@
-/* jshint browser:true */
+/* jshint browser: true */
+/* global Modernizr */
 /* global Trello */
 
 'use strict';
@@ -9,6 +10,7 @@
   var serialize = require('form-serialize');
   var message = require('./messages');
   var help = require('./help');
+  var cache = require('./cache');
   var eventsTool = require('./components/tx-event.js');
 
   var form = document.getElementById('form');
@@ -129,9 +131,12 @@
 
   function init() {
     var inputEvent = 'oninput' in window ? 'input' : 'keyup';
-    authorizeTrello();
+    if (Modernizr.serviceworker) {
+      cache.init();
+    }
     message.init();
     help.init(authorizeTrello);
+    authorizeTrello();
     eventsTool.bind(form, 'submit', submit);
     eventsTool.bind(form, 'change', validate);
     eventsTool.bind(form, inputEvent, validate);
