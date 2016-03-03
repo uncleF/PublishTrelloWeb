@@ -32,10 +32,10 @@ function show(event) {
 }
 
 function toggleHelp() {
-  if (authHelp.className.match('authorizationHelp-is-invisible')) {
-    authHelp.className = 'authorizationHelp';
-  } else {
+  if (authHelp.className === 'authorizationHelp') {
     authHelp.className = 'authorizationHelp authorizationHelp-is-invisible';
+  } else {
+    authHelp.className = 'authorizationHelp';
   }
 }
 

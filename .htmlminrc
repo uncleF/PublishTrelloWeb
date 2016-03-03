@@ -1,6 +1,7 @@
 {
   "removeComments": true,
   "removeCommentsFromCDATA": true,
+  "collapseWhitespace": true,
   "collapseBooleanAttributes": true,
   "removeRedundantAttributes": true
 }

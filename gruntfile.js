@@ -665,6 +665,7 @@ module.exports = function(grunt) {
     'copy',
     'images',
     'string-replace',
+    'inlineModernizr',
     'htmlmin',
     'compress',
     'cleanempty'
