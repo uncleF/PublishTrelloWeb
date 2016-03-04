@@ -81,17 +81,20 @@ function onResponse(error, response) {
 }
 
 function send() {
-  busyDownload();
-  request({
-    method: 'POST',
-    uri: '/generate',
-    body: outputOptions(),
-    json: true
-  }, onResponse);
+  var body = outputOptions();
+  if (body.hasOwnProperty('token') && body.token) {
+    busyDownload();
+    request({
+      method: 'POST',
+      uri: '/generate',
+      body: body,
+      json: true
+    }, onResponse);
+  }
 }
 
 function sendAfterAuth() {
-  eventsTool.unbind(window, 'authsuccess', sendAfterAuth);
+  eventsTool.unbind(window, 'gottoken', sendAfterAuth);
   send();
 }
 
@@ -100,7 +103,7 @@ function submit(event) {
   if (trello.authorized()) {
     send();
   } else {
-    eventsTool.bind(window, 'authsuccess', sendAfterAuth);
+    eventsTool.bind(window, 'gottoken', sendAfterAuth);
     trello.authorizeTrello();
   }
 }

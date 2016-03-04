@@ -1,0 +1,22 @@
+<form action="/download" type="get" id="form" class="form">
+  <input class="board" name="board" id="board" placeholder="Trello Board Link – https://trello.com/b/...">
+  <ul class="options">
+    <li class="option">
+      <input type="checkbox" class="optionCheckbox" name="html" id="html">
+      <label for="html" class="optionLabel">HTML</label>
+    </li>
+    <li class="option">
+      <input type="checkbox" class="optionCheckbox" name="md" id="md">
+      <label for="md" class="optionLabel">Markdown</label>
+    </li>
+    <li class="option">
+      <input type="checkbox" class="optionCheckbox" name="pdf" id="pdf">
+      <label for="pdf" class="optionLabel">PDF</label>
+    </li>
+    <li class="option">
+      <input type="checkbox" class="optionCheckbox" name="epub" id="epub">
+      <label for="epub" class="optionLabel">ePub</label>
+    </li>
+  </ul>
+  <button type="submit" class="download" name="download" id="download" disabled="disabled">Download Board</button>
+</form>
