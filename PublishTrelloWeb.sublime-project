@@ -19,10 +19,6 @@
       "name": "PublishTrelloWeb: Project",
       "path": "."
     }, {
-      "follow_symlinks": true,
-      "name": "PublishTrelloWeb: Config",
-      "path": "config"
-    }, {
       "file_exclude_patterns":
       [
         "data",
@@ -31,6 +27,10 @@
       "follow_symlinks": true,
       "name": "PublishTrelloWeb: App",
       "path": "app"
+    }, {
+      "follow_symlinks": true,
+      "name": "PublishTrelloWeb: Config",
+      "path": "config"
     }, {
       "follow_symlinks": true,
       "name": "PublishTrelloWeb: HTML",
