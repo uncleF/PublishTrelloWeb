@@ -8,6 +8,7 @@
 
   var request = require('browser-request');
   var serialize = require('form-serialize');
+
   var message = require('./messages');
   var help = require('./help');
   var cache = require('./cache');
@@ -26,7 +27,8 @@
   var auth = document.getElementById('auth');
   var helpToggle = document.getElementById('helpToggle');
 
-  const TRELLO_URL = new RegExp(/(?:^(https?:\/\/)?|^(w{3}\.)?|^(https?:\/\/w{3}\.)?)trello\.com\/b\//);
+  const TRELLO_LS_KEY = 'trello_token';
+  const TRELLO_URL = new RegExp(/(?:^(?:https?:\/\/)?|^(?:w{3}\.)?|^(?:https?:\/\/w{3}\.)?)trello\.com\/b\//);
 
   function toggleDownload() {
     download.disabled = !download.disabled;
@@ -92,17 +94,28 @@
     auth.className = 'authorization authorization-is-authorized';
   }
 
+  function authenticationSuccessSend() {
+    authenticationSuccess();
+    send();
+  }
+
   function authenticationFailure() {
     help.toggleHelp();
     auth.className = 'authorization authorization-is-unauthorized';
   }
 
-  function authorizeTrello() {
+  function authorizeTrello(send) {
+    var success;
+    if (!send) {
+      success = authenticationSuccess;
+    } else {
+      success = authenticationSuccessSend;
+    }
     Trello.authorize({
       type: 'popup',
-      name: 'PublishTrello',
+      name: 'Publish Trello',
       expiration: 'never',
-      success: authenticationSuccess,
+      success: success,
       error: authenticationFailure
     });
   }
@@ -112,7 +125,7 @@
     if (Trello.authorized()) {
       send();
     } else {
-      authorizeTrello();
+      authorizeTrello(true);
     }
   }
 
@@ -126,7 +139,9 @@
 
   function authToggle(event) {
     event.preventDefault();
-    authorizeTrello();
+    if (!Trello.authorized()) {
+      authorizeTrello();
+    }
   }
 
   function init() {
@@ -134,9 +149,11 @@
     if (Modernizr.serviceworker) {
       cache.init();
     }
+    if (Modernizr.localstorage && localStorage[TRELLO_LS_KEY]) {
+      authenticationSuccess();
+    }
     message.init();
     help.init(authorizeTrello);
-    authorizeTrello();
     eventsTool.bind(form, 'submit', submit);
     eventsTool.bind(form, 'change', validate);
     eventsTool.bind(form, inputEvent, validate);
