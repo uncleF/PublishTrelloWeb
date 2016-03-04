@@ -29,10 +29,6 @@
       "path": "app"
     }, {
       "follow_symlinks": true,
-      "name": "PublishTrelloWeb: Config",
-      "path": "config"
-    }, {
-      "follow_symlinks": true,
       "name": "PublishTrelloWeb: HTML",
       "path": "interface/res/templates"
     }, {
@@ -43,6 +39,10 @@
       "follow_symlinks": true,
       "name": "PublishTrelloWeb: JavaScript",
       "path": "interface/res/js-dev"
+    }, {
+      "follow_symlinks": true,
+      "name": "PublishTrelloWeb: Config",
+      "path": "config"
     }, {
       "folder_exclude_patterns":
       [
