@@ -7,8 +7,8 @@ var messageText = document.getElementById('messageText');
 var closeLink = document.getElementById('closeMessage');
 var okButton = document.getElementById('okMessage');
 
-var overlay = require('./components/tx-overlay.js').init(overlayLayer);
-var eventsTool = require('./components/tx-event.js');
+var overlay = require('./patterns/tx-overlay.js').init(overlayLayer);
+var eventsTool = require('./patterns/tx-event.js');
 
 function init() {
   eventsTool.bind(closeLink, 'click', overlay.toggle);

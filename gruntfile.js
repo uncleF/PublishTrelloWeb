@@ -461,7 +461,7 @@ module.exports = function(grunt) {
       images: {
         cwd: project.build.dir,
         src: ['**/*.svg', '!**/fonts/**/*.svg'],
-        dest: project.dir,
+        dest: project.build.dir,
         expand: true
       }
     },
