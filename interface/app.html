@@ -80,7 +80,8 @@
   </li>
 </ul> -->
       <article class="disclaimer">
-  <p>An open source application without any affiliation with Trello. All access to your (and public) boards is done through <a href="https://developers.trello.com/">Trello API</a>.</p>
+  <p>@tx-title v@tx-version is an open source application without any affiliation with Trello. All access to your (and public) boards is done through <a href="https://developers.trello.com/">Trello API</a>.</p>
+  <p>Due to bug on Trello's side it is not possible to authorize application in the Internet Explorer.</p>
   <!-- <p>Avaliable in <a href="#language" id="language" class="language language-is-fr">5 languages</a>, as a <a href="#">node.js package</a> and <a href="#">CLI utility</a>.</p> -->
 </article>
     </section>
@@ -92,17 +93,27 @@
   </article>
 </div>
     <div id="help" class="overlay">
-  <article class="helpArticle">
-    <div id="authHelp" class="authHelp">
-      <p>You'll have to <a href="#auth" id="authToggleHelp">authorize</a> this application to get access to your Trello boards. When you do, it will be able to read all of your boards and teams. It won't be able to create or modify any of your cards, lists, boards or comments. It won't access your e-mail address or password.</p>
-    </div>
-    <ol>
-      <li>Paste a link to a private or public Trello board you have access to.</li>
-      <li>Decide in which formats you want to download it.</li>
-      <li>Download.</li>
-    </ol>
+  <div class="helpHolder">
+    <article class="helpArticle">
+      <div id="authHelp" class="authHelp">
+        <h2>Authorization</h2>
+        <p>You'll have to <a href="#auth" id="authToggleHelp">authorize</a> this application to get access to your Trello boards. When you do, it will be able to read all of your boards and teams. It won't be able to create or modify any of your cards, lists, boards or comments. It won't access your e-mail address or password.</p>
+        <p>Due to bug on Trello's side it's not possible to authorize application in Internet Explorer</p>
+      </div>
+      <h2>Instructions</h2>
+      <ol>
+        <li>Paste a link to a private or public Trello board you have access to.</li>
+        <li>Decide in which formats you want to download it.</li>
+        <li>Click <span class="buttonHelp">Download Board</span>.</li>
+      </ol>
+      <h2>Contacts</h2>
+      <ul>
+        <li><a href="https://github.com/uncleF">GitHub</a></li>
+        <li><a href="mailto:uncle.funkay@gmail.com">uncle.funkay@gmail.com</a></li>
+      </ul>
+    </article>
     <a href="#" id="closeHelp" class="close">Close</a>
-  </article>
+  </div>
 </div>
     <script type="text/javascript" src="res/js/scripts.js" defer></script>
   </body>

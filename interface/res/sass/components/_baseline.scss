@@ -85,7 +85,7 @@ h1 {
 
 h2 {
   @extend %headerStyle;
-  @include tx-rhythm(1, 1);
+  @include tx-rhythm(2, 1);
   @include tx-font-size(h2);
 }
 
@@ -141,9 +141,29 @@ dd {
 }
 
 ul {
+  $listBullet-size: 4px;
+  $listBullet-gutter: 5px;
+
   @extend %marginStyle;
   @extend %u-listResetStyle;
-  list-style-type: disc;
+  list-style: none;
+
+  >li {
+
+    &:before {
+      @include tx-pseudo(relative, inline-block);
+      left: -5px;
+      width: $listBullet-size;
+      height: $listBullet-size;
+      border-radius: 50%;
+      margin: 0 $listBullet-gutter 0 (-$listBullet-size - $listBullet-gutter);
+      background: $ui-color;
+      line-height: $listBullet-size;
+      vertical-align: middle;
+    }
+
+  }
+
 }
 
 ol {

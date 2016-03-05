@@ -523,13 +523,13 @@ textarea {
 /* Message */
 
 .close {
-  $close-position: 5px;
+  $close-position: 10px;
 
   @include tx-sprite($spt-close, $block: true, $pd: true, $color: $ui-color);
-  display: block;
   position: absolute;
   top: $close-position;
   right: $close-position;
+  display: block;
   overflow: hidden;
 
   &:hover,

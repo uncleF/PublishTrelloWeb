@@ -72,6 +72,11 @@ body {
 
 .navItem {
   margin: 0 0 0 ($gap / 2);
+
+  &:before {
+    display: none;
+  }
+
 }
 
 
@@ -136,6 +141,11 @@ body {
 .option {
   @include tx-font-size($fontSize);
   margin: 0;
+
+  &:before {
+    display: none;
+  }
+
 }
 
 
@@ -190,23 +200,53 @@ body {
 
 /* Help */
 
-.helpArticle {
-  $helpArticle-minWidth: 260px;
-  $helpArticle-maxWidth: 390px;
-  $helpArticle-background: $white;
+.helpHolder {
+  $helpHolder-minWidth: 260px;
+  $helpHolder-maxWidth: 390px;
+  $helpHolder-background: $white;
 
   @include tx-inline-block;
-  @include tx-font-size($fontSize);
   @include tx-font-size($fontSize * .90);
   position: relative;
-  min-width: $helpArticle-minWidth;
-  max-width: $helpArticle-maxWidth;
-  padding: ($gap * .5) $gap;
+  min-width: $helpHolder-minWidth;
+  max-width: $helpHolder-maxWidth;
+  padding: 0 $gap;
   border-radius: $ui-borderRadius;
-  background: $helpArticle-background;
+  background: $helpHolder-background;
   text-align: left;
   vertical-align: middle;
   white-space: normal;
+}
+
+.helpArticle {
+  $helpArticle-maxWidth: 500px;
+  $helpArticle-scrollWidth: 6px;
+  $helpArticle-scrollGutter: 10px;
+
+  position: relative;
+  overflow: auto;
+  max-height: $helpArticle-maxWidth;
+  padding: 0 ($gap + $helpArticle-scrollGutter) $gap 0;
+  margin: 0 (-$gap - $helpArticle-scrollGutter) 0 0;
+
+  &::-webkit-scrollbar {
+    -webkit-appearance: none;
+  }
+
+  &::-webkit-scrollbar:vertical {
+    width: $helpArticle-scrollWidth;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    width: $helpArticle-scrollWidth;
+    border-radius: ($helpArticle-scrollWidth / 2);
+    background: $ui-color;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: none;
+  }
+
 }
 
 .authHelp {
@@ -217,7 +257,15 @@ body {
 
 }
 
+.buttonHelp {
+  $buttonHelp-color: $white;
 
+  @include tx-inline-block;
+  padding: 0 5px;
+  border-radius: 3px;
+  color: $buttonHelp-color;
+  background: $ui-color;
+}
 
 
 

@@ -546,7 +546,7 @@ module.exports = function(grunt) {
 
   grunt.registerTask('spritesSCSS', 'processing sprites styles', function() {
     var scss = '';
-    grunt.file.delete(project.res.css.sass + 'project/_project-sprites.scss', {force: true});
+    grunt.file.delete(project.res.css.sass + 'project/_project-sprites.scss');
     if (project.res.images.sprites.length > 0) {
       project.res.images.sprites.forEach(function(sprite) {
         var name = sprite.split('.')[0];
@@ -580,6 +580,7 @@ module.exports = function(grunt) {
         grunt.file.write(project.res.css.sass + 'project/_project-sprites.scss', scss);
       });
     }
+    grunt.file.delete(project.res.css.sass + 'project/tx');
   });
 
   grunt.registerTask('inlineModernizr', 'inlining Modernizr', function() {
