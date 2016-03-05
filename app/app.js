@@ -4,6 +4,7 @@ var express = require('express');
 var bodyParser = require('body-parser');
 var compress = require('compression');
 var publish = require('publishtrello');
+var del = require('del');
 var path = require('path');
 var qconf = require('qconf');
 var shortid = require('shortid');
@@ -46,7 +47,11 @@ function generateOutput(request, response) {
 }
 
 function download(request, response) {
-  response.download(`${request.query.dir}/${request.query.file}.zip`);
+  var dir = request.query.dir;
+  var filePath = `${dir}/${request.query.file}.zip`;
+  response.download(filePath, function() {
+    del([dir]);
+  });
 }
 
 function error404(request, response) {
@@ -56,7 +61,7 @@ function error404(request, response) {
 
 function error500(error, request, response, next) {
   response.status(500);
-  response.render('500.html', {title:'500', error: error});
+  response.render('500.html', {title: '500', error: error});
 }
 
 function init() {

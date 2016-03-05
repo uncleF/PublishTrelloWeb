@@ -603,6 +603,7 @@ textarea {
   padding: ($help-size - $help-borderWidth * 2) 0 0;
   border: $help-borderWidth solid $ui-color;
   border-radius: 50%;
+  text-decoration: none;
 
   &:before {
     @include tx-sprite($spt-help, $block: true, $color: $ui-color);
@@ -705,6 +706,7 @@ textarea {
   display: block;
   width: $spt-trello-width;
   height: $spt-trello-height;
+  text-decoration: none;
 
   &:before {
     @include tx-pseudo;
