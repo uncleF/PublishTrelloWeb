@@ -15,6 +15,7 @@ var options = {
 var request = require('browser-request');
 var serialize = require('form-serialize');
 var message = require('./messages');
+var autocomplete = require('./autocomplete');
 var eventsTool = require('./patterns/tx-event.js');
 
 var trello;
@@ -45,8 +46,10 @@ function validateBoard() {
   if (board.value !== '') {
     if (board.value.match(TRELLO_URL)) {
       form.className = 'form form-is-validBoard';
+      eventsTool.trigger(window, 'boardvalid');
     } else {
       form.className = 'form form-is-invalidBoard';
+      eventsTool.trigger(window, 'inboardvalid');
     }
   } else {
     form.className = 'form';
@@ -108,15 +111,24 @@ function submit(event) {
   }
 }
 
+function initAutocomplete() {
+  autocomplete.init(board, trello, TRELLO_URL);
+  eventsTool.unbind(window, 'authsuccess', initAutocomplete);
+}
+
 function init(trelloInstance) {
   var inputEvent = 'oninput' in window ? 'input' : 'keyup';
   trello = trelloInstance;
   message.init();
+  // if (trello.authorized()) {
+    initAutocomplete();
+  // }
   eventsTool.bind(form, 'submit', submit);
   eventsTool.bind(form, 'change', validate);
   eventsTool.bind(form, inputEvent, validate);
   eventsTool.bind(board, 'change', validateBoard);
   eventsTool.bind(board, inputEvent, validateBoard);
+  eventsTool.bind(window, 'authsuccess', initAutocomplete);
 }
 
 exports.init = init;

@@ -34,11 +34,11 @@ function receiveAuthMessage(event) {
     source.close();
   }
   if ((event.data !== null) && /[0-9a-f]{64}/.test(event.data)) {
-    triggerSuccess();
     trelloToken = event.data;
+    triggerSuccess();
   } else {
-    triggerFailure();
     trelloToken = null;
+    triggerFailure();
   }
   if (Modernizr.localstorage && trelloToken) {
     localStorage[TRELLO_LS_KEY] = trelloToken;
@@ -73,6 +73,10 @@ function authorized() {
 
 function token() {
   return trelloToken;
+}
+
+function key() {
+  return APP_KEY;
 }
 
 function authToggleFromHelp(event) {
@@ -113,3 +117,4 @@ exports.authorizeTrello = authorizeTrello;
 exports.deauthorizeTrello = deauthorizeTrello;
 exports.authorized = authorized;
 exports.token = token;
+exports.key = key;

@@ -10,7 +10,7 @@
   var form = require('./components/form');
 
   function init() {
-    cache.init();
+    // cache.init();
     help.init();
     trello.init(help);
     form.init(trello);

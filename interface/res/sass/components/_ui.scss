@@ -750,6 +750,121 @@ textarea {
 
 
 
+/* Autocomplete */
+
+.autocomplete {
+  $autocomplete-background: $white;
+  $autocomplete-borderWidth: 1px;
+  $autocomplete-borderColor: $gray;
+
+  @include tx-font-size(small);
+  position: absolute;
+  z-index: 1;
+  top: 47px;
+  right: 0;
+  left: 0;
+  overflow: auto;
+  max-height: 16em;
+  padding: 0;
+  border: $autocomplete-borderWidth solid $autocomplete-borderColor;
+  margin: 0;
+  background: rgba($autocomplete-background, .85);
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-10px) translateZ(0);
+  transition: $UITransition;
+
+  &-is-active {
+    opacity: 1;
+    pointer-events: all;
+    transform: translateY(0) translateZ(0);
+  }
+
+}
+
+.autocompleteItem {
+  margin: 0;
+
+  &:before {
+    display: none;
+  }
+
+}
+
+.autocompleteOption {
+  $autocompleteOption-hover: $white;
+  $autocompleteOption-backgroundHover: $blueDark;
+
+  position: relative;
+  display: block;
+  padding: 0 ($gap / 2);
+  text-decoration: none;
+  white-space: nowrap;
+  transition: none;
+
+  &:visited {
+    color: $link;
+  }
+
+  &-is-starred {
+
+    &:before {
+      @include tx-pseudo(relative, inline-block);
+      @include tx-sprite($spt-star, $block: true);
+      top: 1px;
+      margin: 0 .5em 0 0;
+    }
+
+    &.autocompleteOption-is-selected {
+
+      &:before {
+        @include tx-sprite-position($spt-starInverted);
+      }
+
+    }
+
+    &:hover,
+    &:active {
+
+      &:before {
+        @include tx-sprite-position($spt-starInverted);
+      }
+
+    }
+
+  }
+
+  &-is-selected {
+    color: $autocompleteOption-hover;
+    background: $ui-color;
+
+    &:visited {
+      color: $autocompleteOption-hover;
+    }
+
+    .autocomplete-is-mouseInterface & {
+      color: $link;
+      background: none;
+
+      &:visited {
+        color: $link;
+      }
+
+    }
+
+  }
+
+  &:hover,
+  &:active {
+    color: $autocompleteOption-hover;
+    background: $ui-color;
+  }
+
+
+
+}
+
+
 /* HDPI UI */
 
 @media only screen and (min-resolution: 1.5dppx), only screen and (-webkit-min-device-pixel-ratio: 1.5), only screen and (min--moz-device-pixel-ratio: 1.5), only screen and (-o-min-device-pixel-ratio: 3 / 2), only screen and (min-device-pixel-ratio: 1.5), only screen and (min-resolution: 150dpi) {
