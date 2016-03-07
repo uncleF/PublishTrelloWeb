@@ -49,7 +49,7 @@ module.exports = function(grunt) {
       var resourcesDirCompiled = developmentDirCompiled + RESOURCES_DIR + '/';
       var config = {
         name: PROJECT,
-        version: grunt.readJSON('package.json').version,
+        version: grunt.file.readJSON('package.json').version,
         language: LANGUAGE,
         dir: developmentDirCompiled,
         meta: META_DIR + '/',

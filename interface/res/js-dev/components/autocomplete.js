@@ -111,6 +111,7 @@ function chooseMouse(event) {
 
 function chooseThis(event) {
   event.preventDefault();
+  deactivate();
   eventsTool.trigger(input, 'change');
 }
 

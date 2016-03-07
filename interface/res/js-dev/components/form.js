@@ -64,9 +64,13 @@ function outputOptions() {
 }
 
 function onResponse(error, response) {
-  if (response.statusCode === 200) {
+  if (!error && response.statusCode === 200) {
     var json = JSON.parse(response.responseText);
-    startDownload(json.dir, json.file);
+    if (json.hasOwnProperty('error')) {
+      message.show(json.error);
+    } else {
+      startDownload(json.dir, json.file);
+    }
   } else {
     message.show('Something went wrong!');
   }

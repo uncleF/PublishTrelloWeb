@@ -12,7 +12,7 @@
 
   function init() {
     rAF.polyfill();
-    // cache.init();
+    cache.init();
     help.init();
     trello.init(help);
     form.init(trello);

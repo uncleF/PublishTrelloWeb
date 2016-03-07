@@ -42,7 +42,6 @@ function generateOutput(request, response) {
       dir: outputOptions.dir,
       file: outputOptions.file
     });
-    response.end();
   });
 }
 
