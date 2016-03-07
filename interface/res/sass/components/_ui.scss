@@ -802,8 +802,14 @@ textarea {
   white-space: nowrap;
   transition: none;
 
-  &:visited {
+  &:visited,
+  &:hover,
+  &:active {
     color: $link;
+  }
+
+  &:focus {
+    outline: none;
   }
 
   &-is-starred {
@@ -815,52 +821,19 @@ textarea {
       margin: 0 .5em 0 0;
     }
 
-    &.autocompleteOption-is-selected {
-
-      &:before {
-        @include tx-sprite-position($spt-starInverted);
-      }
-
-    }
-
-    &:hover,
-    &:active {
-
-      &:before {
-        @include tx-sprite-position($spt-starInverted);
-      }
-
-    }
-
   }
 
-  &-is-selected {
+  &-is-highlighted {
     color: $autocompleteOption-hover;
-    background: $ui-color;
+    background: $autocompleteOption-backgroundHover;
 
-    &:visited {
+    &:visited,
+    &:hover,
+    &:active {
       color: $autocompleteOption-hover;
     }
 
-    .autocomplete-is-mouseInterface & {
-      color: $link;
-      background: none;
-
-      &:visited {
-        color: $link;
-      }
-
-    }
-
   }
-
-  &:hover,
-  &:active {
-    color: $autocompleteOption-hover;
-    background: $ui-color;
-  }
-
-
 
 }
 

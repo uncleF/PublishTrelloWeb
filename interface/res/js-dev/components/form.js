@@ -20,36 +20,25 @@ var eventsTool = require('./patterns/tx-event.js');
 
 var trello;
 
-const TRELLO_URL = new RegExp(/(?:^(?:https?:\/\/)?|^(?:w{3}\.)?|^(?:https?:\/\/w{3}\.)?)trello\.com\/b\//);
-
-function toggleDownload() {
-  download.disabled = !download.disabled;
-  if (download.className !== 'download') {
-    download.className = 'download';
-  }
-}
-
 function busyDownload() {
-  toggleDownload();
+  download.disabled = true;
   download.className = 'download download-is-busy';
 }
 
 function validate() {
   if (download.className !== 'download download-is-busy' && download.disabled && (form.className === 'form form-is-validBoard' && (options.html.checked || options.md.checked || options.pdf.checked || options.epub.checked))) {
-    toggleDownload();
+    download.disabled = false;
   } else if (download.className !== 'download download-is-busy' && !download.disabled && (form.className !== 'form form-is-validBoard' || (!options.html.checked && !options.md.checked && !options.pdf.checked && !options.epub.checked))) {
-    toggleDownload();
+    download.disabled = true;
   }
 }
 
 function validateBoard() {
   if (board.value !== '') {
-    if (board.value.match(TRELLO_URL)) {
+    if (board.value.match(trello.regExpURL())) {
       form.className = 'form form-is-validBoard';
-      eventsTool.trigger(window, 'boardvalid');
     } else {
       form.className = 'form form-is-invalidBoard';
-      eventsTool.trigger(window, 'inboardvalid');
     }
   } else {
     form.className = 'form';
@@ -59,7 +48,7 @@ function validateBoard() {
 function resetForm() {
   form.reset();
   validateBoard();
-  toggleDownload();
+  download.className = 'download';
 }
 
 function startDownload(dir, file) {
@@ -112,7 +101,7 @@ function submit(event) {
 }
 
 function initAutocomplete() {
-  autocomplete.init(board, trello, TRELLO_URL);
+  autocomplete.init(board, trello, trello.regExpURL());
   eventsTool.unbind(window, 'authsuccess', initAutocomplete);
 }
 
@@ -120,15 +109,16 @@ function init(trelloInstance) {
   var inputEvent = 'oninput' in window ? 'input' : 'keyup';
   trello = trelloInstance;
   message.init();
-  // if (trello.authorized()) {
-    initAutocomplete();
-  // }
   eventsTool.bind(form, 'submit', submit);
   eventsTool.bind(form, 'change', validate);
   eventsTool.bind(form, inputEvent, validate);
   eventsTool.bind(board, 'change', validateBoard);
   eventsTool.bind(board, inputEvent, validateBoard);
-  eventsTool.bind(window, 'authsuccess', initAutocomplete);
+  if (trello.authorized()) {
+    initAutocomplete();
+  } else {
+    eventsTool.bind(window, 'authsuccess', initAutocomplete);
+  }
 }
 
 exports.init = init;

@@ -9,8 +9,9 @@ var autheHelp = document.getElementById('authToggleHelp');
 var eventsTool = require('./patterns/tx-event.js');
 
 const APP_KEY = '84e8362bd7d7fefaab5498e386897312';
-const TRELLO_LS_KEY = 'trello_token';
+const LS_KEY = 'trello_token';
 const AUTH_ENDPOINT = 'https://trello.com';
+const REGEXP_URL = new RegExp(/(?:^(?:https?:\/\/)?|^(?:w{3}\.)?|^(?:https?:\/\/w{3}\.)?)trello\.com\/b\/.+/);
 
 var authWindow;
 var trelloAuth = false;
@@ -22,6 +23,22 @@ function triggerSuccess() {
 
 function triggerFailure() {
   eventsTool.trigger(window, 'authfailure');
+}
+
+function authorized() {
+  return trelloAuth;
+}
+
+function token() {
+  return trelloToken;
+}
+
+function key() {
+  return APP_KEY;
+}
+
+function regExpURL() {
+  return REGEXP_URL;
 }
 
 function receiveAuthMessage(event) {
@@ -41,9 +58,9 @@ function receiveAuthMessage(event) {
     triggerFailure();
   }
   if (Modernizr.localstorage && trelloToken) {
-    localStorage[TRELLO_LS_KEY] = trelloToken;
+    localStorage[LS_KEY] = trelloToken;
   } else if (!trelloToken) {
-    delete localStorage[TRELLO_LS_KEY];
+    delete localStorage[LS_KEY];
   }
   eventsTool.trigger(window, 'gottoken');
   eventsTool.unbind(window, 'message', receiveAuthMessage);
@@ -63,31 +80,7 @@ function authorizeTrello() {
 function deauthorizeTrello() {
   trelloToken = null;
   if (Modernizr.localstorage) {
-    delete localStorage[TRELLO_LS_KEY];
-  }
-}
-
-function authorized() {
-  return trelloAuth;
-}
-
-function token() {
-  return trelloToken;
-}
-
-function key() {
-  return APP_KEY;
-}
-
-function authToggleFromHelp(event) {
-  event.preventDefault();
-  authorizeTrello();
-}
-
-function authToggle(event) {
-  event.preventDefault();
-  if (!authorized()) {
-    authorizeTrello();
+    delete localStorage[LS_KEY];
   }
 }
 
@@ -101,20 +94,28 @@ function authFailure() {
   auth.className = 'authorization authorization-is-unauthorized';
 }
 
+function authToggle(event) {
+  event.preventDefault();
+  if (!authorized()) {
+    authorizeTrello();
+  }
+}
+
 function init() {
   eventsTool.bind(auth, 'click', authToggle);
-  eventsTool.bind(autheHelp, 'click', authToggleFromHelp);
+  eventsTool.bind(autheHelp, 'click', authToggle);
   eventsTool.bind(window, 'authsuccess', authSuccess);
   eventsTool.bind(window, 'authfailure', authFailure);
-  if (Modernizr.localstorage && localStorage[TRELLO_LS_KEY]) {
-    trelloToken = localStorage[TRELLO_LS_KEY];
-    eventsTool.trigger(window, 'authsuccess');
+  if (Modernizr.localstorage && localStorage[LS_KEY]) {
+    trelloToken = localStorage[LS_KEY];
+    triggerSuccess();
   }
 }
 
 exports.init = init;
 exports.authorizeTrello = authorizeTrello;
-exports.deauthorizeTrello = deauthorizeTrello;
+exports.authorizeTrello = deauthorizeTrello;
 exports.authorized = authorized;
 exports.token = token;
 exports.key = key;
+exports.regExpURL = regExpURL;

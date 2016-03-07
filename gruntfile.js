@@ -49,6 +49,7 @@ module.exports = function(grunt) {
       var resourcesDirCompiled = developmentDirCompiled + RESOURCES_DIR + '/';
       var config = {
         name: PROJECT,
+        version: grunt.readJSON('package.json').version,
         language: LANGUAGE,
         dir: developmentDirCompiled,
         meta: META_DIR + '/',
@@ -259,6 +260,9 @@ module.exports = function(grunt) {
             pattern: /@tx-title/gi,
             replacement: project.name
           }, {
+            pattern: /@tx-version/gi,
+            replacement: project.version
+          },{
             pattern: /@tx-language/gi,
             replacement: project.language
           }, {

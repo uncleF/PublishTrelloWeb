@@ -1,1 +1,1490 @@
-!function a(b,c,d){function e(g,h){if(!c[g]){if(!b[g]){var i="function"==typeof require&&require;if(!h&&i)return i(g,!0);if(f)return f(g,!0);var j=new Error("Cannot find module '"+g+"'");throw j.code="MODULE_NOT_FOUND",j}var k=c[g]={exports:{}};b[g][0].call(k.exports,function(a){var c=b[g][1][a];return e(c?c:a)},k,k.exports,a,b,c,d)}return c[g].exports}for(var f="function"==typeof require&&require,g=0;g<d.length;g++)e(d[g]);return e}({1:[function(a,b,c){"use strict";function d(){t()||u()}function e(){J.className="autocomplete autocomplete-is-active"}function f(){J.className="autocomplete"}function g(){K.unbind(D,"blur",y)}function h(){p(),D.value=G[I].href,K.trigger(D,"change")}function i(a){I>-1&&(G[I].className=G[I].className.replace(" autocompleteOption-is-selected","")),I=a,G[I].className+=" autocompleteOption-is-selected"}function j(a){for(var b=0;H>b;b+=1)if(G[b]===a)return i(b),void h()}function k(a){var b=a.target;a.preventDefault(),b.className.indexOf("autocompleteOption")>-1&&j(b),K.bind(D,"blur",y)}function l(a){a.preventDefault(),-1===I?(I=H-1,i(I)):i(I>0?I-1:H-1),G[I].scrollIntoView(!1)}function m(a){a.preventDefault(),-1===I?(I=0,i(I)):i(H-1>I?I+1:0),G[I].scrollIntoView(!1)}function n(a){a.preventDefault(),h()}function o(a){var b=a.keyCode;return 38===b?void l(a):40===b?void m(a):13===b?void n(a):void 0}function p(){f(),K.unbind(D,"keyup",o),K.unbind(J,"click",k),K.bind(D,"keyup",z)}function q(){e(),K.unbind(D,"keyup",z),K.bind(D,"keyup",o),K.bind(J,"click",k)}function r(a){return a.replace(F,"").split("/")[0]}function s(){for(var a=r(D.value),b=0;H>b;b+=1)if(r(G[b].href)===a)return b;return-1}function t(){var a=s();return a>-1?(i(a),!0):!1}function u(){I>-1&&(G[I].className=G[I].className.replace(" autocompleteOption-is-selected",""),I=-1)}function v(){I>-1&&u(),G=document.getElementsByClassName("autocompleteOption"),H=G.length}function w(a){v(),""!==D.value&&t(),a()}function x(){w(q)}function y(){p()}function z(a){40===a.keyCode&&(a.preventDefault(),q())}function A(){J.className+=" autocomplete-is-mouseInterface"}function B(){J.className=J.className.replace(" autocomplete-is-mouseInterface","")}function C(a,b,c){D=a,E=b,F=c,K.bind(D,"focus",x),K.bind(D,"blur",y),K.bind(J,"mousedown",g),K.bind(J,"mouseover",A),K.bind(J,"mouseout",B),K.bind(window,"boardvalid",d)}var D,E,F,G,H,I,J=document.getElementById("autocomplete"),K=(a("browser-request"),a("./patterns/tx-event.js"));c.init=C,c.activate=q,c.deactivate=p},{"./patterns/tx-event.js":6,"browser-request":10}],2:[function(a,b,c){"use strict";function d(){Modernizr.serviceworker&&navigator.serviceWorker.register("/service.js")}c.init=d},{}],3:[function(a,b,c){"use strict";function d(){t.disabled=!t.disabled,"download"!==t.className&&(t.className="download")}function e(){d(),t.className="download download-is-busy"}function f(){"download download-is-busy"!==t.className&&t.disabled&&"form form-is-validBoard"===r.className&&(u.html.checked||u.md.checked||u.pdf.checked||u.epub.checked)?d():"download download-is-busy"===t.className||t.disabled||"form form-is-validBoard"===r.className&&(u.html.checked||u.md.checked||u.pdf.checked||u.epub.checked)||d()}function g(){""!==s.value?s.value.match(A)?(r.className="form form-is-validBoard",z.trigger(window,"boardvalid")):(r.className="form form-is-invalidBoard",z.trigger(window,"inboardvalid")):r.className="form"}function h(){r.reset(),g(),d()}function i(a,b){h(),window.location="/download?dir="+a+"&file="+b}function j(){var a=w(r,{hash:!0});return a.board=a.board.replace(/http.*\/b\//g,"").replace(/\/.*/g,""),a.token=q.token(),a}function k(a,b){if(200===b.statusCode){var c=JSON.parse(b.responseText);i(c.dir,c.file)}else x.show("Something went wrong!")}function l(){var a=j();a.hasOwnProperty("token")&&a.token&&(e(),v({method:"POST",uri:"/generate",body:a,json:!0},k))}function m(){z.unbind(window,"gottoken",m),l()}function n(a){a.preventDefault(),q.authorized()?l():(z.bind(window,"gottoken",m),q.authorizeTrello())}function o(){y.init(s,q,A),z.unbind(window,"authsuccess",o)}function p(a){var b="oninput"in window?"input":"keyup";q=a,x.init(),o(),z.bind(r,"submit",n),z.bind(r,"change",f),z.bind(r,b,f),z.bind(s,"change",g),z.bind(s,b,g),z.bind(window,"authsuccess",o)}var q,r=document.getElementById("form"),s=document.getElementById("board"),t=document.getElementById("download"),u={html:document.getElementById("html"),md:document.getElementById("md"),pdf:document.getElementById("pdf"),epub:document.getElementById("epub")},v=a("browser-request"),w=a("form-serialize"),x=a("./messages"),y=a("./autocomplete"),z=a("./patterns/tx-event.js"),A=new RegExp(/(?:^(?:https?:\/\/)?|^(?:w{3}\.)?|^(?:https?:\/\/w{3}\.)?)trello\.com\/b\//);c.init=p},{"./autocomplete":1,"./messages":5,"./patterns/tx-event.js":6,"browser-request":10,"form-serialize":11}],4:[function(a,b,c){"use strict";function d(a){a&&a.preventDefault(),k.toggle()}function e(){"authHelp"===j.className?j.className="authHelp authHelp-is-invisible":j.className="authHelp"}function f(){l.bind(h,"click",k.toggle),l.bind(i,"click",d),l.bind(window,"authsuccess",e),l.bind(window,"authfailure",e)}var g=document.getElementById("help"),h=document.getElementById("closeHelp"),i=document.getElementById("helpToggle"),j=document.getElementById("authHelp"),k=a("./patterns/tx-overlay.js").init(g),l=a("./patterns/tx-event.js");c.init=f},{"./patterns/tx-event.js":6,"./patterns/tx-overlay.js":7}],5:[function(a,b,c){"use strict";function d(){k.bind(h,"click",j.toggle),k.bind(i,"click",j.toggle)}function e(a){g.textContent=a,j.toggle()}var f=document.getElementById("message"),g=document.getElementById("messageText"),h=document.getElementById("closeMessage"),i=document.getElementById("okMessage"),j=a("./patterns/tx-overlay.js").init(f),k=a("./patterns/tx-event.js");c.init=d,c.show=e},{"./patterns/tx-event.js":6,"./patterns/tx-overlay.js":7}],6:[function(a,b,c){"use strict";function d(a,b,c){document.addEventListener?a.addEventListener(b,c):a.attachEvent("on"+b,c)}function e(a,b,c){document.removeEventListener?a.removeEventListener(b,c):a.detachEvent("on"+b,c)}function f(a,b,c){c=c||!1;var d;document.createEvent?(d=document.createEvent("MouseEvents"),d.initEvent(b,c,!1),a.dispatchEvent(d)):(d=document.createEventObject(),a.fireEvent("on"+b,d))}c.bind=d,c.unbind=e,c.trigger=f},{}],7:[function(a,b,c){"use strict";function d(a){function b(a){var b=e.className;a&&a.preventDefault(),e.className=b.indexOf(g)>-1?b.replace(g,""):b+" "+g}function c(a){var c=a.target?a.target:a.srcElement;c.className.indexOf(g)>-1&&b(a)}function d(){a&&(e=a,g=e.className.split(" ")[0]+"-is-active",f.bind(e,"click",c))}var e,g;return d(),{toggle:b}}function e(a){return new d(a)}var f=a("./tx-event");c.init=e},{"./tx-event":6}],8:[function(a,b,c){"use strict";function d(){u.trigger(window,"authsuccess")}function e(){u.trigger(window,"authfailure")}function f(a){var b;return a.origin!==x||a.source!==q?void e():(null!==(b=a.source)&&b.close(),null!==a.data&&/[0-9a-f]{64}/.test(a.data)?(r=a.data,d()):(r=null,e()),Modernizr.localstorage&&r?localStorage[w]=r:r||delete localStorage[w],u.trigger(window,"gottoken"),void u.unbind(window,"message",f))}function g(){u.bind(window,"message",f);var a=420,b=470,c=window.screenX+(window.innerWidth-a)/2,d=window.screenY+(window.innerHeight-b)/2,e=window.location,g=null!==(e=/^[a-z]+:\/\/[^\/]*/.exec(e))?e[0]:void 0;q=window.open("https://trello.com/1/authorize?response_type=token&key="+v+"&return_url="+g+"&callback_method=postMessage&scope=read&expiration=never&name=Publish%20Trello","trello","width="+a+",height="+b+",left="+c+",top="+d)}function h(){r=null,Modernizr.localstorage&&delete localStorage[w]}function i(){return y}function j(){return r}function k(){return v}function l(a){a.preventDefault(),g()}function m(a){a.preventDefault(),i()||g()}function n(){y=!0,s.className="authorization authorization-is-authorized"}function o(){y=!1,s.className="authorization authorization-is-unauthorized"}function p(){u.bind(s,"click",m),u.bind(t,"click",l),u.bind(window,"authsuccess",n),u.bind(window,"authfailure",o),Modernizr.localstorage&&localStorage[w]&&(r=localStorage[w],u.trigger(window,"authsuccess"))}var q,r,s=document.getElementById("authToggle"),t=document.getElementById("authToggleHelp"),u=a("./patterns/tx-event.js"),v="84e8362bd7d7fefaab5498e386897312",w="trello_token",x="https://trello.com",y=!1;c.init=p,c.authorizeTrello=g,c.deauthorizeTrello=h,c.authorized=i,c.token=j,c.key=k},{"./patterns/tx-event.js":6}],9:[function(a,b,c){"use strict";!function(){function b(){c.init(),d.init(c),e.init(d)}var c=a("./components/help"),d=(a("./components/cache"),a("./components/trello")),e=a("./components/form");b()}()},{"./components/cache":2,"./components/form":3,"./components/help":4,"./components/trello":8}],10:[function(a,b,c){!function(a,d){"function"==typeof define&&define.amd?define([],d):"object"==typeof c?b.exports=d():a.returnExports=d()}(this,function(){function a(e,f){if("function"!=typeof f)throw new Error("Bad callback given: "+f);if(!e)throw new Error("No options given");var h=e.onResponse;if(e="string"==typeof e?{uri:e}:JSON.parse(JSON.stringify(e)),e.onResponse=h,e.verbose&&(a.log=d()),e.url&&(e.uri=e.url,delete e.url),!e.uri&&""!==e.uri)throw new Error("options.uri is a required argument");if("string"!=typeof e.uri)throw new Error("options.uri must be a string");for(var i=["proxy","_redirectsFollowed","maxRedirects","followRedirect"],j=0;j<i.length;j++)if(e[i[j]])throw new Error("options."+i[j]+" is not supported");if(e.callback=f,e.method=e.method||"GET",e.headers=e.headers||{},e.body=e.body||null,e.timeout=e.timeout||a.DEFAULT_TIMEOUT,e.headers.host)throw new Error("Options.headers.host is not supported");e.json&&(e.headers.accept=e.headers.accept||"application/json","GET"!==e.method&&(e.headers["content-type"]="application/json"),"boolean"!=typeof e.json?e.body=JSON.stringify(e.json):"string"!=typeof e.body&&(e.body=JSON.stringify(e.body)));var k=function(a){var b=[];for(var c in a)a.hasOwnProperty(c)&&b.push(encodeURIComponent(c)+"="+encodeURIComponent(a[c]));return b.join("&")};if(e.qs){var l="string"==typeof e.qs?e.qs:k(e.qs);-1!==e.uri.indexOf("?")?e.uri=e.uri+"&"+l:e.uri=e.uri+"?"+l}var m=function(a){var b={};b.boundry="-------------------------------"+Math.floor(1e9*Math.random());var c=[];for(var d in a)a.hasOwnProperty(d)&&c.push("--"+b.boundry+'\nContent-Disposition: form-data; name="'+d+'"\n\n'+a[d]+"\n");return c.push("--"+b.boundry+"--"),b.body=c.join(""),b.length=b.body.length,b.type="multipart/form-data; boundary="+b.boundry,b};if(e.form){if("string"==typeof e.form)throw"form name unsupported";if("POST"===e.method){var n=(e.encoding||"application/x-www-form-urlencoded").toLowerCase();switch(e.headers["content-type"]=n,n){case"application/x-www-form-urlencoded":e.body=k(e.form).replace(/%20/g,"+");break;case"multipart/form-data":var o=m(e.form);e.body=o.body,e.headers["content-type"]=o.type;break;default:throw new Error("unsupported encoding:"+n)}}}return e.onResponse=e.onResponse||c,e.onResponse===!0&&(e.onResponse=f,e.callback=c),!e.headers.authorization&&e.auth&&(e.headers.authorization="Basic "+g(e.auth.username+":"+e.auth.password)),b(e)}function b(b){function c(){l=!0;var c=new Error("ETIMEDOUT");return c.code="ETIMEDOUT",c.duration=b.timeout,a.log.error("Timeout",{id:k._id,milliseconds:b.timeout}),b.callback(c,k)}function d(c){if(l)return a.log.debug("Ignoring timed out state change",{state:k.readyState,id:k.id});if(a.log.debug("State change",{state:k.readyState,id:k.id,timed_out:l}),k.readyState===h.OPENED){a.log.debug("Request started",{id:k.id});for(var d in b.headers)k.setRequestHeader(d,b.headers[d])}else k.readyState===h.HEADERS_RECEIVED?e():k.readyState===h.LOADING?(e(),g()):k.readyState===h.DONE&&(e(),g(),i())}function e(){if(!p.response){if(p.response=!0,a.log.debug("Got response",{id:k.id,status:k.status}),clearTimeout(k.timeoutTimer),k.statusCode=k.status,m&&0==k.statusCode){var c=new Error("CORS request rejected: "+b.uri);return c.cors="rejected",p.loading=!0,p.end=!0,b.callback(c,k)}b.onResponse(null,k)}}function g(){p.loading||(p.loading=!0,a.log.debug("Response body loading",{id:k.id}))}function i(){if(!p.end){if(p.end=!0,a.log.debug("Request done",{id:k.id}),k.body=k.responseText,b.json)try{k.body=JSON.parse(k.responseText)}catch(c){return b.callback(c,k)}b.callback(null,k,k.body)}}var k=new h,l=!1,m=f(b.uri),n="withCredentials"in k;if(j+=1,k.seq_id=j,k.id=j+": "+b.method+" "+b.uri,k._id=k.id,m&&!n){var o=new Error("Browser does not support cross-origin request: "+b.uri);return o.cors="unsupported",b.callback(o,k)}k.timeoutTimer=setTimeout(c,b.timeout);var p={response:!1,loading:!1,end:!1};return k.onreadystatechange=d,k.open(b.method,b.uri,!0),m&&(k.withCredentials=!!b.withCredentials),k.send(b.body),k}function c(){}function d(){var a,b,d={},f=["trace","debug","info","warn","error"];for(b=0;b<f.length;b++)a=f[b],d[a]=c,"undefined"!=typeof console&&console&&console[a]&&(d[a]=e(console,a));return d}function e(a,b){function c(c,d){return"object"==typeof d&&(c+=" "+JSON.stringify(d)),a[b].call(a,c)}return c}function f(a){var b,c=/^([\w\+\.\-]+:)(?:\/\/([^\/?#:]*)(?::(\d+))?)?/;try{b=location.href}catch(d){b=document.createElement("a"),b.href="",b=b.href}var e=c.exec(b.toLowerCase())||[],f=c.exec(a.toLowerCase()),g=!(!f||f[1]==e[1]&&f[2]==e[2]&&(f[3]||("http:"===f[1]?80:443))==(e[3]||("http:"===e[1]?80:443)));return g}function g(a){var b,c,d,e,f,g,h,i,j="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=",k=0,l=0,m="",n=[];if(!a)return a;do b=a.charCodeAt(k++),c=a.charCodeAt(k++),d=a.charCodeAt(k++),i=b<<16|c<<8|d,e=i>>18&63,f=i>>12&63,g=i>>6&63,h=63&i,n[l++]=j.charAt(e)+j.charAt(f)+j.charAt(g)+j.charAt(h);while(k<a.length);switch(m=n.join(""),a.length%3){case 1:m=m.slice(0,-2)+"==";break;case 2:m=m.slice(0,-1)+"="}return m}var h=XMLHttpRequest;if(!h)throw new Error("missing XMLHttpRequest");a.log={trace:c,debug:c,info:c,warn:c,error:c};var i=18e4,j=0;a.withCredentials=!1,a.DEFAULT_TIMEOUT=i,a.defaults=function(b,c){var d=function(a){var c=function(c,d){c="string"==typeof c?{uri:c}:JSON.parse(JSON.stringify(c));for(var e in b)void 0===c[e]&&(c[e]=b[e]);return a(c,d)};return c},e=d(a);return e.get=d(a.get),e.post=d(a.post),e.put=d(a.put),e.head=d(a.head),e};var k=["get","put","post","head"];return k.forEach(function(b){var c=b.toUpperCase(),d=b.toLowerCase();a[d]=function(b){"string"==typeof b?b={method:c,uri:b}:(b=JSON.parse(JSON.stringify(b)),b.method=c);var d=[b].concat(Array.prototype.slice.apply(arguments,[1]));return a.apply(this,d)}}),a.couch=function(b,d){function e(a,b,c){if(a)return d(a,b,c);if((b.statusCode<200||b.statusCode>299)&&c.error){a=new Error("CouchDB error: "+(c.error.reason||c.error.error));for(var e in c)a[e]=c[e];return d(a,b,c)}return d(a,b,c)}"string"==typeof b&&(b={uri:b}),b.json=!0,b.body&&(b.json=b.body),delete b.body,d=d||c;var f=a(b,e);return f},a})},{}],11:[function(a,b,c){function d(a,b){"object"!=typeof b?b={hash:!!b}:void 0===b.hash&&(b.hash=!0);for(var c=b.hash?{}:"",d=b.serializer||(b.hash?g:h),e=a&&a.elements?a.elements:[],f=Object.create(null),k=0;k<e.length;++k){var l=e[k];if((b.disabled||!l.disabled)&&l.name&&j.test(l.nodeName)&&!i.test(l.type)){var m=l.name,n=l.value;if("checkbox"!==l.type&&"radio"!==l.type||l.checked||(n=void 0),b.empty){if("checkbox"!==l.type||l.checked||(n=""),"radio"===l.type&&(f[l.name]||l.checked?l.checked&&(f[l.name]=!0):f[l.name]=!1),!n&&"radio"==l.type)continue}else if(!n)continue;if("select-multiple"!==l.type)c=d(c,m,n);else{n=[];for(var o=l.options,p=!1,q=0;q<o.length;++q){var r=o[q],s=b.empty&&!r.value,t=r.value||s;r.selected&&t&&(p=!0,c=b.hash&&"[]"!==m.slice(m.length-2)?d(c,m+"[]",r.value):d(c,m,r.value))}!p&&b.empty&&(c=d(c,m,""))}}}if(b.empty)for(var m in f)f[m]||(c=d(c,m,""));return c}function e(a){var b=[],c=/^([^\[\]]*)/,d=new RegExp(k),e=c.exec(a);for(e[1]&&b.push(e[1]);null!==(e=d.exec(a));)b.push(e[1]);return b}function f(a,b,c){if(0===b.length)return a=c;var d=b.shift(),e=d.match(/^\[(.+?)\]$/);if("[]"===d)return a=a||[],Array.isArray(a)?a.push(f(null,b,c)):(a._values=a._values||[],a._values.push(f(null,b,c))),a;if(e){var g=e[1],h=parseInt(g,10);isNaN(h)?(a=a||{},a[g]=f(a[g],b,c)):(a=a||[],a[h]=f(a[h],b,c))}else a[d]=f(a[d],b,c);return a}function g(a,b,c){var d=b.match(k);if(d){var g=e(b);f(a,g,c)}else{var h=a[b];h?(Array.isArray(h)||(a[b]=[h]),a[b].push(c)):a[b]=c}return a}function h(a,b,c){return c=c.replace(/(\r)?\n/g,"\r\n"),c=encodeURIComponent(c),c=c.replace(/%20/g,"+"),a+(a?"&":"")+encodeURIComponent(b)+"="+c}var i=/^(?:submit|button|image|reset|file)$/i,j=/^(?:input|select|textarea|keygen)/i,k=/(\[[^\[\]]*\])/g;b.exports=d},{}]},{},[9]);
+(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+/* jshint browser: true */
+
+'use strict';
+
+var list = document.getElementById('autocomplete');
+
+var update = require('./autocompleteUpdate');
+var eventsTool = require('./patterns/tx-event.js');
+
+var autocompleteActive = false;
+var autocompleteOn = false;
+
+var input;
+
+var trello;
+
+var options;
+var optionsLength;
+var highlightedOption;
+
+function getOptionTarget(target) {
+  return Array.prototype.indexOf.call(options, target);
+}
+
+function checkOption(target) {
+  return target.className.indexOf('autocompleteOption') > -1;
+}
+
+function getListBounds() {
+  var scroll = list.scrollTop;
+  var height = list.getAttribute('data-height') - 0;
+  if (!height) {
+    height = list.offsetHeight - options[0].offsetHeight;
+    list.setAttribute('data-height', height);
+  }
+  return {
+    scroll: scroll,
+    height: height
+  };
+}
+
+function getOptionPosition(option) {
+  var position = option.getAttribute('data-position') - 0;
+  if (!position) {
+    position = option.offsetTop;
+    option.setAttribute('data-position', position);
+  }
+  return position;
+}
+
+function scrollOption() {
+  requestAnimationFrame(function () {
+    var option = options[highlightedOption];
+    var optionPosition = getOptionPosition(option);
+    var visibleBounds = getListBounds();
+    if (optionPosition <= visibleBounds.scroll) {
+      option.scrollIntoView(true);
+    } else if (optionPosition >= visibleBounds.scroll + visibleBounds.height) {
+      option.scrollIntoView(false);
+    }
+  });
+}
+
+function updateOption(newHighlightedOption) {
+  if (highlightedOption > -1) {
+    options[highlightedOption].className = options[highlightedOption].className.replace(' autocompleteOption-is-highlighted', '');
+  }
+  highlightedOption = newHighlightedOption;
+  options[highlightedOption].className += ' autocompleteOption-is-highlighted';
+}
+
+function changeOption() {
+  input.value = options[highlightedOption].href;
+  eventsTool.trigger(input, 'change', true);
+}
+
+function highlightOption(newHighlightedOption) {
+  updateOption(newHighlightedOption);
+  scrollOption();
+}
+
+function selectOption(newHighlightedOption) {
+  highlightOption(newHighlightedOption);
+  changeOption();
+}
+
+function choosePrev(event) {
+  event.preventDefault();
+  if (highlightedOption > 0) {
+    selectOption(highlightedOption - 1);
+  } else {
+    selectOption(optionsLength - 1);
+  }
+}
+
+function chooseNext(event) {
+  event.preventDefault();
+  if (highlightedOption > -1 && highlightedOption < optionsLength - 1) {
+    selectOption(highlightedOption + 1);
+  } else {
+    selectOption(0);
+  }
+}
+
+function chooseMouse(event) {
+  var target = event.target;
+  if (checkOption(target)) {
+    selectOption(getOptionTarget(target));
+  }
+}
+
+function chooseThis(event) {
+  event.preventDefault();
+  eventsTool.trigger(input, 'change');
+}
+
+function choose(event) {
+  var key = event.keyCode;
+  if (key === 38) {
+    choosePrev(event);
+    return;
+  }
+  if (key === 40) {
+    chooseNext(event);
+    return;
+  }
+  if (key === 13) {
+    chooseThis(event);
+    return;
+  }
+}
+
+function show() {
+  list.className = 'autocomplete autocomplete-is-active';
+}
+
+function hide() {
+  list.className = 'autocomplete';
+}
+
+function activate() {
+  if (autocompleteActive && !autocompleteOn) {
+    autocompleteOn = true;
+    show();
+    eventsTool.unbind(input, 'keyup', openAutocomplete);
+    eventsTool.bind(input, 'keyup', choose);
+  }
+}
+
+function deactivate(event) {
+  if (autocompleteOn) {
+    autocompleteOn = false;
+    hide();
+    eventsTool.unbind(input, 'keyup', choose);
+    eventsTool.bind(input, 'keyup', openAutocomplete);
+  }
+}
+
+function deactivateMouse(event) {
+  event.preventDefault();
+}
+
+function toggleAutocomplete() {
+  options = document.getElementsByClassName('autocompleteOption');
+  optionsLength = options.length;
+  autocompleteActive = true;
+}
+
+function openAutocomplete(event) {
+  if (event.keyCode === 40) {
+    event.preventDefault();
+    activate();
+  }
+}
+
+function reset() {
+  autocompleteActive = false;
+  update.update();
+}
+
+function init(element, trelloInstance) {
+  var inputEvent = 'oninput' in window ? 'input' : 'keyup';
+  input = element;
+  trello = trelloInstance;
+  update.init(list, trello);
+  eventsTool.bind(input, 'focus', activate);
+  eventsTool.bind(input, 'blur', deactivate);
+  eventsTool.bind(input, inputEvent, deactivate);
+  eventsTool.bind(list, 'mouseover', chooseMouse);
+  eventsTool.bind(list, 'click', deactivateMouse);
+  eventsTool.bind(window, 'gotboards', toggleAutocomplete);
+}
+
+exports.init = init;
+exports.activate = activate;
+exports.deactivate = deactivate;
+exports.reset = reset;
+
+},{"./autocompleteUpdate":2,"./patterns/tx-event.js":7}],2:[function(require,module,exports){
+/* jshint browser: true */
+
+'use strict';
+
+var request = require('browser-request');
+var eventsTool = require('./patterns/tx-event.js');
+
+var list;
+var trello;
+
+var TRELLO_MEMBER;
+var TRELLO_BOARDS;
+
+function buildList() {
+  var items = '';
+  for (var index = 0, length = TRELLO_BOARDS.length; index < length; index += 1) {
+    items += '<li class="autocompleteItem"><a href="' + TRELLO_BOARDS[index].shortUrl + '" class="autocompleteOption">' + TRELLO_BOARDS[index].name + '</a></li>';
+  }
+  list.insertAdjacentHTML('beforeend', items);
+  eventsTool.trigger(window, 'gotboards');
+}
+
+function updateRequest(requestURL, callback) {
+  request({
+    method: 'GET',
+    uri: requestURL
+  }, callback);
+}
+
+function gotBoards(error, response) {
+  if (error) {
+    console.log(error);
+  } else {
+    TRELLO_BOARDS = JSON.parse(response.body);
+    buildList();
+  }
+}
+
+function getBoards() {
+  var boardsRequestURL = 'https://api.trello.com/1/members/' + TRELLO_MEMBER + '/boards?key=' + trello.key() + '&token=' + trello.token() + '&filter=open';
+  updateRequest(boardsRequestURL, gotBoards);
+}
+
+function gotMemeber(error, response) {
+  if (error) {
+    console.log(error);
+  } else {
+    TRELLO_MEMBER = JSON.parse(response.body).username;
+    getBoards();
+  }
+}
+
+function getMemeber() {
+  var membersRequestURL = 'https://api.trello.com/1/tokens/' + trello.token() + '/member?key=' + trello.key() + '&fields=username';
+  updateRequest(membersRequestURL, gotMemeber);
+}
+
+function init(element, trelloInstance) {
+  list = element;
+  trello = trelloInstance;
+  getMemeber();
+}
+
+exports.init = init;
+exports.update = getBoards;
+
+},{"./patterns/tx-event.js":7,"browser-request":12}],3:[function(require,module,exports){
+/* jshint browser: true */
+/* global Modernizr */
+
+'use strict';
+
+function init() {
+  if (Modernizr.serviceworker) {
+    navigator.serviceWorker.register('/service.js');
+  }
+}
+
+exports.init = init;
+
+},{}],4:[function(require,module,exports){
+/* jshint browser: true */
+
+'use strict';
+
+var form = document.getElementById('form');
+var board = document.getElementById('board');
+var download = document.getElementById('download');
+var options = {
+  html: document.getElementById('html'),
+  md: document.getElementById('md'),
+  pdf: document.getElementById('pdf'),
+  epub: document.getElementById('epub')
+};
+
+var request = require('browser-request');
+var serialize = require('form-serialize');
+var message = require('./messages');
+var autocomplete = require('./autocomplete');
+var eventsTool = require('./patterns/tx-event.js');
+
+var trello;
+
+function busyDownload() {
+  download.disabled = true;
+  download.className = 'download download-is-busy';
+}
+
+function validate() {
+  if (download.className !== 'download download-is-busy' && download.disabled && form.className === 'form form-is-validBoard' && (options.html.checked || options.md.checked || options.pdf.checked || options.epub.checked)) {
+    download.disabled = false;
+  } else if (download.className !== 'download download-is-busy' && !download.disabled && (form.className !== 'form form-is-validBoard' || !options.html.checked && !options.md.checked && !options.pdf.checked && !options.epub.checked)) {
+    download.disabled = true;
+  }
+}
+
+function validateBoard() {
+  if (board.value !== '') {
+    if (board.value.match(trello.regExpURL())) {
+      form.className = 'form form-is-validBoard';
+    } else {
+      form.className = 'form form-is-invalidBoard';
+    }
+  } else {
+    form.className = 'form';
+  }
+}
+
+function resetForm() {
+  form.reset();
+  validateBoard();
+  download.className = 'download';
+}
+
+function startDownload(dir, file) {
+  resetForm();
+  window.location = '/download?dir=' + dir + '&file=' + file;
+}
+
+function outputOptions() {
+  var options = serialize(form, { hash: true });
+  options.board = options.board.replace(/http.*\/b\//g, '').replace(/\/.*/g, '');
+  options.token = trello.token();
+  return options;
+}
+
+function onResponse(error, response) {
+  if (response.statusCode === 200) {
+    var json = JSON.parse(response.responseText);
+    startDownload(json.dir, json.file);
+  } else {
+    message.show('Something went wrong!');
+  }
+}
+
+function send() {
+  var body = outputOptions();
+  if (body.hasOwnProperty('token') && body.token) {
+    busyDownload();
+    request({
+      method: 'POST',
+      uri: '/generate',
+      body: body,
+      json: true
+    }, onResponse);
+  }
+}
+
+function sendAfterAuth() {
+  eventsTool.unbind(window, 'gottoken', sendAfterAuth);
+  send();
+}
+
+function submit(event) {
+  event.preventDefault();
+  if (trello.authorized()) {
+    send();
+  } else {
+    eventsTool.bind(window, 'gottoken', sendAfterAuth);
+    trello.authorizeTrello();
+  }
+}
+
+function initAutocomplete() {
+  autocomplete.init(board, trello, trello.regExpURL());
+  eventsTool.unbind(window, 'authsuccess', initAutocomplete);
+}
+
+function init(trelloInstance) {
+  var inputEvent = 'oninput' in window ? 'input' : 'keyup';
+  trello = trelloInstance;
+  message.init();
+  eventsTool.bind(form, 'submit', submit);
+  eventsTool.bind(form, 'change', validate);
+  eventsTool.bind(form, inputEvent, validate);
+  eventsTool.bind(board, 'change', validateBoard);
+  eventsTool.bind(board, inputEvent, validateBoard);
+  if (trello.authorized()) {
+    initAutocomplete();
+  } else {
+    eventsTool.bind(window, 'authsuccess', initAutocomplete);
+  }
+}
+
+exports.init = init;
+
+},{"./autocomplete":1,"./messages":6,"./patterns/tx-event.js":7,"browser-request":12,"form-serialize":13}],5:[function(require,module,exports){
+/* jshint browser: true */
+
+'use strict';
+
+var overlayLayer = document.getElementById('help');
+var closeLink = document.getElementById('closeHelp');
+var helpToggle = document.getElementById('helpToggle');
+var authHelp = document.getElementById('authHelp');
+
+var overlay = require('./patterns/tx-overlay.js').init(overlayLayer);
+var eventsTool = require('./patterns/tx-event.js');
+
+function show(event) {
+  if (event) {
+    event.preventDefault();
+  }
+  overlay.toggle();
+}
+
+function toggleAuthHelp() {
+  if (authHelp.className === 'authHelp') {
+    authHelp.className = 'authHelp authHelp-is-invisible';
+  } else {
+    authHelp.className = 'authHelp';
+  }
+}
+
+function init() {
+  eventsTool.bind(closeLink, 'click', overlay.toggle);
+  eventsTool.bind(helpToggle, 'click', show);
+  eventsTool.bind(window, 'authsuccess', toggleAuthHelp);
+  eventsTool.bind(window, 'authfailure', toggleAuthHelp);
+}
+
+exports.init = init;
+
+},{"./patterns/tx-event.js":7,"./patterns/tx-overlay.js":8}],6:[function(require,module,exports){
+/* jshint browser: true */
+
+'use strict';
+
+var overlayLayer = document.getElementById('message');
+var messageText = document.getElementById('messageText');
+var closeLink = document.getElementById('closeMessage');
+var okButton = document.getElementById('okMessage');
+
+var overlay = require('./patterns/tx-overlay.js').init(overlayLayer);
+var eventsTool = require('./patterns/tx-event.js');
+
+function init() {
+  eventsTool.bind(closeLink, 'click', overlay.toggle);
+  eventsTool.bind(okButton, 'click', overlay.toggle);
+}
+
+function show(message) {
+  messageText.textContent = message;
+  overlay.toggle();
+}
+
+exports.init = init;
+exports.show = show;
+
+},{"./patterns/tx-event.js":7,"./patterns/tx-overlay.js":8}],7:[function(require,module,exports){
+/* jshint browser: true */
+
+'use strict';
+
+function bind(object, type, callback) {
+  if (document.addEventListener) {
+    object.addEventListener(type, callback);
+  } else {
+    object.attachEvent('on' + type, callback);
+  }
+}
+
+function unbind(object, type, callback) {
+  if (document.removeEventListener) {
+    object.removeEventListener(type, callback);
+  } else {
+    object.detachEvent('on' + type, callback);
+  }
+}
+
+function trigger(object, event, propagate) {
+  propagate = propagate || false;
+  var eventObj;
+  if (document.createEvent) {
+    eventObj = document.createEvent('MouseEvents');
+    eventObj.initEvent(event, propagate, false);
+    object.dispatchEvent(eventObj);
+  } else {
+    eventObj = document.createEventObject();
+    object.fireEvent('on' + event, eventObj);
+  }
+}
+
+exports.bind = bind;
+exports.unbind = unbind;
+exports.trigger = trigger;
+
+},{}],8:[function(require,module,exports){
+/* jshint browser: true */
+
+'use strict';
+
+var addEvent = require('./tx-event');
+
+function Overlay(element) {
+
+  var object;
+  var activeClassName;
+
+  function toggle(event) {
+    var currentClassName = object.className;
+    if (event) {
+      event.preventDefault();
+    }
+    object.className = currentClassName.indexOf(activeClassName) > -1 ? currentClassName.replace(activeClassName, '') : currentClassName + ' ' + activeClassName;
+  }
+
+  function clicked(event) {
+    var target = event.target ? event.target : event.srcElement;
+    if (target.className.indexOf(activeClassName) > -1) {
+      toggle(event);
+    }
+  }
+
+  function setup() {
+    if (element) {
+      object = element;
+      activeClassName = object.className.split(' ')[0] + '-is-active';
+      addEvent.bind(object, 'click', clicked);
+    }
+  }
+
+  setup();
+
+  return {
+    toggle: toggle
+  };
+}
+
+function init(element) {
+  return new Overlay(element);
+}
+
+exports.init = init;
+
+},{"./tx-event":7}],9:[function(require,module,exports){
+'use strict';
+
+/* jshint browser:true */
+
+function polyfill() {
+  var lastTime = 0;
+  var vendors = ['ms', 'moz', 'webkit', 'o'];
+  for (var x = 0; x < vendors.length && !window.requestAnimationFrame; ++x) {
+    window.requestAnimationFrame = window[vendors[x] + 'RequestAnimationFrame'];
+    window.cancelAnimationFrame = window[vendors[x] + 'CancelAnimationFrame'] || window[vendors[x] + 'CancelRequestAnimationFrame'];
+  }
+  if (!window.requestAnimationFrame) {
+    window.requestAnimationFrame = function (callback, element) {
+      var currTime = new Date().getTime();
+      var timeToCall = Math.max(0, 16 - (currTime - lastTime));
+      var id = window.setTimeout(function () {
+        callback(currTime + timeToCall);
+      }, timeToCall);
+      lastTime = currTime + timeToCall;
+      return id;
+    };
+  }
+  if (!window.cancelAnimationFrame) {
+    window.cancelAnimationFrame = function (id) {
+      clearTimeout(id);
+    };
+  }
+}
+
+exports.polyfill = polyfill;
+
+},{}],10:[function(require,module,exports){
+/* jshint browser: true */
+/* global Modernizr */
+
+'use strict';
+
+var auth = document.getElementById('authToggle');
+var autheHelp = document.getElementById('authToggleHelp');
+
+var eventsTool = require('./patterns/tx-event.js');
+
+var APP_KEY = '84e8362bd7d7fefaab5498e386897312';
+var LS_KEY = 'trello_token';
+var AUTH_ENDPOINT = 'https://trello.com';
+var REGEXP_URL = new RegExp(/(?:^(?:https?:\/\/)?|^(?:w{3}\.)?|^(?:https?:\/\/w{3}\.)?)trello\.com\/b\/.+/);
+
+var authWindow;
+var trelloAuth = false;
+var trelloToken;
+
+function triggerSuccess() {
+  eventsTool.trigger(window, 'authsuccess');
+}
+
+function triggerFailure() {
+  eventsTool.trigger(window, 'authfailure');
+}
+
+function authorized() {
+  return trelloAuth;
+}
+
+function token() {
+  return trelloToken;
+}
+
+function key() {
+  return APP_KEY;
+}
+
+function regExpURL() {
+  return REGEXP_URL;
+}
+
+function receiveAuthMessage(event) {
+  var source;
+  if (event.origin !== AUTH_ENDPOINT || event.source !== authWindow) {
+    triggerFailure();
+    return;
+  }
+  if ((source = event.source) !== null) {
+    source.close();
+  }
+  if (event.data !== null && /[0-9a-f]{64}/.test(event.data)) {
+    trelloToken = event.data;
+    triggerSuccess();
+  } else {
+    trelloToken = null;
+    triggerFailure();
+  }
+  if (Modernizr.localstorage && trelloToken) {
+    localStorage[LS_KEY] = trelloToken;
+  } else if (!trelloToken) {
+    delete localStorage[LS_KEY];
+  }
+  eventsTool.trigger(window, 'gottoken');
+  eventsTool.unbind(window, 'message', receiveAuthMessage);
+}
+
+function authorizeTrello() {
+  eventsTool.bind(window, 'message', receiveAuthMessage);
+  var width = 420;
+  var height = 470;
+  var left = window.screenX + (window.innerWidth - width) / 2;
+  var top = window.screenY + (window.innerHeight - height) / 2;
+  var location = window.location;
+  var origin = (location = /^[a-z]+:\/\/[^\/]*/.exec(location)) !== null ? location[0] : void 0;
+  authWindow = window.open('https://trello.com/1/authorize?response_type=token&key=' + APP_KEY + '&return_url=' + origin + '&callback_method=postMessage&scope=read&expiration=never&name=Publish%20Trello', 'trello', 'width=' + width + ',height=' + height + ',left=' + left + ',top=' + top);
+}
+
+function deauthorizeTrello() {
+  trelloToken = null;
+  if (Modernizr.localstorage) {
+    delete localStorage[LS_KEY];
+  }
+}
+
+function authSuccess() {
+  trelloAuth = true;
+  auth.className = 'authorization authorization-is-authorized';
+}
+
+function authFailure() {
+  trelloAuth = false;
+  auth.className = 'authorization authorization-is-unauthorized';
+}
+
+function authToggle(event) {
+  event.preventDefault();
+  if (!authorized()) {
+    authorizeTrello();
+  }
+}
+
+function init() {
+  eventsTool.bind(auth, 'click', authToggle);
+  eventsTool.bind(autheHelp, 'click', authToggle);
+  eventsTool.bind(window, 'authsuccess', authSuccess);
+  eventsTool.bind(window, 'authfailure', authFailure);
+  if (Modernizr.localstorage && localStorage[LS_KEY]) {
+    trelloToken = localStorage[LS_KEY];
+    triggerSuccess();
+  }
+}
+
+exports.init = init;
+exports.authorizeTrello = authorizeTrello;
+exports.authorizeTrello = deauthorizeTrello;
+exports.authorized = authorized;
+exports.token = token;
+exports.key = key;
+exports.regExpURL = regExpURL;
+
+},{"./patterns/tx-event.js":7}],11:[function(require,module,exports){
+/* jshint browser: true */
+
+'use strict';
+
+(function () {
+
+  var cache = require('./components/cache');
+  var help = require('./components/help');
+  var trello = require('./components/trello');
+  var form = require('./components/form');
+  var rAF = require('./components/patterns/tx-rAF');
+
+  function init() {
+    rAF.polyfill();
+    // cache.init();
+    help.init();
+    trello.init(help);
+    form.init(trello);
+  }
+
+  init();
+})();
+
+},{"./components/cache":3,"./components/form":4,"./components/help":5,"./components/patterns/tx-rAF":9,"./components/trello":10}],12:[function(require,module,exports){
+// Browser Request
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+// UMD HEADER START 
+(function (root, factory) {
+    if (typeof define === 'function' && define.amd) {
+        // AMD. Register as an anonymous module.
+        define([], factory);
+    } else if (typeof exports === 'object') {
+        // Node. Does not work with strict CommonJS, but
+        // only CommonJS-like enviroments that support module.exports,
+        // like Node.
+        module.exports = factory();
+    } else {
+        // Browser globals (root is window)
+        root.returnExports = factory();
+  }
+}(this, function () {
+// UMD HEADER END
+
+var XHR = XMLHttpRequest
+if (!XHR) throw new Error('missing XMLHttpRequest')
+request.log = {
+  'trace': noop, 'debug': noop, 'info': noop, 'warn': noop, 'error': noop
+}
+
+var DEFAULT_TIMEOUT = 3 * 60 * 1000 // 3 minutes
+
+//
+// request
+//
+
+function request(options, callback) {
+  // The entry-point to the API: prep the options object and pass the real work to run_xhr.
+  if(typeof callback !== 'function')
+    throw new Error('Bad callback given: ' + callback)
+
+  if(!options)
+    throw new Error('No options given')
+
+  var options_onResponse = options.onResponse; // Save this for later.
+
+  if(typeof options === 'string')
+    options = {'uri':options};
+  else
+    options = JSON.parse(JSON.stringify(options)); // Use a duplicate for mutating.
+
+  options.onResponse = options_onResponse // And put it back.
+
+  if (options.verbose) request.log = getLogger();
+
+  if(options.url) {
+    options.uri = options.url;
+    delete options.url;
+  }
+
+  if(!options.uri && options.uri !== "")
+    throw new Error("options.uri is a required argument");
+
+  if(typeof options.uri != "string")
+    throw new Error("options.uri must be a string");
+
+  var unsupported_options = ['proxy', '_redirectsFollowed', 'maxRedirects', 'followRedirect']
+  for (var i = 0; i < unsupported_options.length; i++)
+    if(options[ unsupported_options[i] ])
+      throw new Error("options." + unsupported_options[i] + " is not supported")
+
+  options.callback = callback
+  options.method = options.method || 'GET';
+  options.headers = options.headers || {};
+  options.body    = options.body || null
+  options.timeout = options.timeout || request.DEFAULT_TIMEOUT
+
+  if(options.headers.host)
+    throw new Error("Options.headers.host is not supported");
+
+  if(options.json) {
+    options.headers.accept = options.headers.accept || 'application/json'
+    if(options.method !== 'GET')
+      options.headers['content-type'] = 'application/json'
+
+    if(typeof options.json !== 'boolean')
+      options.body = JSON.stringify(options.json)
+    else if(typeof options.body !== 'string')
+      options.body = JSON.stringify(options.body)
+  }
+  
+  //BEGIN QS Hack
+  var serialize = function(obj) {
+    var str = [];
+    for(var p in obj)
+      if (obj.hasOwnProperty(p)) {
+        str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
+      }
+    return str.join("&");
+  }
+  
+  if(options.qs){
+    var qs = (typeof options.qs == 'string')? options.qs : serialize(options.qs);
+    if(options.uri.indexOf('?') !== -1){ //no get params
+        options.uri = options.uri+'&'+qs;
+    }else{ //existing get params
+        options.uri = options.uri+'?'+qs;
+    }
+  }
+  //END QS Hack
+  
+  //BEGIN FORM Hack
+  var multipart = function(obj) {
+    //todo: support file type (useful?)
+    var result = {};
+    result.boundry = '-------------------------------'+Math.floor(Math.random()*1000000000);
+    var lines = [];
+    for(var p in obj){
+        if (obj.hasOwnProperty(p)) {
+            lines.push(
+                '--'+result.boundry+"\n"+
+                'Content-Disposition: form-data; name="'+p+'"'+"\n"+
+                "\n"+
+                obj[p]+"\n"
+            );
+        }
+    }
+    lines.push( '--'+result.boundry+'--' );
+    result.body = lines.join('');
+    result.length = result.body.length;
+    result.type = 'multipart/form-data; boundary='+result.boundry;
+    return result;
+  }
+  
+  if(options.form){
+    if(typeof options.form == 'string') throw('form name unsupported');
+    if(options.method === 'POST'){
+        var encoding = (options.encoding || 'application/x-www-form-urlencoded').toLowerCase();
+        options.headers['content-type'] = encoding;
+        switch(encoding){
+            case 'application/x-www-form-urlencoded':
+                options.body = serialize(options.form).replace(/%20/g, "+");
+                break;
+            case 'multipart/form-data':
+                var multi = multipart(options.form);
+                //options.headers['content-length'] = multi.length;
+                options.body = multi.body;
+                options.headers['content-type'] = multi.type;
+                break;
+            default : throw new Error('unsupported encoding:'+encoding);
+        }
+    }
+  }
+  //END FORM Hack
+
+  // If onResponse is boolean true, call back immediately when the response is known,
+  // not when the full request is complete.
+  options.onResponse = options.onResponse || noop
+  if(options.onResponse === true) {
+    options.onResponse = callback
+    options.callback = noop
+  }
+
+  // XXX Browsers do not like this.
+  //if(options.body)
+  //  options.headers['content-length'] = options.body.length;
+
+  // HTTP basic authentication
+  if(!options.headers.authorization && options.auth)
+    options.headers.authorization = 'Basic ' + b64_enc(options.auth.username + ':' + options.auth.password);
+
+  return run_xhr(options)
+}
+
+var req_seq = 0
+function run_xhr(options) {
+  var xhr = new XHR
+    , timed_out = false
+    , is_cors = is_crossDomain(options.uri)
+    , supports_cors = ('withCredentials' in xhr)
+
+  req_seq += 1
+  xhr.seq_id = req_seq
+  xhr.id = req_seq + ': ' + options.method + ' ' + options.uri
+  xhr._id = xhr.id // I know I will type "_id" from habit all the time.
+
+  if(is_cors && !supports_cors) {
+    var cors_err = new Error('Browser does not support cross-origin request: ' + options.uri)
+    cors_err.cors = 'unsupported'
+    return options.callback(cors_err, xhr)
+  }
+
+  xhr.timeoutTimer = setTimeout(too_late, options.timeout)
+  function too_late() {
+    timed_out = true
+    var er = new Error('ETIMEDOUT')
+    er.code = 'ETIMEDOUT'
+    er.duration = options.timeout
+
+    request.log.error('Timeout', { 'id':xhr._id, 'milliseconds':options.timeout })
+    return options.callback(er, xhr)
+  }
+
+  // Some states can be skipped over, so remember what is still incomplete.
+  var did = {'response':false, 'loading':false, 'end':false}
+
+  xhr.onreadystatechange = on_state_change
+  xhr.open(options.method, options.uri, true) // asynchronous
+  if(is_cors)
+    xhr.withCredentials = !! options.withCredentials
+  xhr.send(options.body)
+  return xhr
+
+  function on_state_change(event) {
+    if(timed_out)
+      return request.log.debug('Ignoring timed out state change', {'state':xhr.readyState, 'id':xhr.id})
+
+    request.log.debug('State change', {'state':xhr.readyState, 'id':xhr.id, 'timed_out':timed_out})
+
+    if(xhr.readyState === XHR.OPENED) {
+      request.log.debug('Request started', {'id':xhr.id})
+      for (var key in options.headers)
+        xhr.setRequestHeader(key, options.headers[key])
+    }
+
+    else if(xhr.readyState === XHR.HEADERS_RECEIVED)
+      on_response()
+
+    else if(xhr.readyState === XHR.LOADING) {
+      on_response()
+      on_loading()
+    }
+
+    else if(xhr.readyState === XHR.DONE) {
+      on_response()
+      on_loading()
+      on_end()
+    }
+  }
+
+  function on_response() {
+    if(did.response)
+      return
+
+    did.response = true
+    request.log.debug('Got response', {'id':xhr.id, 'status':xhr.status})
+    clearTimeout(xhr.timeoutTimer)
+    xhr.statusCode = xhr.status // Node request compatibility
+
+    // Detect failed CORS requests.
+    if(is_cors && xhr.statusCode == 0) {
+      var cors_err = new Error('CORS request rejected: ' + options.uri)
+      cors_err.cors = 'rejected'
+
+      // Do not process this request further.
+      did.loading = true
+      did.end = true
+
+      return options.callback(cors_err, xhr)
+    }
+
+    options.onResponse(null, xhr)
+  }
+
+  function on_loading() {
+    if(did.loading)
+      return
+
+    did.loading = true
+    request.log.debug('Response body loading', {'id':xhr.id})
+    // TODO: Maybe simulate "data" events by watching xhr.responseText
+  }
+
+  function on_end() {
+    if(did.end)
+      return
+
+    did.end = true
+    request.log.debug('Request done', {'id':xhr.id})
+
+    xhr.body = xhr.responseText
+    if(options.json) {
+      try        { xhr.body = JSON.parse(xhr.responseText) }
+      catch (er) { return options.callback(er, xhr)        }
+    }
+
+    options.callback(null, xhr, xhr.body)
+  }
+
+} // request
+
+request.withCredentials = false;
+request.DEFAULT_TIMEOUT = DEFAULT_TIMEOUT;
+
+//
+// defaults
+//
+
+request.defaults = function(options, requester) {
+  var def = function (method) {
+    var d = function (params, callback) {
+      if(typeof params === 'string')
+        params = {'uri': params};
+      else {
+        params = JSON.parse(JSON.stringify(params));
+      }
+      for (var i in options) {
+        if (params[i] === undefined) params[i] = options[i]
+      }
+      return method(params, callback)
+    }
+    return d
+  }
+  var de = def(request)
+  de.get = def(request.get)
+  de.post = def(request.post)
+  de.put = def(request.put)
+  de.head = def(request.head)
+  return de
+}
+
+//
+// HTTP method shortcuts
+//
+
+var shortcuts = [ 'get', 'put', 'post', 'head' ];
+shortcuts.forEach(function(shortcut) {
+  var method = shortcut.toUpperCase();
+  var func   = shortcut.toLowerCase();
+
+  request[func] = function(opts) {
+    if(typeof opts === 'string')
+      opts = {'method':method, 'uri':opts};
+    else {
+      opts = JSON.parse(JSON.stringify(opts));
+      opts.method = method;
+    }
+
+    var args = [opts].concat(Array.prototype.slice.apply(arguments, [1]));
+    return request.apply(this, args);
+  }
+})
+
+//
+// CouchDB shortcut
+//
+
+request.couch = function(options, callback) {
+  if(typeof options === 'string')
+    options = {'uri':options}
+
+  // Just use the request API to do JSON.
+  options.json = true
+  if(options.body)
+    options.json = options.body
+  delete options.body
+
+  callback = callback || noop
+
+  var xhr = request(options, couch_handler)
+  return xhr
+
+  function couch_handler(er, resp, body) {
+    if(er)
+      return callback(er, resp, body)
+
+    if((resp.statusCode < 200 || resp.statusCode > 299) && body.error) {
+      // The body is a Couch JSON object indicating the error.
+      er = new Error('CouchDB error: ' + (body.error.reason || body.error.error))
+      for (var key in body)
+        er[key] = body[key]
+      return callback(er, resp, body);
+    }
+
+    return callback(er, resp, body);
+  }
+}
+
+//
+// Utility
+//
+
+function noop() {}
+
+function getLogger() {
+  var logger = {}
+    , levels = ['trace', 'debug', 'info', 'warn', 'error']
+    , level, i
+
+  for(i = 0; i < levels.length; i++) {
+    level = levels[i]
+
+    logger[level] = noop
+    if(typeof console !== 'undefined' && console && console[level])
+      logger[level] = formatted(console, level)
+  }
+
+  return logger
+}
+
+function formatted(obj, method) {
+  return formatted_logger
+
+  function formatted_logger(str, context) {
+    if(typeof context === 'object')
+      str += ' ' + JSON.stringify(context)
+
+    return obj[method].call(obj, str)
+  }
+}
+
+// Return whether a URL is a cross-domain request.
+function is_crossDomain(url) {
+  var rurl = /^([\w\+\.\-]+:)(?:\/\/([^\/?#:]*)(?::(\d+))?)?/
+
+  // jQuery #8138, IE may throw an exception when accessing
+  // a field from window.location if document.domain has been set
+  var ajaxLocation
+  try { ajaxLocation = location.href }
+  catch (e) {
+    // Use the href attribute of an A element since IE will modify it given document.location
+    ajaxLocation = document.createElement( "a" );
+    ajaxLocation.href = "";
+    ajaxLocation = ajaxLocation.href;
+  }
+
+  var ajaxLocParts = rurl.exec(ajaxLocation.toLowerCase()) || []
+    , parts = rurl.exec(url.toLowerCase() )
+
+  var result = !!(
+    parts &&
+    (  parts[1] != ajaxLocParts[1]
+    || parts[2] != ajaxLocParts[2]
+    || (parts[3] || (parts[1] === "http:" ? 80 : 443)) != (ajaxLocParts[3] || (ajaxLocParts[1] === "http:" ? 80 : 443))
+    )
+  )
+
+  //console.debug('is_crossDomain('+url+') -> ' + result)
+  return result
+}
+
+// MIT License from http://phpjs.org/functions/base64_encode:358
+function b64_enc (data) {
+    // Encodes string using MIME base64 algorithm
+    var b64 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
+    var o1, o2, o3, h1, h2, h3, h4, bits, i = 0, ac = 0, enc="", tmp_arr = [];
+
+    if (!data) {
+        return data;
+    }
+
+    // assume utf8 data
+    // data = this.utf8_encode(data+'');
+
+    do { // pack three octets into four hexets
+        o1 = data.charCodeAt(i++);
+        o2 = data.charCodeAt(i++);
+        o3 = data.charCodeAt(i++);
+
+        bits = o1<<16 | o2<<8 | o3;
+
+        h1 = bits>>18 & 0x3f;
+        h2 = bits>>12 & 0x3f;
+        h3 = bits>>6 & 0x3f;
+        h4 = bits & 0x3f;
+
+        // use hexets to index into b64, and append result to encoded string
+        tmp_arr[ac++] = b64.charAt(h1) + b64.charAt(h2) + b64.charAt(h3) + b64.charAt(h4);
+    } while (i < data.length);
+
+    enc = tmp_arr.join('');
+
+    switch (data.length % 3) {
+        case 1:
+            enc = enc.slice(0, -2) + '==';
+        break;
+        case 2:
+            enc = enc.slice(0, -1) + '=';
+        break;
+    }
+
+    return enc;
+}
+    return request;
+//UMD FOOTER START
+}));
+//UMD FOOTER END
+
+},{}],13:[function(require,module,exports){
+// get successful control from form and assemble into object
+// http://www.w3.org/TR/html401/interact/forms.html#h-17.13.2
+
+// types which indicate a submit action and are not successful controls
+// these will be ignored
+var k_r_submitter = /^(?:submit|button|image|reset|file)$/i;
+
+// node names which could be successful controls
+var k_r_success_contrls = /^(?:input|select|textarea|keygen)/i;
+
+// Matches bracket notation.
+var brackets = /(\[[^\[\]]*\])/g;
+
+// serializes form fields
+// @param form MUST be an HTMLForm element
+// @param options is an optional argument to configure the serialization. Default output
+// with no options specified is a url encoded string
+//    - hash: [true | false] Configure the output type. If true, the output will
+//    be a js object.
+//    - serializer: [function] Optional serializer function to override the default one.
+//    The function takes 3 arguments (result, key, value) and should return new result
+//    hash and url encoded str serializers are provided with this module
+//    - disabled: [true | false]. If true serialize disabled fields.
+//    - empty: [true | false]. If true serialize empty fields
+function serialize(form, options) {
+    if (typeof options != 'object') {
+        options = { hash: !!options };
+    }
+    else if (options.hash === undefined) {
+        options.hash = true;
+    }
+
+    var result = (options.hash) ? {} : '';
+    var serializer = options.serializer || ((options.hash) ? hash_serializer : str_serialize);
+
+    var elements = form && form.elements ? form.elements : [];
+
+    //Object store each radio and set if it's empty or not
+    var radio_store = Object.create(null);
+
+    for (var i=0 ; i<elements.length ; ++i) {
+        var element = elements[i];
+
+        // ingore disabled fields
+        if ((!options.disabled && element.disabled) || !element.name) {
+            continue;
+        }
+        // ignore anyhting that is not considered a success field
+        if (!k_r_success_contrls.test(element.nodeName) ||
+            k_r_submitter.test(element.type)) {
+            continue;
+        }
+
+        var key = element.name;
+        var val = element.value;
+
+        // we can't just use element.value for checkboxes cause some browsers lie to us
+        // they say "on" for value when the box isn't checked
+        if ((element.type === 'checkbox' || element.type === 'radio') && !element.checked) {
+            val = undefined;
+        }
+
+        // If we want empty elements
+        if (options.empty) {
+            // for checkbox
+            if (element.type === 'checkbox' && !element.checked) {
+                val = '';
+            }
+
+            // for radio
+            if (element.type === 'radio') {
+                if (!radio_store[element.name] && !element.checked) {
+                    radio_store[element.name] = false;
+                }
+                else if (element.checked) {
+                    radio_store[element.name] = true;
+                }
+            }
+
+            // if options empty is true, continue only if its radio
+            if (!val && element.type == 'radio') {
+                continue;
+            }
+        }
+        else {
+            // value-less fields are ignored unless options.empty is true
+            if (!val) {
+                continue;
+            }
+        }
+
+        // multi select boxes
+        if (element.type === 'select-multiple') {
+            val = [];
+
+            var selectOptions = element.options;
+            var isSelectedOptions = false;
+            for (var j=0 ; j<selectOptions.length ; ++j) {
+                var option = selectOptions[j];
+                var allowedEmpty = options.empty && !option.value;
+                var hasValue = (option.value || allowedEmpty);
+                if (option.selected && hasValue) {
+                    isSelectedOptions = true;
+
+                    // If using a hash serializer be sure to add the
+                    // correct notation for an array in the multi-select
+                    // context. Here the name attribute on the select element
+                    // might be missing the trailing bracket pair. Both names
+                    // "foo" and "foo[]" should be arrays.
+                    if (options.hash && key.slice(key.length - 2) !== '[]') {
+                        result = serializer(result, key + '[]', option.value);
+                    }
+                    else {
+                        result = serializer(result, key, option.value);
+                    }
+                }
+            }
+
+            // Serialize if no selected options and options.empty is true
+            if (!isSelectedOptions && options.empty) {
+                result = serializer(result, key, '');
+            }
+
+            continue;
+        }
+
+        result = serializer(result, key, val);
+    }
+
+    // Check for all empty radio buttons and serialize them with key=""
+    if (options.empty) {
+        for (var key in radio_store) {
+            if (!radio_store[key]) {
+                result = serializer(result, key, '');
+            }
+        }
+    }
+
+    return result;
+}
+
+function parse_keys(string) {
+    var keys = [];
+    var prefix = /^([^\[\]]*)/;
+    var children = new RegExp(brackets);
+    var match = prefix.exec(string);
+
+    if (match[1]) {
+        keys.push(match[1]);
+    }
+
+    while ((match = children.exec(string)) !== null) {
+        keys.push(match[1]);
+    }
+
+    return keys;
+}
+
+function hash_assign(result, keys, value) {
+    if (keys.length === 0) {
+        result = value;
+        return result;
+    }
+
+    var key = keys.shift();
+    var between = key.match(/^\[(.+?)\]$/);
+
+    if (key === '[]') {
+        result = result || [];
+
+        if (Array.isArray(result)) {
+            result.push(hash_assign(null, keys, value));
+        }
+        else {
+            // This might be the result of bad name attributes like "[][foo]",
+            // in this case the original `result` object will already be
+            // assigned to an object literal. Rather than coerce the object to
+            // an array, or cause an exception the attribute "_values" is
+            // assigned as an array.
+            result._values = result._values || [];
+            result._values.push(hash_assign(null, keys, value));
+        }
+
+        return result;
+    }
+
+    // Key is an attribute name and can be assigned directly.
+    if (!between) {
+        result[key] = hash_assign(result[key], keys, value);
+    }
+    else {
+        var string = between[1];
+        var index = parseInt(string, 10);
+
+        // If the characters between the brackets is not a number it is an
+        // attribute name and can be assigned directly.
+        if (isNaN(index)) {
+            result = result || {};
+            result[string] = hash_assign(result[string], keys, value);
+        }
+        else {
+            result = result || [];
+            result[index] = hash_assign(result[index], keys, value);
+        }
+    }
+
+    return result;
+}
+
+// Object/hash encoding serializer.
+function hash_serializer(result, key, value) {
+    var matches = key.match(brackets);
+
+    // Has brackets? Use the recursive assignment function to walk the keys,
+    // construct any missing objects in the result tree and make the assignment
+    // at the end of the chain.
+    if (matches) {
+        var keys = parse_keys(key);
+        hash_assign(result, keys, value);
+    }
+    else {
+        // Non bracket notation can make assignments directly.
+        var existing = result[key];
+
+        // If the value has been assigned already (for instance when a radio and
+        // a checkbox have the same name attribute) convert the previous value
+        // into an array before pushing into it.
+        //
+        // NOTE: If this requirement were removed all hash creation and
+        // assignment could go through `hash_assign`.
+        if (existing) {
+            if (!Array.isArray(existing)) {
+                result[key] = [ existing ];
+            }
+
+            result[key].push(value);
+        }
+        else {
+            result[key] = value;
+        }
+    }
+
+    return result;
+}
+
+// urlform encoding serializer
+function str_serialize(result, key, value) {
+    // encode newlines as \r\n cause the html spec says so
+    value = value.replace(/(\r)?\n/g, '\r\n');
+    value = encodeURIComponent(value);
+
+    // spaces should be '+' rather than '%20'.
+    value = value.replace(/%20/g, '+');
+    return result + (result ? '&' : '') + encodeURIComponent(key) + '=' + value;
+}
+
+module.exports = serialize;
+
+},{}]},{},[11]);
