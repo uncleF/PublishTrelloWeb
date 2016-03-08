@@ -23,7 +23,7 @@ function getOptionTarget(target) {
 }
 
 function checkOption(target) {
-  return target.className.indexOf('autocompleteOption') > -1;
+  return target.className.indexOf('js-autocompleteOption') > -1;
 }
 
 function getListBounds() {
@@ -63,10 +63,10 @@ function scrollOption() {
 
 function updateOption(newHighlightedOption) {
   if (highlightedOption > -1) {
-    options[highlightedOption].className = options[highlightedOption].className.replace(' autocompleteOption-is-highlighted', '');
+    options[highlightedOption].className = options[highlightedOption].className.replace(' js-autocompleteOption-is-highlighted', '');
   }
   highlightedOption = newHighlightedOption;
-  options[highlightedOption].className += ' autocompleteOption-is-highlighted';
+  options[highlightedOption].className += ' js-autocompleteOption-is-highlighted';
 }
 
 function changeOption() {
@@ -162,7 +162,7 @@ function deactivateMouse(event) {
 }
 
 function toggleAutocomplete() {
-  options = document.getElementsByClassName('autocompleteOption');
+  options = document.getElementsByClassName('js-autocompleteOption');
   optionsLength = options.length;
   autocompleteActive = true;
 }

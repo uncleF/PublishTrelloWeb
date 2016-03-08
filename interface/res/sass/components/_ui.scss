@@ -802,7 +802,7 @@ textarea {
 
 }
 
-.autocompleteItem {
+.js-autocompleteItem {
   margin: 0;
 
   &:before {
@@ -811,7 +811,7 @@ textarea {
 
 }
 
-.autocompleteOption {
+.js-autocompleteOption {
   $autocompleteOption-hover: $white;
   $autocompleteOption-backgroundHover: $blueDark;
 

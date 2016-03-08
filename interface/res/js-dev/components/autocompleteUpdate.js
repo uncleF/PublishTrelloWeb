@@ -14,9 +14,9 @@ var TRELLO_BOARDS;
 function appendItem(board) {
   var star = '';
   if (board.starred) {
-    star = 'autocompleteOption-is-starred';
+    star = 'js-autocompleteOption-is-starred';
   }
-  return `<li class="autocompleteItem"><a href="${board.shortUrl}" class="autocompleteOption ${star}">${board.name}</a></li>`;
+  return `<li class="js-autocompleteItem"><a href="${board.shortUrl}" class="js-autocompleteOption ${star}">${board.name}</a></li>`;
 }
 
 function buildList() {
