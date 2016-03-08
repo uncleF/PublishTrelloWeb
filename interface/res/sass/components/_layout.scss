@@ -298,6 +298,14 @@ body {
   text-align: center;
 }
 
+.disclaimerIEbug {
+
+  &-is-invisible {
+    display: none;
+  }
+
+}
+
 
 
 /* HDPI Layout */

@@ -44,7 +44,7 @@ function generateOutput(request, response) {
     });
   }).catch(function(error) {
     response.json({
-      error: error.code
+      error: error
     });
   });
 }

@@ -11,10 +11,18 @@ var trello;
 var TRELLO_MEMBER;
 var TRELLO_BOARDS;
 
+function appendItem(board) {
+  var star = '';
+  if (board.starred) {
+    star = 'autocompleteOption-is-starred';
+  }
+  return `<li class="autocompleteItem"><a href="${board.shortUrl}" class="autocompleteOption ${star}">${board.name}</a></li>`;
+}
+
 function buildList() {
   var items = '';
   for (let index = 0, length = TRELLO_BOARDS.length; index < length; index += 1) {
-    items += `<li class="autocompleteItem"><a href="${TRELLO_BOARDS[index].shortUrl}" class="autocompleteOption">${TRELLO_BOARDS[index].name}</a></li>`;
+    items += appendItem(TRELLO_BOARDS[index]);
   }
   list.insertAdjacentHTML('beforeend', items);
   eventsTool.trigger(window, 'gotboards');

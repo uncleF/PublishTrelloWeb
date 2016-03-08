@@ -67,11 +67,13 @@ function onResponse(error, response) {
   if (!error && response.statusCode === 200) {
     var json = JSON.parse(response.responseText);
     if (json.hasOwnProperty('error')) {
+      resetForm();
       message.show(json.error);
     } else {
       startDownload(json.dir, json.file);
     }
   } else {
+    resetForm();
     message.show('Something went wrong!');
   }
 }

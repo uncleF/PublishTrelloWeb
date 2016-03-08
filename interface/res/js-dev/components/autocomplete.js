@@ -143,8 +143,8 @@ function activate() {
   if (autocompleteActive && !autocompleteOn) {
     autocompleteOn = true;
     show();
-    eventsTool.unbind(input, 'keyup', openAutocomplete);
-    eventsTool.bind(input, 'keyup', choose);
+    eventsTool.unbind(input, 'keydown', openAutocomplete);
+    eventsTool.bind(input, 'keydown', choose);
   }
 }
 
@@ -152,8 +152,8 @@ function deactivate(event) {
   if (autocompleteOn) {
     autocompleteOn = false;
     hide();
-    eventsTool.unbind(input, 'keyup', choose);
-    eventsTool.bind(input, 'keyup', openAutocomplete);
+    eventsTool.unbind(input, 'keydown', choose);
+    eventsTool.bind(input, 'keydown', openAutocomplete);
   }
 }
 

@@ -756,6 +756,8 @@ textarea {
   $autocomplete-background: $white;
   $autocomplete-borderWidth: 1px;
   $autocomplete-borderColor: $gray;
+  $autocomplete-scrollWidth: 6px;
+  $autocomplete-scrollGutter: 10px;
 
   @include tx-font-size(small);
   position: absolute;
@@ -768,11 +770,29 @@ textarea {
   padding: 0;
   border: $autocomplete-borderWidth solid $autocomplete-borderColor;
   margin: 0;
-  background: rgba($autocomplete-background, .85);
+  background: rgba($autocomplete-background, .90);
   opacity: 0;
   pointer-events: none;
   transform: translateY(-10px) translateZ(0);
   transition: $UITransition;
+
+  &::-webkit-scrollbar {
+    -webkit-appearance: none;
+  }
+
+  &::-webkit-scrollbar:vertical {
+    width: $autocomplete-scrollWidth;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    width: $autocomplete-scrollWidth;
+    border-radius: ($autocomplete-scrollWidth / 2);
+    background: $ui-color;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: none;
+  }
 
   &-is-active {
     opacity: 1;
@@ -815,10 +835,11 @@ textarea {
   &-is-starred {
 
     &:before {
-      @include tx-pseudo(relative, inline-block);
+      @include tx-pseudo;
       @include tx-sprite($spt-star, $block: true);
-      top: 1px;
-      margin: 0 .5em 0 0;
+      top: 50%;
+      right: ($gap / 2);
+      margin: ($spt-star-height / -2 - 1px) 0 0;
     }
 
   }
@@ -826,6 +847,10 @@ textarea {
   &-is-highlighted {
     color: $autocompleteOption-hover;
     background: $autocompleteOption-backgroundHover;
+
+    &:before {
+      @include tx-sprite-position($spt-starInverted);
+    }
 
     &:visited,
     &:hover,
