@@ -11,6 +11,9 @@ html {
 
 body {
   position: relative;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
   overflow: hidden;
   height: 100%;
   padding: 0;
@@ -20,9 +23,15 @@ body {
   text-align: center;
   white-space: nowrap;
 
-  &:before {
-    @include tx-pseudo-va;
-    vertical-align: middle;
+  .mdz-no-flexbox &,
+  .mdz-no-flexboxlegacy & {
+    display: block;
+
+    &:before {
+      @include tx-pseudo-va;
+      vertical-align: middle;
+    }
+
   }
 
 }
@@ -34,7 +43,6 @@ body {
 .app {
   $app-minWidth: 500px;
 
-  @include tx-inline-block;
   @include tx-font-size($fontSize);
   position: relative;
   min-width: ($app-minWidth - $gap);
@@ -42,6 +50,12 @@ body {
   text-align: left;
   vertical-align: middle;
   white-space: normal;
+
+  .mdz-flexbox &,
+  .mdz-flexboxlegacy & {
+    @include tx-inline-block;
+  }
+
 }
 
 .logo {

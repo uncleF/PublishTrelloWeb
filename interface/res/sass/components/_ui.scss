@@ -10,6 +10,7 @@
 /* Focus */
 
 %focusStyle {
+  outline-offset: 2px;
 
   &:focus {
     outline: $focus-outlineWidth dotted $focus-outlineColor;
@@ -250,28 +251,17 @@ textarea {
 
 
 
-/* Form Focus */
-
-%formFocusStyle {
-  outline: $focus-outlineWidth dotted $focus-outlineColor;
-  outline-offset: 2px;
-}
-
-
-
 /* Board URL */
 
 .board {
   @extend %formStyle;
+  @extend %focusStyle;
   @include tx-form-height(2.10);
+  display: block;
   box-sizing: border-box;
   width: 100%;
   padding: 0 50px 0 ($gap / 2);
-
-  &:focus {
-    @extend %formFocusStyle;
-  }
-
+  transform: translateZ(0);
 }
 
 
@@ -282,6 +272,7 @@ textarea {
   $formButtonStyle-color: $white;
 
   @extend %touchAction;
+  @extend %focusStyle;
   @include tx-grid-height(2, $lh: false);
   position: relative;
   display: block;
@@ -303,10 +294,6 @@ textarea {
   &:hover,
   &:active {
     background: $ui-active;
-  }
-
-  &:focus {
-    @extend %formFocusStyle;
   }
 
   &[disabled] {
@@ -380,7 +367,7 @@ textarea {
   }
 
   &:focus + .optionLabel {
-    @extend %formFocusStyle;
+    outline: $focus-outlineWidth dotted $focus-outlineColor;
   }
 
 }
@@ -389,6 +376,8 @@ textarea {
   @include tx-inline-block;
   position: relative;
   color: $ui-color;
+  outline: $focus-outlineWidth dotted transparent;
+  outline-offset: 2px;
   line-height: $optionLabelCheckBackground-size;
 
   &:before {
@@ -588,10 +577,6 @@ textarea {
 
   }
 
-  &:focus {
-    outline-offset: 2px;
-  }
-
 }
 
 .helpToggle {
@@ -691,10 +676,6 @@ textarea {
 
 //   }
 
-//   &:focus {
-//     outline-offset: 2px;
-//   }
-
 // }
 
 
@@ -742,10 +723,6 @@ textarea {
 
   }
 
-  &:focus {
-    outline-offset: 2px;
-  }
-
 }
 
 
@@ -771,10 +748,10 @@ textarea {
   border: $autocomplete-borderWidth solid $autocomplete-borderColor;
   margin: 0;
   background: rgba($autocomplete-background, .90);
+  visibility: hidden;
   opacity: 0;
-  pointer-events: none;
   transform: translateY(-10px) translateZ(0);
-  transition: $UITransition;
+  transition: opacity $UITransition, transform $UITransition, visibility $UITransition-instant $UITransition;
 
   &::-webkit-scrollbar {
     -webkit-appearance: none;
@@ -795,9 +772,10 @@ textarea {
   }
 
   &-is-active {
+    visibility: visible;
     opacity: 1;
-    pointer-events: all;
     transform: translateY(0) translateZ(0);
+    transition: opacity $UITransition, transform $UITransition, visibility $UITransition-instant;
   }
 
 }
@@ -820,7 +798,6 @@ textarea {
   padding: 0 ($gap / 2);
   text-decoration: none;
   white-space: nowrap;
-  transition: none;
 
   &:visited,
   &:hover,
@@ -875,7 +852,8 @@ textarea {
   .authorization:before,
   .authorization:after,
   .settings:before,
-  .language:before {
+  .language:before,
+  .js-autocompleteOption:before {
     @include tx-sprite-dpi($ssh-sprites-2x, $ssh-sprites);
   }
 
@@ -891,7 +869,8 @@ textarea {
   .authorization:before,
   .authorization:after,
   .settings:before,
-  .language:before {
+  .language:before,
+  .js-autocompleteOption:before {
     @include tx-sprite-dpi($ssh-sprites-3x, $ssh-sprites);
   }
 

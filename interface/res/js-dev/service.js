@@ -4,7 +4,7 @@
 
 'use strict';
 
-var CACHE_NAME = 'pt-cache-v2';
+var CACHE_NAME = 'pt-cache-v3';
 
 var offline = [
   '/',
