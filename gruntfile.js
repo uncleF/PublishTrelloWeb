@@ -282,7 +282,10 @@ module.exports = function(grunt) {
     browserify: {
       bundle: {
         options: {
-          transform: [['babelify', {'presets': ['es2015']}]]
+          transform: [['babelify', {'presets': ['es2015']}]],
+          browserifyOptions: {
+            debug: true
+          }
         },
         files: {
           bundleFiles: function() {
