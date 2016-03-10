@@ -537,8 +537,7 @@ module.exports = function(grunt) {
         options: {
           livereload: true
         },
-        files: [project.dir + '*.html', project.res.css.dir + '**/*.css', project.res.js.dir + '**/*.js', project.dir + '**/*.{png,jpg,gif,svg}'],
-        tasks: ['copy:build']
+        files: [project.dir + '*.html', project.res.css.dir + '**/*.css', project.res.js.dir + '**/*.js', project.dir + '**/*.{png,jpg,gif,svg}']
       }
     },
     concurrent: {

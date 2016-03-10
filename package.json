@@ -59,7 +59,8 @@
     "mocha": "^2.4.5"
   },
   "scripts": {
-    "start": "nodemon app/app.js"
+    "start": "nodemon app/app.js",
+    "dev": "nodemon app/app.js -dev"
   },
   "author": "unclef.npm@gmail.com",
   "license": "ISC",

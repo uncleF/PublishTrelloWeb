@@ -11,8 +11,10 @@ var shortid = require('shortid');
 
 var app = express();
 var config = qconf();
+var dev = process.argv[2] === '-dev';
 
-var PUBLIC = config.get('public');
+var PUBLIC = !dev ? config.get('public') : config.get('publicDev');
+var SW = !dev ? config.get('sw') : config.get('swDev');
 var KEY =  config.get('key');
 
 function showInterface(request, response) {
@@ -73,7 +75,7 @@ function init() {
   app.use(compress());
   app.use(bodyParser.json());
   app.use(express.static(path.join(__dirname, PUBLIC)));
-  app.use('/service.js', express.static(`${path.join(__dirname, PUBLIC)}/res/js/service.js`));
+  app.use('/service.js', express.static(`${path.join(__dirname, PUBLIC + SW)}`));
   app.get('/', showInterface);
   app.post('/generate', generateOutput);
   app.get('/download', download);
