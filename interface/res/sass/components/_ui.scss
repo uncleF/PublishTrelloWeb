@@ -36,7 +36,6 @@ a {
   color: $link;
   text-decoration: underline;
   text-decoration-color: rgba($link, $underlineOpacity);
-  transition: color $UITransition, text-decoration-color $UITransition;
 
   &:visited {
     color: $visited;
@@ -749,9 +748,6 @@ textarea {
   margin: 0;
   background: rgba($autocomplete-background, .90);
   visibility: hidden;
-  opacity: 0;
-  transform: translateY(-10px) translateZ(0);
-  transition: opacity $UITransition, transform $UITransition, visibility $UITransition-instant $UITransition;
 
   &::-webkit-scrollbar {
     -webkit-appearance: none;
@@ -773,9 +769,6 @@ textarea {
 
   &-is-active {
     visibility: visible;
-    opacity: 1;
-    transform: translateY(0) translateZ(0);
-    transition: opacity $UITransition, transform $UITransition, visibility $UITransition-instant;
   }
 
 }

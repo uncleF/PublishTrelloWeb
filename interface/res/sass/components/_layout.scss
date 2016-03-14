@@ -104,6 +104,7 @@ body {
   &:before {
     @include tx-pseudo();
     @include tx-sprite-image($ssh-sprites);
+    z-index: 1;
     top: 24px;
     right: 15px;
   }
@@ -310,14 +311,6 @@ body {
   max-width: $disclaimer-maxWidth;
   color: $disclaimer-color;
   text-align: center;
-}
-
-.disclaimerIEbug {
-
-  &-is-invisible {
-    display: none;
-  }
-
 }
 
 

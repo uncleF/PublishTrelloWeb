@@ -115,6 +115,7 @@ function init(trelloInstance) {
   var inputEvent = 'oninput' in window ? 'input' : 'keyup';
   trello = trelloInstance;
   message.init();
+  validateBoard();
   eventsTool.bind(form, 'submit', submit);
   eventsTool.bind(form, 'change', validate);
   eventsTool.bind(form, inputEvent, validate);

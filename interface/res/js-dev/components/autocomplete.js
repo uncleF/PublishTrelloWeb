@@ -103,6 +103,7 @@ function chooseNext(event) {
 }
 
 function chooseMouse(event) {
+
   var target = event.target;
   if (checkOption(target)) {
     selectOption(getOptionTarget(target));
@@ -180,13 +181,11 @@ function reset() {
 }
 
 function init(element, trelloInstance) {
-  var inputEvent = 'oninput' in window ? 'input' : 'keyup';
   input = element;
   trello = trelloInstance;
   update.init(list, trello);
   eventsTool.bind(input, 'focus', activate);
   eventsTool.bind(input, 'blur', deactivate);
-  eventsTool.bind(input, inputEvent, deactivate);
   eventsTool.bind(list, 'mouseover', chooseMouse);
   eventsTool.bind(list, 'click', deactivateMouse);
   eventsTool.bind(window, 'gotboards', toggleAutocomplete);

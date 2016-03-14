@@ -42,7 +42,7 @@ function gotBoards(error, response) {
     console.log(error);
   } else {
     if (Modernizr.localstorage) {
-      localStorage[LS_KEY] = response.body;
+      localStorage.setItem(LS_KEY, response.body);
     }
     TRELLO_BOARDS = JSON.parse(response.body);
     buildList();
@@ -52,7 +52,7 @@ function gotBoards(error, response) {
 function getBoards() {
   var boardsRequestURL = `https://api.trello.com/1/members/${TRELLO_MEMBER}/boards?key=${trello.key()}&token=${trello.token()}&fields=name,shortUrl&filter=open`;
   if (Modernizr.localstorage && localStorage[LS_KEY]) {
-    TRELLO_BOARDS = JSON.parse(localStorage[LS_KEY]);
+    TRELLO_BOARDS = JSON.parse(localStorage.getItem(LS_KEY));
     if (TRELLO_BOARDS) {
       buildList();
     }
